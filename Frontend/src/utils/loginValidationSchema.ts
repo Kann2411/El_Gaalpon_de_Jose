@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const registerValidationSchema = Yup.object().shape({
+export const loginValidationSchema = Yup.object().shape({
     email: 
     Yup.string()
     .email("Invalid email")
