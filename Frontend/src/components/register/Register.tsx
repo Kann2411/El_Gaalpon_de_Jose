@@ -1,17 +1,30 @@
 'use client'
 import React from "react";
 import { ErrorMessage, Field, Formik, Form } from "formik";
+import { IRegister } from "@/interfaces/interfaces";
 
 export default function Register() {
 
-    const initialValues = {
+    const initialValues : IRegister = {
         name: '',
         email: '',
-        birthdate: '',
+        phone: '',
         dni: '',
         password: '',
         confirmPassword: '',
     };
+
+    const handleSubmit = (values: IRegister, {resetForm}: {resetForm: () => void} ) => {
+        console.log(values);
+        resetForm();
+    }
     
-  return <div>Register</div>;
+  return (
+    <div>
+        {/* <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+        > */}
+    </div>
+  )
 }
