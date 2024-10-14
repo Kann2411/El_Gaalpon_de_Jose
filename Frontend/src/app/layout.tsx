@@ -6,6 +6,14 @@ import "./globals.css";
 //dgdfgfgdfgdfgg
 //prueba 1234
 
+
+
+
+
+
+
+// prueba joa
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
