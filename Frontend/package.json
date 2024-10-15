@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "el-galpon-de-jose": "file:",
     "formik": "^2.4.6",
     "next": "14.2.15",
     "react": "^18",
