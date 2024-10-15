@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ChatBotModule } from './modules/chat-bot/chat-bot.module';
 import { FileUploadModule } from './modules/file-upload/file-upload.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import typeOrmConfig from './modules/config/typeorm';
+import typeOrmConfig from './config/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from './modules/users/users.module';
