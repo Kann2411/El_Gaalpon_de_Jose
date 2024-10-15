@@ -11,3 +11,28 @@ export interface ILogin {
     email: string,
     password: string
 }
+
+export interface IUser {
+    id: number,
+    name: string,
+    email: string,
+    phone: string,
+    dni: string,
+    password: string
+}
+
+export interface IUserResponse {
+    login: boolean
+    user: Partial<IUser> | null
+    token: string
+}
+
+export interface IUserContext{
+    user: Partial<IUser> | null
+    setUser: React.Dispatch<React.SetStateAction<Partial<IUser> | null>>
+    isLogged: boolean
+    setIsLogged: (isLogged: boolean) => void
+    signIn: (credential : ILogin) => Promise<boolean>
+    register: (user: Omit<IUser, "id">) => Promise<boolean>
+    logOut: () => void
+}
