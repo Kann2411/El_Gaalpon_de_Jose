@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { rutasMiddleware } from './modules/middleware/middleware.rutas';
+import { rutasMiddleware } from './middleware/middleware.rutas';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
