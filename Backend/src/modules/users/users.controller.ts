@@ -1,11 +1,19 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from '../dtos/createUser.dto';
-import { AuthGuard } from '../auth/auth.guard';
-import { RolesGuard } from '../guards/roles.guard';
-import { Role } from '../enums/role.enum';
-import { Roles } from '../decorators/role.decorator';
-
+import { CreateUserDto } from '../../dtos/createUser.dto';
+import { AuthGuard } from '../../auth/auth.guard';
+import { RolesGuard } from '../../guards/roles.guard';
+import { Role } from '../../enums/role.enum';
+import { Roles } from '../../decorators/role.decorator';
 
 @Controller('users')
 @UseGuards(AuthGuard)
@@ -20,19 +28,20 @@ export class UsersController {
   }
 
   @Get(':id')
-  async getUserById(@Param('id',ParseUUIDPipe) id: string) {
+  async getUserById(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.getUserById(id);
   }
 
   @Put(':id')
-  async updateUser(@Param('id',ParseUUIDPipe) id: string, @Body() updateUserDto: CreateUserDto) {
+  async updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUserDto: CreateUserDto,
+  ) {
     return this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id',ParseUUIDPipe) id: string) {
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.delete(id);
   }
-
 }
-
