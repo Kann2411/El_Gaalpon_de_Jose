@@ -8,7 +8,8 @@ import typeOrmConfig from './config/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { TrainingModule } from './modules/training/training.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AuthModule } from './auth/auth.module';
     FileUploadModule,
     UsersModule,
     AuthModule,
+    TrainingModule,
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },

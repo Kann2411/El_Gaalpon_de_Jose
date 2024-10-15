@@ -14,6 +14,11 @@ export class CreateUserDto {
   @Length(3, 80, { message: 'El nombre debe tener entre 3 y 80 caracteres.' })
   name: string;
 
+  @IsString()
+  @IsNotEmpty({ message: 'El dni es requerido.' })
+  @Length(3, 8, { message: 'El nombre debe tener entre 3 y 80 caracteres.' })
+  dni: string;
+
   @IsEmail({}, { message: 'El correo debe tener un formato válido.' })
   email: string;
 

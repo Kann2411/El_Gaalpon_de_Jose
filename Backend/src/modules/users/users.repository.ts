@@ -20,7 +20,7 @@ export class UsersRepository {
   async getUsers(): Promise<User[]> {
     try {
       const [users] = await this.userRepository.findAndCount({
-        select: ['id', 'name', 'email', 'phone', 'role'],
+        select: ['id', 'name', 'dni', 'email', 'phone', 'role'],
       });
       return users;
     } catch (error) {
@@ -35,6 +35,7 @@ export class UsersRepository {
         select: {
           id: true,
           name: true,
+          dni:true,
           email: true,
           phone: true,
         },
@@ -63,6 +64,24 @@ export class UsersRepository {
       throw new InternalServerErrorException(
         'Error al buscar el usuario por email',
       );
+    }
+  }
+
+  async updateUserImage(id: string, secureUrl: string): Promise<void> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id: id },
+      });
+      if (!user) {
+        throw new NotFoundException(`Usuario con id ${id} no existe.`);
+      }
+      user.imgUrl = secureUrl;
+      await this.userRepository.save(user);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error; 
+      }
+      throw new InternalServerErrorException('Error al actualizar la imagen del producto.');
     }
   }
 

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { rutasMiddleware } from './middleware/middleware.rutas';
 import { ValidationPipe } from '@nestjs/common';
+import { rutasMiddleware } from './middlewares/middleware.rutas';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
