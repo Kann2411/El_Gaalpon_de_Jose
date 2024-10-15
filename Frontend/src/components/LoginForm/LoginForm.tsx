@@ -1,18 +1,32 @@
 'use client'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Field, Form, Formik, ErrorMessage } from 'formik'
 import { ILogin } from '@/interfaces/interfaces'
 import { loginValidationSchema } from '@/utils/loginValidationSchema'
+import { useRouter } from 'next/navigation'
+import { UserContext } from '@/context/user'
 
 export default function LoginForm() {
+
+    const router = useRouter()
+    const {signIn} = useContext(UserContext)
 
     const initialValues: ILogin = {
         email: '',
         password: ''
     }
 
-    const handleSubmit = (values: ILogin, {resetForm}: {resetForm: () => void}) => {
-        console.log(values)
+    const handleSubmit = async (values: ILogin, {resetForm}: {resetForm: () => void}) => {
+        const success = await signIn(values)
+
+        if (success) {
+            alert('User logged in successfully!')
+            router.push('/home')
+        }
+
+        if(!success){
+            alert('Email or Password incorrect!')
+        }
         resetForm()
     }
 

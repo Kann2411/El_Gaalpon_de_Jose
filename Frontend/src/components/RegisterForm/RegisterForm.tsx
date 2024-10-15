@@ -1,10 +1,17 @@
 'use client'
+import { UserContext } from '@/context/user';
 import { IRegister } from '@/interfaces/interfaces'
 import { registerValidationSchema } from '@/utils/registerValidationSchema';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React from 'react'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useContext } from 'react'
 
 export default function RegisterForm() {
+
+    const router = useRouter()
+    const {signUp} = useContext(UserContext)
+
   const initialValues: IRegister = {
       name: '',
       email: '',
@@ -15,12 +22,18 @@ export default function RegisterForm() {
   }
 
   const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
-    try {
-        console.log(values);
-        resetForm();
-    } catch (error) {
-        console.error("Error al enviar el formulario:", error);
+    const success = await signUp(values)
+
+    if (success){
+        alert('User created successfully!')
+        router.push('/home')
     }
+
+    if(!success) {
+        alert('This user already exists!')
+    }
+
+    resetForm()
 }
 
   return (
@@ -63,6 +76,7 @@ export default function RegisterForm() {
                         <ErrorMessage name="confirmPassword" component="div"/>
                     </div>
                     <button type="submit" disabled={!isValid || !dirty}>Submit</button>
+                    <p>Do you already have an account? <Link href={'/login'}>Log In</Link></p>
                 </Form>
             )}
         </Formik>
