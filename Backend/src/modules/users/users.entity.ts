@@ -1,10 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Role } from '../enums/role.enum';
-
+import { Role } from '../../enums/role.enum';
 
 @Entity('users')
 export class User {
-
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -23,9 +21,6 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   imgUrl: string = 'default-image-url';
 
-  @Column({ type: 'enum', enum: Role, default: Role.User})
+  @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
-
 }
-
-
