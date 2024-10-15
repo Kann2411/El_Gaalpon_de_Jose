@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "el-galpon-de-jose": "file:",
+    "formik": "^2.4.6",
     "i": "^0.3.7",
     "next": "^14.2.15",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
