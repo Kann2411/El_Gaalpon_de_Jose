@@ -59,7 +59,7 @@ const NavBarComponent = () => {
         {/* Botón Inscribirme alineado a la derecha */}
         <div>
           <Link
-            href="/inscribirme"
+            href="/register"
             className="text-lg font-medium px-7 py-4 rounded-md bg-red-600 text-white shadow-md hover:bg-red-800 transition-colors"
           >
             Inscribirme

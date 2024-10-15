@@ -37,7 +37,7 @@ export default function RegisterForm() {
 }
 
   return (
-    <div>
+    <div >
         <Formik
             initialValues={initialValues}
             validationSchema={registerValidationSchema}
