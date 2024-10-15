@@ -14,15 +14,14 @@ export interface ILogin {
 
 export interface IUser {
     id: number,
+    imgUrl?: string
     name: string,
     email: string,
     phone: string,
     dni: string,
-    password: string
 }
 
 export interface IUserResponse {
-    login: boolean
     user: Partial<IUser> | null
     token: string
 }
