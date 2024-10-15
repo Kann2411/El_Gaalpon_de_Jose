@@ -19,6 +19,7 @@ export interface IUser {
     email: string,
     phone: string,
     dni: string,
+    password: string
 }
 
 export interface IUserResponse {
@@ -32,6 +33,6 @@ export interface IUserContext{
     isLogged: boolean
     setIsLogged: (isLogged: boolean) => void
     signIn: (credential : ILogin) => Promise<boolean>
-    register: (user: Omit<IUser, "id">) => Promise<boolean>
+    signUp: (user: Omit<IUser, "id">) => Promise<boolean>
     logOut: () => void
 }

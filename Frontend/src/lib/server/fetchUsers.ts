@@ -1,4 +1,4 @@
-import { ILogin, IRegister } from "@/interfaces/interfaces";
+import { ILogin, IRegister, IUser } from "@/interfaces/interfaces";
 
 export async function postSignIn (credential: ILogin) {
     try {
@@ -24,7 +24,10 @@ export async function postSignIn (credential: ILogin) {
 }
 
 
-export async function postSignUp (user: IRegister) {    
+export async function postSignUp (user: Omit<IUser, "id">) {
+    if (!user) {
+        return null
+}    
     try {
         const response = await fetch("http://localhost:3000/auth/signup",{
             method: "POST",
