@@ -1,5 +1,7 @@
-import Image from "next/image";
+import React from "react";
 
-export default function Home() {
-  return <h1>hola </h1>;
-}
+const LandingPage = () => {
+  return <h1>Vista de LandingPage</h1>;
+};
+
+export default LandingPage;
