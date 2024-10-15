@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { rutasMiddleware } from './modules/middleware/middleware.rutas';
+import { LoggerGlobal } from './modules/middlewares/logger.middleware';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
@@ -11,7 +11,7 @@ async function bootstrap() {
     credentials: true, 
   }); 
   app.useGlobalPipes(new ValidationPipe({whitelist:true,forbidNonWhitelisted: true,transform: true,}))
-  app.use(rutasMiddleware);
+  app.use(LoggerGlobal);
   await app.listen(3000);
 }
 bootstrap();
