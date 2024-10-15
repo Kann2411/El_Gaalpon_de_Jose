@@ -8,18 +8,29 @@ import typeOrmConfig from './modules/config/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
-
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal:true,
-    load:[typeOrmConfig]
-  }),
-  TypeOrmModule.forRootAsync({
-    inject:[ConfigService],
-    useFactory:(configService:ConfigService)=>configService.get("typeorm")}),
-    ChatBotModule, FileUploadModule,UsersModule,AuthModule,JwtModule.register({global:true,signOptions:{expiresIn:'1h'},secret: process.env.JWT_SECRET,})],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [typeOrmConfig],
+    }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        configService.get('typeorm'),
+    }),
+    ChatBotModule,
+    FileUploadModule,
+    UsersModule,
+    AuthModule,
+    JwtModule.register({
+      global: true,
+      signOptions: { expiresIn: '1h' },
+      secret: process.env.JWT_SECRET,
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

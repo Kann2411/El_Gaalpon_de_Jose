@@ -1,7 +1,7 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from 'src/modules/dtos/createUser.dto';
-import { LoginUserDto } from 'src/modules/dtos/loginUser.dto';
+import { CreateUserDto } from 'src/dtos/createUser.dto';
+import { LoginUserDto } from 'src/dtos/loginUser.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,11 +17,10 @@ export class AuthController {
     const { password: _, ...userWithoutPassword } = newUser;
     return { user: userWithoutPassword };
   }
-  
-  @Post('signin')  
-  signIn(@Body() credentials: LoginUserDto) { 
+
+  @Post('signin')
+  signIn(@Body() credentials: LoginUserDto) {
     const { email, password } = credentials;
     return this.authService.signIn(email, password);
   }
-  
 }

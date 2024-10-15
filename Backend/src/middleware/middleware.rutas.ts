@@ -5,8 +5,6 @@ export function rutasMiddleware(
   res: Response,
   next: NextFunction,
 ) {
-  console.log(
-    `Esta ejecutando un metodo ${req.method}`,
-  );
+  console.log(`Esta ejecutando un metodo ${req.method}`);
   next();
 }
