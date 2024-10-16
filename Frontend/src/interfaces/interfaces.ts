@@ -11,6 +11,12 @@ export interface ILogin {
     email: string,
     password: string
 }
+export interface IProviderLogin {
+    provider: 'google'; 
+}
+
+
+export type SignInCredential = ILogin | IProviderLogin;
 
 export interface IUser {
     id: number,
