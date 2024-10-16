@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Training } from './training.entity';
 import { Repository } from 'typeorm';
@@ -12,7 +12,10 @@ export class TrainingRepository {
     private readonly trainingRepository: Repository<Training>,
   ) {}
 
-  async createTraining(createTrainingDto: CreateTrainingDto, user: User): Promise<Training> {
+  async createTraining(
+    createTrainingDto: CreateTrainingDto,
+    user: User,
+  ): Promise<Training> {
     const training = this.trainingRepository.create({
       ...createTrainingDto,
       user,
@@ -21,6 +24,7 @@ export class TrainingRepository {
     try {
       await this.trainingRepository.save(training);
       return training;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new InternalServerErrorException('Error al crear el entrenamiento');
     }
@@ -28,7 +32,10 @@ export class TrainingRepository {
 
   async getTrainingsByUser(userId: string): Promise<Training[]> {
     try {
-      return await this.trainingRepository.find({ where: { user: { id: userId } } });
+      return await this.trainingRepository.find({
+        where: { user: { id: userId } },
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new InternalServerErrorException('Error al obtener entrenamientos');
     }

@@ -35,7 +35,7 @@ export class UsersRepository {
         select: {
           id: true,
           name: true,
-          dni:true,
+          dni: true,
           email: true,
           phone: true,
         },
@@ -79,9 +79,11 @@ export class UsersRepository {
       await this.userRepository.save(user);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw error; 
+        throw error;
       }
-      throw new InternalServerErrorException('Error al actualizar la imagen del producto.');
+      throw new InternalServerErrorException(
+        'Error al actualizar la imagen del producto.',
+      );
     }
   }
 
