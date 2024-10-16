@@ -5,7 +5,6 @@ import { TrainingPlan } from '../training/trainingPlan.entity';
 
 @Entity('users')
 export class User {
- 
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -32,7 +31,7 @@ export class User {
 
   @OneToMany(() => Training, (training) => training.user)
   trainings: Training[];
-  
+
   @OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.coach)
   trainingPlans: TrainingPlan[];
 }

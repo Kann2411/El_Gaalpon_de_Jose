@@ -1,4 +1,11 @@
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { TrainingPlanService } from './trainingPlan.service';
 import { CreateTrainingPlanDto } from '../../dtos/createTrainingPlan.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -12,9 +19,15 @@ export class TrainingPlanController {
   constructor(private readonly trainingPlanService: TrainingPlanService) {}
 
   @Post()
-  async create(@Body() createTrainingPlanDto: CreateTrainingPlanDto, @Request() req) {
+  async create(
+    @Body() createTrainingPlanDto: CreateTrainingPlanDto,
+    @Request() req,
+  ) {
     const coach = req.user;
-    return await this.trainingPlanService.createTrainingPlan(createTrainingPlanDto, coach);
+    return await this.trainingPlanService.createTrainingPlan(
+      createTrainingPlanDto,
+      coach,
+    );
   }
 
   @Get()

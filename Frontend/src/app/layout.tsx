@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBarComponent from "@/components/NavBar";
+<<<<<<< HEAD
 import { UserProvider } from "@/context/user";
+=======
+import { Providers } from "./Providers";
+>>>>>>> 46f9eb0d05488a3c6c10d7d6eb7b7f98317b2c4e
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,6 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+<<<<<<< HEAD
     <UserProvider>
       <html lang="en">
         <head>
@@ -39,5 +44,20 @@ export default function RootLayout({
         </body>
       </html>
     </UserProvider>
+=======
+    <html lang="en">
+      <head>
+        <title>FitZone</title>
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Providers>
+        <NavBarComponent />
+        {children}
+        </Providers>
+      </body>
+    </html>
+>>>>>>> 46f9eb0d05488a3c6c10d7d6eb7b7f98317b2c4e
   );
 }

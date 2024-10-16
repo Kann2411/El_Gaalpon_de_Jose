@@ -1,4 +1,11 @@
-import { Controller, Post, Body, UseGuards, Request, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  Get,
+} from '@nestjs/common';
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from '../../dtos/createTraining.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -19,7 +26,7 @@ export class TrainingController {
 
   @Get()
   async getUserTrainings(@Request() req) {
-    const userId = req.user.id; 
+    const userId = req.user.id;
     return await this.trainingService.getUserTrainings(userId);
   }
 }
