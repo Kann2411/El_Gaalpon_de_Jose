@@ -12,7 +12,10 @@ export class TrainingPlanRepository {
     private readonly trainingPlanRepository: Repository<TrainingPlan>,
   ) {}
 
-  async createTrainingPlan(planDto: CreateTrainingPlanDto, coach: User): Promise<TrainingPlan> {
+  async createTrainingPlan(
+    planDto: CreateTrainingPlanDto,
+    coach: User,
+  ): Promise<TrainingPlan> {
     const trainingPlan = this.trainingPlanRepository.create({
       ...planDto,
       coach,
@@ -21,8 +24,11 @@ export class TrainingPlanRepository {
     try {
       await this.trainingPlanRepository.save(trainingPlan);
       return trainingPlan;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new InternalServerErrorException('Error al crear el plan de entrenamiento');
+      throw new InternalServerErrorException(
+        'Error al crear el plan de entrenamiento',
+      );
     }
   }
 

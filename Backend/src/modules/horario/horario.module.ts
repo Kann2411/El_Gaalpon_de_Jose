@@ -1,10 +1,10 @@
-import { Module } from "@nestjs/common";
+import { Module } from '@nestjs/common';
 
 @Module({
-    imports: [],
-    providers: [],
-    controllers: [],
+  imports: [],
+  providers: [],
+  controllers: [],
 })
-export class HorarioModule{
-    constructor() {}
+export class HorarioModule {
+  constructor() {}
 }

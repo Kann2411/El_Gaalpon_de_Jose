@@ -7,5 +7,5 @@ export class CreateTrainingPlanDto {
 
   @IsString()
   @IsNotEmpty()
-  file: string; 
+  file: string;
 }
