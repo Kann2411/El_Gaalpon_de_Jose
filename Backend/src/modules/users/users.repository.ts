@@ -35,7 +35,7 @@ export class UsersRepository {
         select: {
           id: true,
           name: true,
-          dni:true,
+          dni: true,
           email: true,
           phone: true,
         },
@@ -56,16 +56,9 @@ export class UsersRepository {
     }
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
-    try {
-      const user = await this.userRepository.findOne({ where: { email } });
-      return user || null;
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Error al buscar el usuario por email',
-      );
-    }
-  }
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { email } });
+}
 
   async updateUserImage(id: string, secureUrl: string): Promise<void> {
     try {
@@ -79,22 +72,31 @@ export class UsersRepository {
       await this.userRepository.save(user);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw error; 
+        throw error;
       }
-      throw new InternalServerErrorException('Error al actualizar la imagen del producto.');
+      throw new InternalServerErrorException(
+        'Error al actualizar la imagen del producto.',
+      );
     }
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<Omit<User, 'role'>> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
-      const newUser = this.userRepository.create(createUserDto);
-      await this.userRepository.save(newUser);
-      const { role, ...userWithoutAdmin } = newUser;
-      return userWithoutAdmin;
+        const newUser = this.userRepository.create(createUserDto);
+
+        if (createUserDto.password) {
+            newUser.password = await bcrypt.hash(createUserDto.password, 10);
+        }
+
+        await this.userRepository.save(newUser);
+        return newUser; 
     } catch (error) {
-      throw new InternalServerErrorException('Error al crear el usuario');
+        throw new InternalServerErrorException('Error al crear el usuario');
     }
-  }
+}
+
+  
+  
 
   async updateUser(id: string, updateUserDto: CreateUserDto): Promise<string> {
     try {
