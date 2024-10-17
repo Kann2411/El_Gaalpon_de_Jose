@@ -16,6 +16,7 @@ import { HorarioService } from './horario.service';
 export class HorarioController{
     constructor(
         private  readonly horarioService: HorarioService,
+    ){}
 
   @Get()
   async getHorario() {
