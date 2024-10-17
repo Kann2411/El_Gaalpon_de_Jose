@@ -12,9 +12,10 @@ import { UUID } from 'crypto';
 import { Horario } from './horario.entity';
 import { HorarioService } from './horario.service';
 
-@Controller('class')
-export class HorarioController {
-  constructor(private readonly horarioService: HorarioService) {}
+@Controller('horario')
+export class HorarioController{
+    constructor(
+        private  readonly horarioService: HorarioService,
 
   @Get()
   async getHorario() {
