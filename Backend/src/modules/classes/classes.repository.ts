@@ -3,11 +3,13 @@ import { Class } from "./classes.entity";
 import { UUID } from "crypto";
 import { DataSource, Repository } from "typeorm";
 import { InjectDataSource, InjectRepository } from "@nestjs/typeorm";
+import { HorarioRepository } from "../horario/horario.repository";
 
 @Injectable()
 export class ClassRepository{
     constructor(
         @InjectRepository(Class) private readonly classesRepository: Repository<Class>,
+        private readonly horarioRepository: HorarioRepository,
         @InjectDataSource() private dataSource: DataSource,
     ){}
 
@@ -41,6 +43,9 @@ export class ClassRepository{
     async createClass(classData: Class){
         return await this.dataSource.transaction(async (manager) => {
             try {
+                // Esto por si necesita el front
+                // const horario = this.horarioRepository.createHorario(classData.horario)
+                // newClass.horario = horario
                 const newClass = manager.create(Class, classData)
                 await manager.save(newClass)
                 return newClass

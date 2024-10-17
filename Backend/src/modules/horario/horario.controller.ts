@@ -3,7 +3,7 @@ import { UUID } from "crypto";
 import { Horario } from "./horario.entity";
 import { HorarioService } from "./horario.service";
 
-@Controller('class')
+@Controller('horario')
 export class HorarioController{
     constructor(
         private  readonly horarioService: HorarioService,
