@@ -18,16 +18,17 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     console.log('Perfil recibido:', profile); // Imprime el perfil recibido
 
     if (!profile || !profile.emails || profile.emails.length === 0) {
-        throw new UnauthorizedException('No se pudo obtener el perfil de Google');
+      throw new UnauthorizedException('No se pudo obtener el perfil de Google');
     }
 
-    const name = profile.displayName || `${profile.name?.givenName || ''} ${profile.name?.familyName || ''}`;
+    const name =
+      profile.displayName ||
+      `${profile.name?.givenName || ''} ${profile.name?.familyName || ''}`;
 
     return {
-        id: profile.id,
-        email: profile.emails[0].value,
-        name,
+      id: profile.id,
+      email: profile.emails[0].value,
+      name,
     };
-  } 
-
+  }
 }

@@ -13,10 +13,15 @@ import { Horario } from './horario.entity';
 import { HorarioService } from './horario.service';
 
 @Controller('horario')
+<<<<<<< HEAD
+export class HorarioController {
+  constructor(private readonly horarioService: HorarioService) {}
+=======
 export class HorarioController{
     constructor(
         private  readonly horarioService: HorarioService,
     ){}
+>>>>>>> 89a00e06a6aa837b632b152e2771088732dfb061
 
   @Get()
   async getHorario() {
