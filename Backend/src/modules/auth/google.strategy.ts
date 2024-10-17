@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { Strategy } from 'passport-google-oauth20';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -15,20 +15,24 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
-    console.log('Perfil recibido:', profile); // Imprime el perfil recibido
+    // ✔️ Log para desarrollo (usar Logger en producción)
+    console.log('Perfil recibido:', profile);
 
-    if (!profile || !profile.emails || profile.emails.length === 0) {
-      throw new UnauthorizedException('No se pudo obtener el perfil de Google');
+    // Verifica que haya emails en el perfil
+    if (!profile?.emails?.[0]?.value) {
+      throw new UnauthorizedException('No se pudo obtener el email del perfil de Google');
     }
 
-    const name =
-      profile.displayName ||
-      `${profile.name?.givenName || ''} ${profile.name?.familyName || ''}`;
+    // Construye el nombre completo
+    const name = profile.displayName || 
+      `${profile.name?.givenName || ''} ${profile.name?.familyName || ''}`.trim();
 
+    // Retorna la información necesaria
     return {
       id: profile.id,
       email: profile.emails[0].value,
       name,
+      picture: profile.photos?.[0]?.value || '', // Foto opcional
     };
   }
 }
