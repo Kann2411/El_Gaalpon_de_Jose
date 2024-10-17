@@ -17,7 +17,7 @@ export default function RegisterFormComponent() {
     password: "",
     name: "",
     dni: "",
-    confirmPassword:""
+    confirmPassword: ""
   };
 
   const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
@@ -34,49 +34,85 @@ export default function RegisterFormComponent() {
   };
 
   return (
-    <div>
-        <Formik
-            initialValues={initialValues}
-            validationSchema={registerValidationSchema}
-            onSubmit={handleSubmit}
-        >
-            {({ isValid, dirty }) => (
-                <Form>
-                    <div>
-                        <label htmlFor="name">Name</label>
-                        <Field type="text" id="name" name="name" />
-                        <ErrorMessage name="name" component="div" />
-                    </div>
-                    <div>
-                        <label htmlFor="email">Email</label>
-                        <Field type="email" id="email" name="email" />
-                        <ErrorMessage name="email" component="div" />
-                    </div>
-                    <div>
-                        <label htmlFor="phone">Phone</label>
-                        <Field type="text" id="phone" name="phone" />
-                        <ErrorMessage name="phone" component="div" />
-                    </div>
-                    <div>
-                        <label htmlFor="dni">DNI</label>
-                        <Field type="text" id="dni" name="dni" />
-                        <ErrorMessage name="dni" component="div" />
-                    </div>
-                    <div>
-                        <label htmlFor="password">Password</label>
-                        <Field type="password" id="password" name="password" />
-                        <ErrorMessage name="password" component="div" />
-                    </div>
-                    <div>
-                        <label htmlFor="confirmPassword">Confirm Password</label>
-                        <Field type="password" id="confirmPassword" name="confirmPassword" />
-                        <ErrorMessage name="confirmPassword" component="div" />
-                    </div>
-                    <button type="submit" disabled={!isValid || !dirty}>Submit</button>
-                    <p>Do you already have an account? <Link href={'/login'}>Log In</Link></p>
-                </Form>
-            )}
-        </Formik>
-    </div>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={registerValidationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ isValid, dirty }) => (
+        <Form>
+          <div className="mb-4">
+            <Field
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Nombre"
+              className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+            <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
+          </div>
+          <div className="mb-4">
+            <Field
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Correo electrónico"
+              className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+            <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+          </div>
+          <div className="mb-4">
+            <Field
+              type="text"
+              id="phone"
+              name="phone"
+              placeholder="Teléfono"
+              className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+            <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
+          </div>
+          <div className="mb-4">
+            <Field
+              type="text"
+              id="dni"
+              name="dni"
+              placeholder="DNI"
+              className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+            <ErrorMessage name="dni" component="div" className="text-red-500 text-sm" />
+          </div>
+          <div className="mb-4">
+            <Field
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Contraseña"
+              className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+            <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+          </div>
+          <div className="mb-4">
+            <Field
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirmar contraseña"
+              className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+            <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm" />
+          </div>
+          <button
+            type="submit"
+            disabled={!isValid || !dirty}
+            className="w-full bg-red-600 text-white py-3 rounded hover:bg-red-800"
+          >
+            Registrarse
+          </button>
+          <p className="text-center mt-4 text-sm">
+            ¿Ya tienes una cuenta? <Link href="/login" className="text-red-600">Inicia sesión</Link>
+          </p>
+        </Form>
+      )}
+    </Formik>
   );
 }
