@@ -1,10 +1,11 @@
 import React from 'react'
+import CarouselComponent from '@/components/Carousel/Carousel'
 
 const Home = () => {
   return (
-    <h1>
-      Vista de Home
-    </h1>
+    <div>
+      <CarouselComponent />
+    </div>
   )
 }
 

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "el-galpon-de-jose": "file:",
+    "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
     "i": "^0.3.7",
     "next": "^14.2.15",
