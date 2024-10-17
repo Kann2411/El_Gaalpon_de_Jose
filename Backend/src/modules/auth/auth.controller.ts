@@ -3,16 +3,13 @@ import {
   Body,
   Controller,
   Get,
-  InternalServerErrorException,
   Post,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
 import { LoginUserDto } from 'src/dtos/loginUser.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { GoogleOauthGuard } from 'src/guards/googleOauthGuard';
 
 @Controller('auth')

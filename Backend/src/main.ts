@@ -19,20 +19,17 @@ async function bootstrap() {
     }),
   );
   app.use(rutasMiddleware);
-<<<<<<< HEAD
-=======
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Gimnasio')
     .setDescription('API para el gimnasio')
     .setVersion('1.0')
     .addBearerAuth()
-    .build()
+    .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig)
-  SwaggerModule.setup('api', app, document)
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('api', app, document);
 
->>>>>>> 89a00e06a6aa837b632b152e2771088732dfb061
   await app.listen(3001);
 }
 bootstrap();
