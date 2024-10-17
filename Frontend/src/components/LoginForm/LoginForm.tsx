@@ -2,20 +2,23 @@
 import { Field, Form, Formik, ErrorMessage } from 'formik';
 import { loginValidationSchema } from '@/utils/loginValidationSchema';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { ILogin } from '@/interfaces/interfaces';
+import { useContext } from 'react';
+import { UserContext } from '@/context/user';
 
 export default function LoginForm() {
   const router = useRouter();
+  const { signIn } = useContext(UserContext);
 
   const initialValues = {
     email: '',
     password: '',
   };
 
-  const handleSubmit = async (values: typeof initialValues, { resetForm }: { resetForm: () => void }) => {
-    const res = await signIn('credentials', { ...values, redirect: false });
+  const handleSubmit = async (values: ILogin, { resetForm }: { resetForm: () => void }) => {
+    const res = await signIn(values);
 
-    if (res?.ok) {
+    if (res) {
       alert('Usuario logueado correctamente!');
       router.push('/home');
     } else {
