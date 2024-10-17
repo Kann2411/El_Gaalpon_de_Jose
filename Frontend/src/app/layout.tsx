@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBarComponent from "@/components/NavBar";
+import { UserProvider } from "@/context/user";
 import { Providers } from "./Providers";
 
 const geistSans = localFont({
@@ -9,6 +10,7 @@ const geistSans = localFont({
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -26,18 +28,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <title>FitZone</title>
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-        <NavBarComponent />
-        {children}
-        </Providers>
-      </body>
-    </html>
+    <UserProvider>
+      <html lang="en">
+        <head>
+          <title>FitZone</title>
+        </head>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Providers>
+            <NavBarComponent />
+            {children}
+          </Providers>
+        </body>
+      </html>
+    </UserProvider>
   );
 }
+

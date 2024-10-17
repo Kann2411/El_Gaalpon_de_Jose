@@ -20,26 +20,23 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
+            let data: IUserResponse;
+    
             if ('provider' in credentials) {
                 console.log(`Iniciando sesión con ${credentials.provider}`);
-                const data: IUserResponse = { user: { name: 'Google User' }, token: 'fake-google-token' };
-                if (data.user) {
-                    setUser(data.user);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    localStorage.setItem('token', data.token);
-                    setIsLogged(true);
-                    return true;
-                }
+                data = { user: { name: 'Google User' }, token: 'fake-google-token' }; // Simulación
             } else {
-                const data: IUserResponse = await postSignIn(credentials);
-                if (data.user) {
-                    setUser(data.user);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    localStorage.setItem('token', data.token);
-                    setIsLogged(true);
-                    return true;
-                }
+                data = await postSignIn(credentials);
             }
+    
+            if (data && data.user) {
+                setUser(data.user);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.token);
+                setIsLogged(true);
+                return true;
+            }
+    
             return false;
         } catch (error) {
             console.error('Error durante el login:', error);
@@ -51,7 +48,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const signUp = async (user: Omit<IUser, "id">): Promise<boolean> => {
         try {
             const data = await postSignUp(user);
-            if (data.id) {
+            console.log("data:", data);
+            if (data && data.user.id && data.user.id) { 
                 await signIn({ email: user.email, password: user.password });
                 return true;
             } else {
@@ -62,6 +60,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             return false;
         }
     };
+    
 
     const logOut = () => {
         localStorage.removeItem("user");
