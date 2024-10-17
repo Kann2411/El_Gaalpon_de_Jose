@@ -25,6 +25,7 @@ export async function postSignIn (credential: ILogin) {
 
 export async function postSignUp(user: Omit<IUser, "id">) {
   try {
+    console.log("Iniciando la solicitud de registro al backend");
     const response = await fetch("http://localhost:3000/auth/signup", {
       method: "POST",
       headers: {
@@ -35,14 +36,16 @@ export async function postSignUp(user: Omit<IUser, "id">) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Error details:", errorData.message); // Imprimir el mensaje de error detallado
+      console.error("Error del servidor:", errorData); // Para obtener más detalles
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
+    
 
     const result = await response.json();
+    console.log("Respuesta del servidor:", result);
     return result;
   } catch (error) {
-    console.log("Error during sign up:", error);
+    console.error("Error durante el registro:", error);
     return null;
   }
 }

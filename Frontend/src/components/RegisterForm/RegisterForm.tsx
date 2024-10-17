@@ -1,6 +1,7 @@
 "use client";
 import { UserContext } from "@/context/user";
 import { IRegister } from "@/interfaces/interfaces";
+import { postSignUp } from "@/lib/server/fetchUsers";
 import { registerValidationSchema } from "@/utils/registerValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
@@ -20,18 +21,20 @@ export default function RegisterFormComponent() {
     confirmPassword:""
   };
 
-  const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
+  
+    const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
+    console.log("Valores enviados:", values);
     const success = await signUp(values);
-
+    console.log('Registro exitoso:', success);
     if (success) {
       alert('Usuario creado con éxito!');
       router.push('/home');
     } else {
       alert('Algo salió mal');
     }
-
+  
     resetForm();
-  };
+  }; 
 
   return (
     <div>
