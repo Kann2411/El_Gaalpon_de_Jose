@@ -25,7 +25,9 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleAuthRedirect(@Req() req) {
-    console.log('Perfil recibido en el controlador:', req.user);
+    if (req.user?.token) {
+      return req.user;
+    }
     return await this.authService.validateOAuthLogin(req.user);
   }
 
