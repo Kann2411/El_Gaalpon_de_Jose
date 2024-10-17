@@ -5,7 +5,6 @@ import {
   Matches,
   IsNotEmpty,
   IsOptional,
-  IsEnum,
 } from 'class-validator';
 import { Role } from '../enums/role.enum';
 import { RegistrationMethod } from 'src/enums/registrationMethod';
@@ -18,7 +17,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty({ message: 'El dni es requerido.' })
-  @Length(3, 8, { message: 'El nombre debe tener entre 3 y 80 caracteres.' })
+  @Length(3, 10, { message: 'El nombre debe tener entre 3 y 80 caracteres.' })
   dni: string;
 
   @IsEmail({}, { message: 'El correo debe tener un formato válido.' })
@@ -42,6 +41,6 @@ export class CreateUserDto {
   @IsOptional()
   role?: Role;
 
-  @IsOptional() 
+  @IsOptional()
   registrationMethod?: RegistrationMethod;
 }

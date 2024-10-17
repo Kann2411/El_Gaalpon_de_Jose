@@ -7,8 +7,8 @@ export const registerValidationSchema = Yup.object().shape({
     .required('Name is required.'),
 
   dni: Yup.string()
-    .min(3, 'DNI must be between 3 and 8 characters.')
-    .max(8, 'DNI must be between 3 and 8 characters.')
+    .min(3, 'DNI must be between 3 and 10 characters.')
+    .max(10, 'DNI must be between 3 and 10 characters.')
     .required('DNI is required.'),
 
   email: Yup.string()

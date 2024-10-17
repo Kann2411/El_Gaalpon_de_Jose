@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { TrainingService } from './training.service';
 import { CreateTrainingDto } from '../../dtos/createTraining.dto';
-import { AuthGuard } from '../auth/auth.guard';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('trainings')
 @UseGuards(AuthGuard)
