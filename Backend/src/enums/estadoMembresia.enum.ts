@@ -1,4 +1,4 @@
-export enum EstadoMembresia{
-    ACTIVA = 'Activa',
-    INACTIVA = 'Inactiva',
+export enum EstadoMembresia {
+  ACTIVA = 'Activa',
+  INACTIVA = 'Inactiva',
 }

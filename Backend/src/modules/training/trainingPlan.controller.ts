@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { TrainingPlanService } from './trainingPlan.service';
 import { CreateTrainingPlanDto } from '../../dtos/createTrainingPlan.dto';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 import { Role } from 'src/enums/role.enum';
 import { Roles } from 'src/decorators/role.decorator';
 

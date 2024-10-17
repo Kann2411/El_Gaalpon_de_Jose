@@ -12,7 +12,7 @@ export class User {
   @Column({ type: 'varchar', length: 50 })
   name: string;
 
-  @Column({ type: 'varchar', length: 8 })
+  @Column({ type: 'varchar', length: 10 })
   dni: string;
 
   @Column({ type: 'varchar', length: 50, unique: true })
@@ -33,7 +33,7 @@ export class User {
   @Column({
     type: 'enum',
     enum: RegistrationMethod,
-    default: RegistrationMethod.Form, 
+    default: RegistrationMethod.Form,
   })
   registrationMethod: RegistrationMethod;
 

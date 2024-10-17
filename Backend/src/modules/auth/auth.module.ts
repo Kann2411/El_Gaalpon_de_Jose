@@ -9,7 +9,7 @@ import { GoogleStrategy } from './google.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  providers: [AuthService, AuthRepository, UsersRepository,GoogleStrategy],
+  providers: [AuthService, AuthRepository, UsersRepository, GoogleStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

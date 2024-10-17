@@ -9,6 +9,7 @@ import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../../dtos/createUser.dto';
 import * as bcrypt from 'bcrypt';
+import { Role } from 'src/enums/role.enum';
 
 @Injectable()
 export class UsersRepository {
@@ -23,6 +24,7 @@ export class UsersRepository {
         select: ['id', 'name', 'dni', 'email', 'phone', 'role'],
       });
       return users;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new InternalServerErrorException('Error al obtener los usuarios');
     }
@@ -55,10 +57,27 @@ export class UsersRepository {
       );
     }
   }
+  async patchUser(id, role) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`Usuario con nombre ${id} no existe`);
+    }
+    if (role === 'admin') {
+      user.role = Role.Admin;
+    }
+    if (role === 'coach') {
+      user.role = Role.Coach;
+    }
+    if (role === 'user') {
+      user.role = Role.User;
+    }
+    await this.userRepository.save(user);
+    return { message: `Rol de ${user.name} cambiado a ${user.role}` };
+  }
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({ where: { email } });
-}
+  }
 
   async updateUserImage(id: string, secureUrl: string): Promise<void> {
     try {
@@ -82,21 +101,19 @@ export class UsersRepository {
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
-        const newUser = this.userRepository.create(createUserDto);
+      const newUser = this.userRepository.create(createUserDto);
 
-        if (createUserDto.password) {
-            newUser.password = await bcrypt.hash(createUserDto.password, 10);
-        }
+      if (createUserDto.password) {
+        newUser.password = await bcrypt.hash(createUserDto.password, 10);
+      }
 
-        await this.userRepository.save(newUser);
-        return newUser; 
+      await this.userRepository.save(newUser);
+      return newUser;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-        throw new InternalServerErrorException('Error al crear el usuario');
+      throw new InternalServerErrorException('Error al crear el usuario');
     }
-}
-
-  
-  
+  }
 
   async updateUser(id: string, updateUserDto: CreateUserDto): Promise<string> {
     try {
