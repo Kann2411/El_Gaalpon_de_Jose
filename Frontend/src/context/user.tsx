@@ -47,19 +47,27 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signUp = async (user: Omit<IUser, "id">): Promise<boolean> => {
         try {
+            console.log("Llamando a postSignUp con:", user);
             const data = await postSignUp(user);
-            console.log("data:", data);
-            if (data && data.user.id && data.user.id) { 
+            console.log("Respuesta recibida en signUp:", data); // Asegúrate de que esta línea imprima correctamente la respuesta
+    
+            // Asegúrate de que la respuesta tenga el formato correcto
+            if (data && data.user && data.user.id ) {
+                console.log("Usuario registrado correctamente:", data.user);
                 await signIn({ email: user.email, password: user.password });
                 return true;
             } else {
+                console.log("La respuesta no contiene el usuario o el ID:", data);
                 return false;
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error en signUp:", error);
             return false;
         }
     };
+    
+    
+    
     
 
     const logOut = () => {
@@ -74,6 +82,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const token = localStorage.getItem("token");
         if (storedUser && token) {
             const parsedUser = JSON.parse(storedUser);
+            console.log("Usuario guardado en localStorage:", parsedUser); 
             setUser(parsedUser);
             setIsLogged(true);
         }
