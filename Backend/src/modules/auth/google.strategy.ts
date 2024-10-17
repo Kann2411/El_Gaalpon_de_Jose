@@ -14,21 +14,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any) {
-    console.log('Perfil recibido:', profile); // Imprime el perfil recibido
+async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
+  const user = await this.authService.validateOAuthLogin(profile); 
+  done(null, user);
+}
 
-    if (!profile || !profile.emails || profile.emails.length === 0) {
-      throw new UnauthorizedException('No se pudo obtener el perfil de Google');
-    }
-
-    const name =
-      profile.displayName ||
-      `${profile.name?.givenName || ''} ${profile.name?.familyName || ''}`;
-
-    return {
-      id: profile.id,
-      email: profile.emails[0].value,
-      name,
-    };
-  }
 }
