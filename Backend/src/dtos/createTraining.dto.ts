@@ -5,7 +5,7 @@ export class CreateTrainingDto {
   date: Date;
 
   @IsNumber()
-  duration: number; 
+  duration: number;
 
   @IsString()
   @IsNotEmpty()

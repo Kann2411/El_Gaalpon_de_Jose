@@ -5,8 +5,10 @@ import {
   Matches,
   IsNotEmpty,
   IsOptional,
+  IsEnum,
 } from 'class-validator';
 import { Role } from '../enums/role.enum';
+import { RegistrationMethod } from 'src/enums/registrationMethod';
 
 export class CreateUserDto {
   @IsString()
@@ -39,4 +41,7 @@ export class CreateUserDto {
 
   @IsOptional()
   role?: Role;
+
+  @IsOptional() 
+  registrationMethod?: RegistrationMethod;
 }

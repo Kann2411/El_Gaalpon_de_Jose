@@ -10,6 +10,6 @@ import { UsersRepository } from '../users/users.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [FileUploadController],
-  providers: [FileService, FileRepository, cloudinaryConfig,UsersRepository],
+  providers: [FileService, FileRepository, cloudinaryConfig, UsersRepository],
 })
 export class FileUploadModule {}

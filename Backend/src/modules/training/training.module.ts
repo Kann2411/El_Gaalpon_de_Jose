@@ -10,10 +10,13 @@ import { TrainingPlanRepository } from './trainingPlan.repository';
 import { TrainingPlan } from './trainingPlan.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Training, TrainingPlan]),
-  ],
+  imports: [TypeOrmModule.forFeature([Training, TrainingPlan])],
   controllers: [TrainingController, TrainingPlanController],
-  providers: [TrainingService, TrainingRepository, TrainingPlanService, TrainingPlanRepository],
+  providers: [
+    TrainingService,
+    TrainingRepository,
+    TrainingPlanService,
+    TrainingPlanRepository,
+  ],
 })
 export class TrainingModule {}
