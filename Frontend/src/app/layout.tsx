@@ -2,17 +2,15 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavBarComponent from "@/components/NavBar";
-<<<<<<< HEAD
 import { UserProvider } from "@/context/user";
-=======
 import { Providers } from "./Providers";
->>>>>>> 46f9eb0d05488a3c6c10d7d6eb7b7f98317b2c4e
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -30,7 +28,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-<<<<<<< HEAD
     <UserProvider>
       <html lang="en">
         <head>
@@ -39,25 +36,13 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <NavBarComponent />
-          {children}
+          <Providers>
+            <NavBarComponent />
+            {children}
+          </Providers>
         </body>
       </html>
     </UserProvider>
-=======
-    <html lang="en">
-      <head>
-        <title>FitZone</title>
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-        <NavBarComponent />
-        {children}
-        </Providers>
-      </body>
-    </html>
->>>>>>> 46f9eb0d05488a3c6c10d7d6eb7b7f98317b2c4e
   );
 }
+

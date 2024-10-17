@@ -14,9 +14,9 @@ export const registerValidationSchema = Yup.object().shape({
     phone: 
     Yup.string()
     .required("Phone is required")
-    .matches(/^\d+$/, "Phone must contain only numbers")
-    .min(10, "Phone must be at least 10 characters"),
-
+    .matches(/^\d+$/, "Phone must contain only numbers")/* 
+    .min(10, "Phone must be at least 10 characters"), */
+,
     dni: 
     Yup.string()
     .max(8, "DNI must be at most 8 characters")
@@ -26,7 +26,7 @@ export const registerValidationSchema = Yup.object().shape({
     password: 
     Yup.string()
     .min(6, "Password must be at least 6 characters")
-    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Password must contain both letters and numbers")
+    /* .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Password must contain both letters and numbers") */
     .required("Password is required"),
 
 

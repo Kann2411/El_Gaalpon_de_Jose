@@ -88,10 +88,12 @@ const NavBarComponent = () => {
             />
           </div>
 
-          {/* menú desplegable */}
+          {/* Menú desplegable */}
           <div
             className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg transition-all duration-600 ease-in-out ${
-              isMenuOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+              isMenuOpen
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 pointer-events-none"
             }`}
           >
             {isMenuOpen && (
@@ -112,10 +114,6 @@ const NavBarComponent = () => {
       ) : (
         <div className="flex space-x-4">
           <Link
-<<<<<<< HEAD
-            href="/register"
-            className="text-lg font-medium px-7 py-4 rounded-md bg-red-600 text-white shadow-md hover:bg-red-800 transition-colors"
-=======
             href="/login"
             className="text-white text-sm sm:text-base font-medium px-3 py-2"
           >
@@ -123,8 +121,7 @@ const NavBarComponent = () => {
           </Link>
           <Link
             href="/register"
-            className="text-lg font-medium px-4 py-2 rounded-md bg-red-600 text-white shadow-md hover:bg-red-800"
->>>>>>> 46f9eb0d05488a3c6c10d7d6eb7b7f98317b2c4e
+            className="text-lg font-medium px-4 py-2 rounded-md bg-red-600 text-white shadow-md hover:bg-red-800 transition-colors"
           >
             Inscribirme
           </Link>
