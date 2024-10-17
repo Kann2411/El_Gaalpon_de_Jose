@@ -34,6 +34,11 @@ export class AuthController {
 
     // Redirecciona al frontend con el token JWT como parámetro
     res.redirect(`http://localhost:3001?token=${jwtToken}`);
+  async googleAuthRedirect(@Req() req) {
+    if (req.user?.token) {
+      return req.user;
+    }
+    return await this.authService.validateOAuthLogin(req.user);
   }
 
   // Registro de usuarios

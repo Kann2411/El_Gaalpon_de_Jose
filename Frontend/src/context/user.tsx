@@ -20,46 +20,75 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
-            let data: IUserResponse;
+            let data: IUserResponse | null; // Define data como IUserResponse o null
     
+            // Verificación si las credenciales tienen un proveedor
             if ('provider' in credentials) {
                 console.log(`Iniciando sesión con ${credentials.provider}`);
-                data = { user: { name: 'Google User' }, token: 'fake-google-token' }; // Simulación
+                // Simulación de un usuario de Google
+                data = { user: { name: 'Google User' }, token: 'fake-google-token' }; 
             } else {
-                data = await postSignIn(credentials);
+                // Llamada a la función postSignIn para obtener datos del backend
+                const user = await postSignIn(credentials); // Cambia a IUser | null
+                console.log("Datos devueltos de postSignIn:", user); // Log de los datos devueltos
+    
+                // Crear IUserResponse a partir de IUser
+                if (user) {
+                    data = { user, token: 'fake-token' }; // Genera un token de forma apropiada
+                } else {
+                    data = null; // O maneja el caso en el que user sea null
+                }
             }
     
+            // Verificación de datos recibidos
             if (data && data.user) {
+                // Almacenar información del usuario y token en el estado y localStorage
                 setUser(data.user);
                 localStorage.setItem('user', JSON.stringify(data.user));
                 localStorage.setItem('token', data.token);
                 setIsLogged(true);
+                console.log("Inicio de sesión exitoso:", data.user); // Log de éxito
                 return true;
             }
     
+            console.warn("No se pudo iniciar sesión, datos no válidos:", data); // Log de advertencia
             return false;
         } catch (error) {
-            console.error('Error durante el login:', error);
+            // Manejo de errores
+            if (error instanceof Error) {
+                console.error('Error durante el login:', error.message);
+            } else {
+                console.error('Error inesperado durante el login:', error);
+            }
             return false;
         }
     };
+    
     
 
     const signUp = async (user: Omit<IUser, "id">): Promise<boolean> => {
         try {
+            console.log("Llamando a postSignUp con:", user);
             const data = await postSignUp(user);
-            console.log("data:", data);
-            if (data && data.user.id && data.user.id) { 
+            console.log("Respuesta recibida en signUp:", data); // Asegúrate de que esta línea imprima correctamente la respuesta
+    
+            // Asegúrate de que la respuesta tenga el formato correcto
+            if (data && data.user && data.user.id ) {
+                console.log("Usuario registrado correctamente:", data.user);
                 await signIn({ email: user.email, password: user.password });
                 return true;
             } else {
+                console.log("La respuesta no contiene el usuario o el ID:", data);
                 return false;
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error en signUp:", error);
             return false;
         }
     };
+    
+    
+    
     
 
     const logOut = () => {
@@ -74,6 +103,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const token = localStorage.getItem("token");
         if (storedUser && token) {
             const parsedUser = JSON.parse(storedUser);
+            console.log("Usuario guardado en localStorage:", parsedUser); 
             setUser(parsedUser);
             setIsLogged(true);
         }

@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBarComponent from "@/components/NavBar";
 import { UserProvider } from "@/context/user";
 import { Providers } from "./Providers";
+import CarouselComponent from "@/components/Carousel/Carousel";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,19 +29,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <title>FitZone</title>
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-        <NavBarComponent />
-        {children}
-        </Providers>
-      </body>
-    </html>
+    <UserProvider>
+
+      <html lang="en">
+        <head>
+          <title>FitZone</title>
+        </head>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Providers>
+          <NavBarComponent />
+          <CarouselComponent />
+          {children}
+          </Providers>
+        </body>
+      </html>
+    </UserProvider>
   );
 }
 
