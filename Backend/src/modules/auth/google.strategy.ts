@@ -35,9 +35,4 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       picture: profile.photos?.[0]?.value || '', // Foto opcional
     };
   }
-async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
-  const user = await this.authService.validateOAuthLogin(profile); 
-  done(null, user);
-}
-
 }
