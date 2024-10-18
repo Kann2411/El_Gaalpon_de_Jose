@@ -6,7 +6,7 @@ import Button from "../Button/Button"
 export default function CarouselComponent() {
     return (
         <div className="w-full h-[550px]">
-            <Carousel slideInterval={3000}>
+            <Carousel slideInterval={5000}>
                 <div className="relative">
                     <img src="https://i.postimg.cc/bYQQvfJ2/pexels-823sl-2294363.jpg" alt="..." className="object-cover h-full w-full" />
                     <div className="absolute inset-0 flex flex-col justify-center items-start  ps-20 text-white bg-black bg-opacity-50">

@@ -1,7 +1,6 @@
 "use client";
 import { UserContext } from "@/context/user";
 import { IRegister } from "@/interfaces/interfaces";
-import { postSignUp } from "@/lib/server/fetchUsers";
 import { registerValidationSchema } from "@/utils/registerValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
@@ -21,20 +20,17 @@ export default function RegisterFormComponent() {
     confirmPassword: ""
   };
 
-  
-    const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
+  const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
     console.log("Valores enviados:", values);
     const success = await signUp(values);
-    console.log('Registro exitoso:', success);
     if (success) {
-      alert('Usuario creado con éxito!');
-      router.push('/home');
+      alert("Usuario creado con éxito!");
+      router.push("/home");
     } else {
-      alert('Algo salió mal');
+      alert("Algo salió mal");
     }
-  
     resetForm();
-  }; 
+  };
 
   return (
     <Formik
@@ -43,8 +39,8 @@ export default function RegisterFormComponent() {
       onSubmit={handleSubmit}
     >
       {({ isValid, dirty }) => (
-        <Form>
-          <div className="mb-4">
+        <Form className="grid grid-cols-2 gap-4">
+          <div className="mb-4 ">
             <Field
               type="text"
               id="name"
@@ -104,16 +100,15 @@ export default function RegisterFormComponent() {
             />
             <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm" />
           </div>
-          <button
-            type="submit"
-            disabled={!isValid || !dirty}
-            className="w-full bg-red-600 text-white py-3 rounded hover:bg-red-800"
-          >
-            Registrarse
-          </button>
-          <p className="text-center mt-4 text-sm">
-            ¿Ya tienes una cuenta? <Link href="/login" className="text-red-600">Inicia sesión</Link>
-          </p>
+          <div className="col-span-2">
+            <button
+              type="submit"
+              disabled={!isValid || !dirty}
+              className="w-full bg-red-600 text-white py-3 rounded hover:bg-red-800"
+            >
+              Registrarse
+            </button>
+          </div>
         </Form>
       )}
     </Formik>
