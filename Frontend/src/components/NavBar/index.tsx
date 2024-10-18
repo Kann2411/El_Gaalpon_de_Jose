@@ -1,13 +1,13 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/icons/icono-principal.png";
 import { usePathname, useRouter } from "next/navigation";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { UserContext } from "@/context/user";
 
 const NavBarComponent = () => {
-  const { data: session } = useSession();
+  const { user, logOut, isLogged } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -17,10 +17,17 @@ const NavBarComponent = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" });
+  const handleLogout = () => {
+    logOut(); // Usamos la función del contexto para cerrar sesión
     setIsMenuOpen(false);
+    router.push("/"); // Redirigir al inicio tras cerrar sesión
   };
+
+  useEffect(() => {
+    if (isLogged) {
+      router.push("/home"); // Redirigir al usuario logueado a la página de inicio
+    }
+  }, [isLogged, router]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,25 +40,21 @@ const NavBarComponent = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (session) router.push("/home");
-  }, [session, router]);
-
   return (
     <header className="flex items-center justify-between p-4 bg-black text-white shadow-md">
       <Link href="/" className="flex items-center">
-        <Image src={logo} alt="logo principal" width={60} height={60} />
+        <Image src={logo} alt="logo" width={60} height={60} />
         <div className="ml-4 text-2xl font-bold">FitZone</div>
       </Link>
 
       <nav className="flex-1 flex items-center justify-center">
         <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-          {["Inicio", "Planes", "Contáctanos"].map((item, index) => {
+          {["Home", "Plans", "Contact Us"].map((item, index) => {
             const lowerCaseItem = item.toLowerCase();
             const route =
-              lowerCaseItem === "inicio"
+              lowerCaseItem === "home"
                 ? "/home"
-                : lowerCaseItem === "planes"
+                : lowerCaseItem === "plans"
                 ? "/plans"
                 : "/contact";
 
@@ -75,14 +78,14 @@ const NavBarComponent = () => {
         </ul>
       </nav>
 
-      {session?.user ? (
+      {isLogged ? (
         <div className="relative" ref={menuRef}>
           <div
-            className="w-14 h-14 rounded-full cursor-pointer transition-transform duration-200 hover:scale-105"
+            className="w-10 h-10 rounded-full cursor-pointer transition-transform duration-200 hover:scale-105 me-5"
             onClick={toggleMenu}
           >
             <img
-              src={session.user.image ?? "/default-avatar.png"}
+              src={user?.imgUrl ?? "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"}
               alt="avatar"
               className="w-full h-full rounded-full"
             />
@@ -99,14 +102,22 @@ const NavBarComponent = () => {
             {isMenuOpen && (
               <>
                 <div className="px-4 py-2 text-black">
-                  <p className="font-medium">{session.user.name}</p>
+                  <p className="font-medium">{user?.name}</p>
                 </div>
+                <button
+                  onClick={() => router.push("/dashboard")}
+                  className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
+                >
+                  Dashboard
+                </button>
+                
                 <button
                   onClick={handleLogout}
                   className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-100"
                 >
-                  Cerrar sesión
+                  Log Out
                 </button>
+                
               </>
             )}
           </div>
