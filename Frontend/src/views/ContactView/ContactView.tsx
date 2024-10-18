@@ -2,16 +2,8 @@
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 
 import { contactValidationSchema } from '@/utils/contactValidationSchema';
+import { FormValues } from '@/interfaces/interfaces';
 
-
-// Definir las propiedades del formulario
-interface FormValues {
-  name: string;
-  username: string;
-  phone: string;
-  email: string;
-  message: string;
-}
 
 const ContactView: React.FC = () => {
   // Valores iniciales del formulario
