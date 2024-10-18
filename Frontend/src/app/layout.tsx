@@ -40,7 +40,6 @@ export default function RootLayout({
         >
           <Providers>
           <NavBarComponent />
-          <CarouselComponent />
           {children}
           </Providers>
         </body>
