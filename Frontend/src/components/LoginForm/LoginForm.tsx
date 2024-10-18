@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ILogin } from '@/interfaces/interfaces';
 import { useContext } from 'react';
 import { UserContext } from '@/context/user';
+import  Swal  from 'sweetalert2'
 
 export default function LoginForm() {
   const router = useRouter();
@@ -19,10 +20,32 @@ export default function LoginForm() {
     const res = await signIn(values);
 
     if (res) {
-      alert('Usuario logueado correctamente!');
+      Swal.fire({
+        title: 'Success!',
+        text: 'You are logged in!',
+        icon: 'success',
+        confirmButtonText: 'Accept',
+        customClass: {
+          popup: 'bg-black text-white', 
+          title: 'text-red-600',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+        },
+        buttonsStyling: false, 
+      })
       router.push('/home');
     } else {
-      alert('Email o contraseña incorrectos!');
+      Swal.fire({
+        title: 'Ups!',
+        text: 'Email or password incorrect!',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+        customClass: {
+          popup: 'bg-black text-white', 
+          title: 'text-red-600',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+        },
+        buttonsStyling: false, 
+      })
     }
     resetForm();
   };

@@ -6,6 +6,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
+import Swal from 'sweetalert2';
 
 export default function RegisterFormComponent() {
   const router = useRouter();
@@ -24,10 +25,32 @@ export default function RegisterFormComponent() {
     console.log("Valores enviados:", values);
     const success = await signUp(values);
     if (success) {
-      alert("Usuario creado con éxito!");
+      Swal.fire({
+        title: 'Yey!',
+        text: 'You are registered!',
+        icon: 'success',
+        confirmButtonText: 'Accept',
+        customClass: {
+          popup: 'bg-black text-white', 
+          title: 'text-red-600',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+        },
+        buttonsStyling: false, 
+      })
       router.push("/home");
     } else {
-      alert("Algo salió mal");
+      Swal.fire({
+        title: 'Ups!',
+        text: 'This email already exists!',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+        customClass: {
+          popup: 'bg-black text-white', 
+          title: 'text-red-600',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+        },
+        buttonsStyling: false, 
+      })
     }
     resetForm();
   };
