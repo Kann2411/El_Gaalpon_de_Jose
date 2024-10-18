@@ -5,7 +5,7 @@ export class LoginUserDto {
   @ApiProperty({
     description: 'Correo electrónico del usuario',
     type: 'string',
-    example: 'example@gmail.com'
+    example: 'example@gmail.com',
   })
   @IsString()
   @IsNotEmpty({ message: 'El email es requerido.' })
@@ -14,7 +14,7 @@ export class LoginUserDto {
   @ApiProperty({
     description: 'Contraseña del usuario',
     type: 'string',
-    example: 'cOnt12#trase'
+    example: 'cOnt12#trase',
   })
   @IsString()
   @IsNotEmpty({ message: 'La contraseña es requerida.' })

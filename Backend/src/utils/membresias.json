@@ -1,0 +1,27 @@
+[
+    {
+      "tipo": "BASICA",
+      "fechaInicio": "2024-01-01",
+      "fechaFin": "2024-12-31",
+      "estado": "ACTIVA"
+    },
+    {
+      "tipo": "PREMIUM",
+      "fechaInicio": "2024-02-15",
+      "fechaFin": "2025-02-15",
+      "estado": "ACTIVA"
+    },
+    {
+      "tipo": "VIP",
+      "fechaInicio": "2023-11-01",
+      "fechaFin": "2024-10-31",
+      "estado": "INACTIVA"
+    },
+    {
+      "tipo": "BASICA",
+      "fechaInicio": "2024-03-10",
+      "fechaFin": "2024-09-10",
+      "estado": "ACTIVA"
+    }
+  ]
+  

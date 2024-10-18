@@ -1,0 +1,43 @@
+[
+    {
+      "name": "Crossfit Avanzado",
+      "capacidad": 20,
+      "estado": "ACTIVA",
+      "horario": {
+        "dia": "Lunes",
+        "horaInicio": "06:00",
+        "horaFin": "07:30"
+      }
+    },
+    {
+      "name": "Yoga para Principiantes",
+      "capacidad": 15,
+      "estado": "ACTIVA",
+      "horario": {
+        "dia": "Martes",
+        "horaInicio": "18:00",
+        "horaFin": "19:30"
+      }
+    },
+    {
+      "name": "Entrenamiento Funcional",
+      "capacidad": 25,
+      "estado": "ACTIVA",
+      "horario": {
+        "dia": "Miércoles",
+        "horaInicio": "08:00",
+        "horaFin": "09:30"
+      }
+    },
+    {
+      "name": "Boxeo Intermedio",
+      "capacidad": 10,
+      "estado": "ACTIVA",
+      "horario": {
+        "dia": "Jueves",
+        "horaInicio": "19:00",
+        "horaFin": "20:30"
+      }
+    }
+  ]
+  

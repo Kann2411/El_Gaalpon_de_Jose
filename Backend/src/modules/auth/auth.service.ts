@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
@@ -15,22 +19,24 @@ export class AuthService {
   ) {}
 
   async validateOAuthLogin(profile: any): Promise<{ token: string }> {
-
     if (profile?.token) {
       return { token: profile.token };
     }
-  
-    const email = profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
-  
+
+    const email =
+      profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
+
     if (!email) {
       throw new Error('No se pudo obtener un correo electrónico del perfil.');
     }
-  
-  
-    const name = profile.displayName || `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` || 'Sin Nombre';
-  
+
+    const name =
+      profile.displayName ||
+      `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` ||
+      'Sin Nombre';
+
     let user = await this.usersRepository.findByEmail(email);
-  
+
     if (!user) {
       user = await this.usersRepository.createUser({
         email,
@@ -43,13 +49,12 @@ export class AuthService {
         confirmPassword: '',
       });
     }
-  
+
     const payload = { email: user.email, sub: user.id };
     const token = this.jwtService.sign(payload);
-  
+
     return { token };
   }
-  
 
   async signUp(signUpDto: CreateUserDto): Promise<Omit<User, 'role'>> {
     const { email, password } = signUpDto;

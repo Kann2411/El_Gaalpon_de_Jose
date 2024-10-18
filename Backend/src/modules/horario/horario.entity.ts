@@ -26,7 +26,11 @@ export class Horario {
   @Column({ type: 'time', default: '00:00:00' })
   horaInicio: Date;
 
-  @ApiProperty({ description: 'Hora de fin del horario', type: 'string', format: 'time' })
+  @ApiProperty({
+    description: 'Hora de fin del horario',
+    type: 'string',
+    format: 'time',
+  })
   @Column({ type: 'time' })
   horaFin: Date;
 
