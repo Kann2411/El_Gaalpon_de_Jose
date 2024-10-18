@@ -11,7 +11,9 @@ import {
 import { UUID } from 'crypto';
 import { Horario } from './horario.entity';
 import { HorarioService } from './horario.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Horario')
 @Controller('horario')
 export class HorarioController {
   constructor(private readonly horarioService: HorarioService) {}

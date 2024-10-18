@@ -11,7 +11,9 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
 import { LoginUserDto } from 'src/dtos/loginUser.dto';
 import { GoogleOauthGuard } from 'src/guards/googleOauthGuard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
