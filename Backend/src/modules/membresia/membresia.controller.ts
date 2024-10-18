@@ -11,7 +11,9 @@ import {
 import { membresiaService } from './membresia.service';
 import { UUID } from 'crypto';
 import { Membresia } from './membresia.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Membresia')
 @Controller('membresia')
 export class MembresiaController {
   constructor(private readonly membresiaService: membresiaService) {}

@@ -11,7 +11,9 @@ import {
 import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassService } from './classes.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Class')
 @Controller('class')
 export class ClassesController {
   constructor(private readonly classesService: ClassService) {}

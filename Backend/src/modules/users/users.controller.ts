@@ -16,9 +16,13 @@ import { RolesGuard } from '../../guards/roles.guard';
 import { Role } from '../../enums/role.enum';
 import { Roles } from '../../decorators/role.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@Controller('users')
+@ApiTags('Users')
+@ApiBearerAuth()
+@ApiBearerAuth()
 @UseGuards(AuthGuard)
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
