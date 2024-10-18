@@ -14,41 +14,42 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-async validateOAuthLogin(profile: any): Promise<{ token: string }> {
+  async validateOAuthLogin(profile: any): Promise<{ token: string }> {
 
-  if (profile?.token) {
-    return { token: profile.token };
+    if (profile?.token) {
+      return { token: profile.token };
+    }
+  
+    const email = profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
+  
+    if (!email) {
+      throw new Error('No se pudo obtener un correo electrónico del perfil.');
+    }
+  
+  
+    const name = profile.displayName || `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` || 'Sin Nombre';
+  
+    let user = await this.usersRepository.findByEmail(email);
+  
+    if (!user) {
+      user = await this.usersRepository.createUser({
+        email,
+        name,
+        password: '',
+        dni: '0000000',
+        phone: null,
+        registrationMethod: RegistrationMethod.Google,
+        role: Role.User,
+        confirmPassword: '',
+      });
+    }
+  
+    const payload = { email: user.email, sub: user.id };
+    const token = this.jwtService.sign(payload);
+  
+    return { token };
   }
-
-  const email = profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
-
-  if (!email) {
-    throw new Error('No se pudo obtener un correo electrónico del perfil.');
-  }
-
-
-  const name = profile.displayName || `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` || 'Sin Nombre';
-
-  let user = await this.usersRepository.findByEmail(email);
-
-  if (!user) {
-    user = await this.usersRepository.createUser({
-      email,
-      name,
-      password: '',
-      dni: '0000000',
-      phone: null,
-      registrationMethod: RegistrationMethod.Google,
-      role: Role.User,
-      confirmPassword: '',
-    });
-  }
-
-  const payload = { email: user.email, sub: user.id };
-  const token = this.jwtService.sign(payload);
-
-  return { token };
-}
+  
 
   async signUp(signUpDto: CreateUserDto): Promise<Omit<User, 'role'>> {
     const { email, password } = signUpDto;
