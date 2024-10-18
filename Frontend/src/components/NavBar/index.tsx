@@ -39,10 +39,10 @@ const NavBarComponent = () => {
 
   return (
     <header className="flex items-center justify-between p-4 bg-black text-white shadow-md">
-      <div className="flex items-center">
+      <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo principal" width={60} height={60} />
         <div className="ml-4 text-2xl font-bold">FitZone</div>
-      </div>
+      </Link>
 
       <nav className="flex-1 flex items-center justify-center">
         <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">

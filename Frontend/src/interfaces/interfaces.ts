@@ -44,3 +44,11 @@ export interface IUserContext{
     signUp: (user: Omit<IUser, "id">) => Promise<boolean>
     logOut: () => void
 }
+
+
+
+export interface IButtonProps {
+    content: string;
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; 
+    redirectTo?: string;
+}
