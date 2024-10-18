@@ -3,18 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "el-galpon-de-jose": "file:",
+    "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
     "i": "^0.3.7",
     "next": "^14.2.15",
+    "next-auth": "^4.24.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "sweetalert2": "^11.14.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {

@@ -1,11 +1,36 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
 import { LoginUserDto } from 'src/dtos/loginUser.dto';
+import { GoogleOauthGuard } from 'src/guards/googleOauthGuard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('google')
+  @UseGuards(GoogleOauthGuard)
+  async googleAuth(@Req() req) {
+    // Inicia la autenticación con Google
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleOauthGuard)
+  googleLoginCallback(@Req() req, @Res() res) {
+    const user = req.user;
+    res.redirect(`http://localhost:3001/home?token=${user.token}`);
+  }
 
   @Post('signup')
   async signUp(@Body() signUpDto: CreateUserDto) {

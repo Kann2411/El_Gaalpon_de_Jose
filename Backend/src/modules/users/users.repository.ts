@@ -9,6 +9,7 @@ import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from '../../dtos/createUser.dto';
 import * as bcrypt from 'bcrypt';
+import { Role } from 'src/enums/role.enum';
 
 @Injectable()
 export class UsersRepository {
@@ -20,9 +21,10 @@ export class UsersRepository {
   async getUsers(): Promise<User[]> {
     try {
       const [users] = await this.userRepository.findAndCount({
-        select: ['id', 'name', 'email', 'phone', 'role'],
+        select: ['id', 'name', 'dni', 'email', 'phone', 'role'],
       });
       return users;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new InternalServerErrorException('Error al obtener los usuarios');
     }
@@ -35,6 +37,7 @@ export class UsersRepository {
         select: {
           id: true,
           name: true,
+          dni: true,
           email: true,
           phone: true,
         },
@@ -54,24 +57,59 @@ export class UsersRepository {
       );
     }
   }
+  async patchUser(id, role) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException(`Usuario con nombre ${id} no existe`);
+    }
+    if (role === 'admin') {
+      user.role = Role.Admin;
+    }
+    if (role === 'coach') {
+      user.role = Role.Coach;
+    }
+    if (role === 'user') {
+      user.role = Role.User;
+    }
+    await this.userRepository.save(user);
+    return { message: `Rol de ${user.name} cambiado a ${user.role}` };
+  }
 
-  async findByEmail(email: string): Promise<User | undefined> {
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { email } });
+  }
+
+  async updateUserImage(id: string, secureUrl: string): Promise<void> {
     try {
-      const user = await this.userRepository.findOne({ where: { email } });
-      return user || null;
+      const user = await this.userRepository.findOne({
+        where: { id: id },
+      });
+      if (!user) {
+        throw new NotFoundException(`Usuario con id ${id} no existe.`);
+      }
+      user.imgUrl = secureUrl;
+      await this.userRepository.save(user);
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
       throw new InternalServerErrorException(
-        'Error al buscar el usuario por email',
+        'Error al actualizar la imagen del producto.',
       );
     }
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<Omit<User, 'role'>> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
       const newUser = this.userRepository.create(createUserDto);
+
+      if (createUserDto.password) {
+        newUser.password = await bcrypt.hash(createUserDto.password, 10);
+      }
+
       await this.userRepository.save(newUser);
-      const { role, ...userWithoutAdmin } = newUser;
-      return userWithoutAdmin;
+      return newUser;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new InternalServerErrorException('Error al crear el usuario');
     }

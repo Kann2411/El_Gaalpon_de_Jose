@@ -14,6 +14,10 @@ export class UsersService {
     return this.usersRepository.getUserById(id);
   }
 
+  patchUser(id: string, role: string) {
+    return this.usersRepository.patchUser(id, role);
+  }
+
   updateUser(id: string, updateUserDto: CreateUserDto) {
     return this.usersRepository.updateUser(id, updateUserDto);
   }

@@ -1,7 +1,10 @@
+import CarouselComponent from "@/components/Carousel/Carousel";
 import React from "react";
 
 const LandingPage = () => {
-  return <h1>Vista de LandingPage</h1>;
+  return (
+    <CarouselComponent/>
+  );
 };
 
 export default LandingPage;
