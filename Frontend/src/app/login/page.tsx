@@ -1,5 +1,4 @@
 "use client";
-import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import LoginForm from "@/components/LoginForm/LoginForm";
 
@@ -25,9 +24,9 @@ const LoginPage = () => {
           <hr className="flex-grow border-gray-400" />
         </div>
         <button
-          onClick={(e) => {
-            e.preventDefault(); 
-            signIn("google", { callbackUrl: "/home" });
+          onClick={() => {
+            // Redirigir a la URL de autenticación de Google
+            window.location.href = "http://localhost:3000/auth/google";
           }}
           className="w-full mt-4 bg-gray-600 text-white py-3 rounded hover:bg-gray-700 flex items-center justify-center"
         >
