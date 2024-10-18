@@ -1,11 +1,8 @@
+import ContactView from '@/views/LandingPage/ContactView/ContactView'
 import React from 'react'
 
-const Contact = () => {
+export default function Contact() {
   return (
-    <h1>
-      Esta es la vista de contacto.
-    </h1>
+    <ContactView/>
   )
 }
-
-export default Contact
