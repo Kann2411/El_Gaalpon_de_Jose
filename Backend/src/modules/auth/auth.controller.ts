@@ -5,6 +5,7 @@ import {
   Get,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -24,9 +25,9 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
-  async googleAuthRedirect(@Req() req) {
-    console.log('Perfil recibido en el controlador:', req.user);
-    return await this.authService.validateOAuthLogin(req.user);
+  googleLoginCallback(@Req() req, @Res() res) {
+    const user = req.user;
+    res.redirect(`http://localhost:3001/home?token=${user.token}`);
   }
 
   @Post('signup')
