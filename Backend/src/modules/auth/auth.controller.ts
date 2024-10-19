@@ -27,9 +27,15 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
-  googleLoginCallback(@Req() req, @Res() res) {
-    const user = req.user;
-    res.redirect(`http://localhost:3001/home?token=${user.token}`);
+  async googleLoginCallback(@Req() req, @Res() res) {
+    // Obtén el token de la validación de Google
+    const tokenData = await this.authService.validateOAuthLogin(req.user);
+
+    // En lugar de redirigir, devolvemos un JSON con el token
+    return res.status(200).json({
+      token: tokenData.token, // El token JWT que se generó
+      message: 'Login successful',
+    });
   }
 
   @Post('signup')
