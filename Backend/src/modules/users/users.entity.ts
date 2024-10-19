@@ -28,7 +28,7 @@ export class User {
     type: 'string',
     maxLength: 10,
   })
-  @Column({ type: 'varchar', length: 10 })
+  @Column({ type: 'varchar', length: 10, unique: true })
   dni: string;
 
   @ApiProperty({
@@ -53,7 +53,7 @@ export class User {
     type: 'string',
     nullable: true,
   })
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, unique: true })
   phone: string;
 
   @ApiProperty({
@@ -93,7 +93,8 @@ export class User {
   trainings: Training[];
 
   @ApiProperty({
-    description: 'Planes de entrenamiento creados por el usuario (como entrenador)',
+    description:
+      'Planes de entrenamiento creados por el usuario (como entrenador)',
     type: () => [TrainingPlan],
   })
   @OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.coach)

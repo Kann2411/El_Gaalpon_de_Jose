@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
@@ -15,22 +15,25 @@ export class AuthService {
   ) {}
 
   async validateOAuthLogin(profile: any): Promise<{ token: string }> {
-
+    console.log('Hola, se ejecuto validateOuthLogin');
     if (profile?.token) {
       return { token: profile.token };
     }
-  
-    const email = profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
-  
+
+    const email =
+      profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
+
     if (!email) {
       throw new Error('No se pudo obtener un correo electrónico del perfil.');
     }
-  
-  
-    const name = profile.displayName || `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` || 'Sin Nombre';
-  
+
+    const name =
+      profile.displayName ||
+      `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` ||
+      'Sin Nombre';
+
     let user = await this.usersRepository.findByEmail(email);
-  
+
     if (!user) {
       user = await this.usersRepository.createUser({
         email,
@@ -44,14 +47,15 @@ export class AuthService {
       });
     }
   
-    const payload = { email: user.email, sub: user.id, role:user.role};
+
+    const payload = { email: user.email, sub: user.id, role: user.role };
     const token = this.jwtService.sign(payload);
-  
+
     return { token };
   }
-  
 
   async signUp(signUpDto: CreateUserDto): Promise<Omit<User, 'role'>> {
+    console.log('Hola, se ejecuto la funcion signUp');
     const { email, password } = signUpDto;
 
     const existingUser = await this.usersRepository.findByEmail(email);
@@ -66,13 +70,17 @@ export class AuthService {
 
     const newUser = await this.usersRepository.createUser(newUserDto);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { role, ...userWithoutRole } = newUser;
 
     return userWithoutRole;
   }
 
   async signIn(email: string, password: string) {
-    if (!email || !password) return 'email y password requeridos';
+    console.log('Se ejecuto el metodo Signin');
+    if (!email || !password) {
+      throw new BadRequestException('Email  y contraseña son requeridos.');
+    }
 
     const user = await this.usersRepository.findByEmail(email);
 

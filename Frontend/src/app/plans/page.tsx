@@ -1,11 +1,10 @@
-import React from 'react'
+import React from "react";
+import PlansView from "@/views/PlansView/PlansView";
 
 const Plans = () => {
   return (
-    <h1>
-      Vista de los planes
-    </h1>
-  )
-}
+    <PlansView />
+  );
+};
 
-export default Plans
+export default Plans;

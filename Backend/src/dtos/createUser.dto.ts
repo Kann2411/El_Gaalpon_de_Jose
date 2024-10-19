@@ -16,7 +16,7 @@ export class CreateUserDto {
     type: 'string',
     minLength: 3,
     maxLength: 80,
-    example: 'Juan Cordoba'
+    example: 'Juan Cordoba',
   })
   @IsString()
   @IsNotEmpty({ message: 'El nombre es requerido.' })
@@ -28,7 +28,7 @@ export class CreateUserDto {
     type: 'string',
     minLength: 3,
     maxLength: 10,
-    example: '12345678'
+    example: '12345678',
   })
   @IsString()
   @IsNotEmpty({ message: 'El dni es requerido.' })
@@ -38,7 +38,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'Correo electrónico del usuario',
     type: 'string',
-    example: 'example@gmail.com'
+    example: 'example@gmail.com',
   })
   @IsEmail({}, { message: 'El correo debe tener un formato válido.' })
   email: string;
@@ -46,7 +46,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'Contraseña del usuario',
     type: 'string',
-    example: 'cOnt12#trase'
+    example: 'cOnt12#trase',
   })
   @IsString()
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,15}$/, {
@@ -58,7 +58,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'Confirmación de la contraseña',
     type: 'string',
-    example: 'cOnt12#trase'
+    example: 'cOnt12#trase',
   })
   @IsString()
   @IsNotEmpty({ message: 'La confirmación de la contraseña es requerida.' })
@@ -67,7 +67,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'Número de teléfono del usuario',
     type: 'string',
-    example: '123456789'
+    example: '123456789',
   })
   @IsString()
   @IsNotEmpty({ message: 'El número de teléfono es requerido.' })
