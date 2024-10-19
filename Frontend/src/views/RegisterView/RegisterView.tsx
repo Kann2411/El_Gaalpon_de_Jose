@@ -1,5 +1,4 @@
 "use client";
-import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import RegisterFormComponent from "@/components/RegisterForm/RegisterForm";
 
@@ -30,7 +29,7 @@ const RegisterView = () => {
         <button
           onClick={(e) => {
             e.preventDefault();
-            signIn("google", { callbackUrl: "/home" });
+            window.location.href = "http://localhost:3000/auth/google";
           }}
           className="w-full mt-4 bg-gray-600 text-white py-3 rounded hover:bg-gray-700 flex items-center justify-center"
         >
