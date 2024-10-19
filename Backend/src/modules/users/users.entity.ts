@@ -93,7 +93,8 @@ export class User {
   trainings: Training[];
 
   @ApiProperty({
-    description: 'Planes de entrenamiento creados por el usuario (como entrenador)',
+    description:
+      'Planes de entrenamiento creados por el usuario (como entrenador)',
     type: () => [TrainingPlan],
   })
   @OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.coach)

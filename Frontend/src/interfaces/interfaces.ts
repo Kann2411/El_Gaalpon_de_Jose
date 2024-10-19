@@ -19,15 +19,17 @@ export interface IProviderLogin {
 export type SignInCredential = ILogin | IProviderLogin;
 
 export interface IUser {
-    id: string; // ID del usuario, obligatorio
-    name: string; // Nombre del usuario
-    email: string; // Correo electrónico del usuario
-    phone: string; // Número de teléfono del usuario
-    dni: string; // DNI del usuario
-    imgUrl?: string; // URL de la imagen del usuario (por defecto "default-image-url")
-    registrationMethod?: string; // Método de registro (ejemplo: "Form")
-    password: string; // Contraseña, opcional para evitar que se envíe en algunas situaciones
-    confirmPassword: string; // Confirma la contraseña, opcional
+    id: string; 
+    name: string; 
+    email: string; 
+    phone: string; 
+    dni: string;
+    imgUrl?: string;
+    registrationMethod?: string; 
+    password: string;
+    confirmPassword: string;
+    role: string; 
+    token: string;
   }
 
 export interface IUserResponse {
@@ -52,3 +54,20 @@ export interface IButtonProps {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; 
     redirectTo?: string;
 }
+
+export interface DecodedToken {
+    id: string;
+    email: string;
+    roles: string;
+    iat: number;
+    exp: number;
+}
+
+
+export interface FormValues {
+    name: string;
+    username: string;
+    phone: string;
+    email: string;
+    message: string;
+  }

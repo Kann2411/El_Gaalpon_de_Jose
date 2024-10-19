@@ -12,11 +12,18 @@ export class Training {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: 'Fecha del entrenamiento', type: 'string', format: 'date' })
+  @ApiProperty({
+    description: 'Fecha del entrenamiento',
+    type: 'string',
+    format: 'date',
+  })
   @Column({ type: 'date' })
   date: Date;
 
-  @ApiProperty({ description: 'Duración del entrenamiento en horas', type: 'float' })
+  @ApiProperty({
+    description: 'Duración del entrenamiento en horas',
+    type: 'float',
+  })
   @Column({ type: 'float' })
   duration: number;
 
@@ -24,7 +31,10 @@ export class Training {
   @Column({ type: 'varchar', length: 255 })
   progress: string;
 
-  @ApiProperty({ description: 'Usuario asociado al entrenamiento', type: () => User })
+  @ApiProperty({
+    description: 'Usuario asociado al entrenamiento',
+    type: () => User,
+  })
   @ManyToOne(() => User, (user) => user.trainings)
   user: User;
 

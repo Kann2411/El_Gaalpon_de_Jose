@@ -1,8 +1,11 @@
 "use client";
 
-import { ILogin, IProviderLogin, IUser, IUserContext, IUserResponse, SignInCredential } from "@/interfaces/interfaces";
+import { DecodedToken, ILogin, IProviderLogin, IUser, IUserContext, IUserResponse, SignInCredential } from "@/interfaces/interfaces";
 import { postSignIn, postSignUp } from "@/lib/server/fetchUsers";
 import { createContext, useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+
+
 
 export const UserContext = createContext<IUserContext>({
     user: null,
@@ -20,41 +23,42 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
-            let data: IUserResponse | null; // Define data como IUserResponse o null
+            let data: IUserResponse | null;
     
-            // Verificación si las credenciales tienen un proveedor
             if ('provider' in credentials) {
                 console.log(`Iniciando sesión con ${credentials.provider}`);
-                // Simulación de un usuario de Google
-                data = { user: { name: 'Google User' }, token: 'fake-google-token' }; 
+                data = { user: { name: 'Google User', role: 'user' }, token: 'fake-google-token' }; 
             } else {
-                // Llamada a la función postSignIn para obtener datos del backend
-                const user = await postSignIn(credentials); // Cambia a IUser | null
-                console.log("Datos devueltos de postSignIn:", user); // Log de los datos devueltos
+                const user = await postSignIn(credentials); 
+                console.log("Datos devueltos de postSignIn:", user);
     
-                // Crear IUserResponse a partir de IUser
                 if (user) {
-                    data = { user, token: 'fake-token' }; // Genera un token de forma apropiada
+                    data = { user, token: user.token };
                 } else {
-                    data = null; // O maneja el caso en el que user sea null
+                    data = null;
                 }
             }
     
-            // Verificación de datos recibidos
-            if (data && data.user) {
-                // Almacenar información del usuario y token en el estado y localStorage
-                setUser(data.user);
-                localStorage.setItem('user', JSON.stringify(data.user));
+            if (data && data.token) {
+                const decodedToken: DecodedToken = jwtDecode(data.token);
+                const role = decodedToken.roles; 
+    
+                const userWithRole = {
+                    ...data.user,
+                    role: role,
+                };
+    
+                setUser(userWithRole);
+                localStorage.setItem('user', JSON.stringify(userWithRole));
                 localStorage.setItem('token', data.token);
                 setIsLogged(true);
-                console.log("Inicio de sesión exitoso:", data.user); // Log de éxito
+                console.log("Inicio de sesión exitoso con rol:", userWithRole);
                 return true;
             }
     
-            console.warn("No se pudo iniciar sesión, datos no válidos:", data); // Log de advertencia
+            console.warn("No se pudo iniciar sesión, datos no válidos:", data);
             return false;
         } catch (error) {
-            // Manejo de errores
             if (error instanceof Error) {
                 console.error('Error durante el login:', error.message);
             } else {
@@ -70,9 +74,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             console.log("Llamando a postSignUp con:", user);
             const data = await postSignUp(user);
-            console.log("Respuesta recibida en signUp:", data); // Asegúrate de que esta línea imprima correctamente la respuesta
+            console.log("Respuesta recibida en signUp:", data); 
     
-            // Asegúrate de que la respuesta tenga el formato correcto
             if (data && data.user && data.user.id ) {
                 console.log("Usuario registrado correctamente:", data.user);
                 await signIn({ email: user.email, password: user.password });
@@ -88,26 +91,38 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     };
     
     
-    
-    
-
     const logOut = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         setUser(null);
         setIsLogged(false);
     };
-
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         const token = localStorage.getItem("token");
+    
         if (storedUser && token) {
             const parsedUser = JSON.parse(storedUser);
-            console.log("Usuario guardado en localStorage:", parsedUser); 
-            setUser(parsedUser);
-            setIsLogged(true);
+    
+            if (token) {
+                try {
+                    const decodedToken: DecodedToken = jwtDecode(token);
+                    const role = decodedToken.roles; 
+    
+                    setUser({
+                        ...parsedUser,
+                        role: role,
+                    });
+                    setIsLogged(true);
+                } catch (error) {
+                    console.warn("Error al decodificar el token:", error);
+                }
+            } else {
+                console.warn("Token no encontrado o inválido");
+            }
         }
     }, []);
+    
 
     return (
         <UserContext.Provider

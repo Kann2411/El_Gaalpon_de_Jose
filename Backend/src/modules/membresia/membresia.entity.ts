@@ -17,11 +17,19 @@ export class Membresia {
   @Column()
   tipo: TipoMembresia;
 
-  @ApiProperty({ description: 'Fecha de inicio de la membresía', type: 'string', format: 'date' })
+  @ApiProperty({
+    description: 'Fecha de inicio de la membresía',
+    type: 'string',
+    format: 'date',
+  })
   @Column({ type: 'date' })
   fechaInicio: Date;
 
-  @ApiProperty({ description: 'Fecha de fin de la membresía', type: 'string', format: 'date' })
+  @ApiProperty({
+    description: 'Fecha de fin de la membresía',
+    type: 'string',
+    format: 'date',
+  })
   @Column({ type: 'date' })
   fechaFin: Date;
 
