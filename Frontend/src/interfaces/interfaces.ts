@@ -62,3 +62,12 @@ export interface DecodedToken {
     iat: number;
     exp: number;
 }
+
+
+export interface FormValues {
+    name: string;
+    username: string;
+    phone: string;
+    email: string;
+    message: string;
+  }
