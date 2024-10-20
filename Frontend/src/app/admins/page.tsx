@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@/context/user';
 import { useRouter } from 'next/navigation';
@@ -8,28 +8,25 @@ import { IUser } from '@/interfaces/interfaces';
 export default function Admins() {
     const router = useRouter();
     const { user } = useContext(UserContext);
-    const [users, setUsers] = useState<IUser[]>([]); // Estado para almacenar los usuarios
-    const [loading, setLoading] = useState(true); // Estado de carga
+    const [users, setUsers] = useState<IUser[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // Función para obtener todos los usuarios
     const fetchAdmins = async () => {
         try {
             const data = await getUsers();
-            const filteredAdmins = data.filter(u => u.role === 'admin'); // Filtrar usuarios con rol 'admin'
+            const filteredAdmins = data.filter(u => u.role === 'admin');
             setUsers(filteredAdmins);
         } catch (error) {
             console.error('Error fetching admins:', error);
         } finally {
-            setLoading(false); // Finaliza el estado de carga
+            setLoading(false);
         }
     }
 
-    // Función para cambiar el rol de un usuario
     const handleChangeRole = async (id: string, newRole: 'user' | 'admin' | 'coach') => {
         try {
-            await changeUserRole(id, newRole); // Cambiar rol
-            // Eliminar usuario de la lista y actualizar estado
-            setUsers(users.filter(u => u.id !== id)); // Elimina el usuario de la lista actual
+            await changeUserRole(id, newRole);
+            setUsers(users.filter(u => u.id !== id));
             alert('Rol cambiado exitosamente');
         } catch (error) {
             if (error instanceof Error) {
@@ -50,17 +47,29 @@ export default function Admins() {
         }
     }, [user, router]);
 
-    if (loading) return <p>Loading admins...</p>;
+    if (loading) return <p className="text-white">Loading admins...</p>;
 
     return (
-        <div>
-            <h1>Admins</h1>
-            <ul>
+        <div className="bg-black text-white min-h-screen p-8">
+            <h1 className="text-3xl font-bold mb-6">Admins</h1>
+            <ul className="space-y-4">
                 {users.map(u => (
-                    <li key={u.id}>
+                    <li key={u.id} className="flex items-center justify-between p-4 bg-zinc-900 rounded-lg shadow-lg  transition duration-300">
                         <span>{u.name} - {u.email} - Rol: {u.role}</span>
-                        <button onClick={() => handleChangeRole(u.id, 'user')}>Cambiar a User</button>
-                        <button onClick={() => handleChangeRole(u.id, 'coach')}>Cambiar a Coach</button>
+                        <div className="flex space-x-2">
+                            <button
+                                onClick={() => handleChangeRole(u.id, 'user')}
+                                className="bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300 hover:bg-red-500"
+                            >
+                                Change to User
+                            </button>
+                            <button
+                                onClick={() => handleChangeRole(u.id, 'coach')}
+                                className="bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300 hover:bg-red-500"
+                            >
+                                Change to Coach
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>
