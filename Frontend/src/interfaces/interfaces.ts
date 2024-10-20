@@ -28,7 +28,7 @@ export interface IUser {
     registrationMethod?: string; 
     password: string;
     confirmPassword: string;
-    role: string; 
+    role: string | 'admin' | 'user' | 'coach'; 
     token: string;
   }
 

@@ -60,3 +60,51 @@ export async function postSignUp(user: Omit<IUser, "id">) {
     return null;
   }
 }
+
+
+// src/lib/server/fetchUsers.ts
+
+export const getUsers = async (): Promise<IUser[]> => {
+  // Suponiendo que guardas el token en localStorage después del inicio de sesión
+  const token = localStorage.getItem('token'); 
+
+  const response = await fetch('http://localhost:3000/users', {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Incluyendo el token en el encabezado
+      }
+  });
+
+  if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
+  }
+
+  return await response.json();
+};
+
+// src/lib/server/fetchUsers.ts
+
+export const changeUserRole = async (userId: string, newRole: 'user' | 'admin' | 'coach') => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+      throw new Error('Token no encontrado');
+  }
+
+  const response = await fetch(`http://localhost:3000/users/changeRole/${userId}?role=${newRole}`, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+      },
+  });
+
+  if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Error desconocido al cambiar el rol');
+  }
+
+  return await response.json();
+};
+
