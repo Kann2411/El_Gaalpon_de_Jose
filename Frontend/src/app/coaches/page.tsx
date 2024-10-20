@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@/context/user';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ export default function Coaches() {
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const handleChangeRole = async (id: string, newRole: 'user' | 'admin' | 'coach') => {
         try {
@@ -37,7 +37,7 @@ export default function Coaches() {
                 alert('Error desconocido al cambiar el rol');
             }
         }
-    }
+    };
 
     useEffect(() => {
         if (user?.role === 'admin') {
@@ -47,17 +47,29 @@ export default function Coaches() {
         }
     }, [user, router]);
 
-    if (loading) return <p>Cargando coaches...</p>;
+    if (loading) return <p className="text-white">Cargando coaches...</p>;
 
     return (
-        <div>
-            <h1>Coaches</h1>
-            <ul>
+        <div className="bg-black text-white min-h-screen p-8">
+            <h1 className="text-3xl font-bold mb-6">Coaches</h1>
+            <ul className="space-y-4">
                 {users.map(u => (
-                    <li key={u.id}>
+                    <li key={u.id} className="flex items-center justify-between p-4 bg-zinc-900 rounded-lg shadow-lg transition duration-300">
                         <span>{u.name} - {u.email} - Rol: {u.role}</span>
-                        <button onClick={() => handleChangeRole(u.id, 'user')}>Cambiar a User</button>
-                        <button onClick={() => handleChangeRole(u.id, 'admin')}>Cambiar a Admin</button>
+                        <div className="flex space-x-2">
+                            <button
+                                onClick={() => handleChangeRole(u.id, 'user')}
+                                className="bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300 hover:bg-red-500"
+                            >
+                                Cambiar a User
+                            </button>
+                            <button
+                                onClick={() => handleChangeRole(u.id, 'admin')}
+                                className="bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300 hover:bg-red-500"
+                            >
+                                Cambiar a Admin
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>
