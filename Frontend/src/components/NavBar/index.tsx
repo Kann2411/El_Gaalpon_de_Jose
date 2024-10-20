@@ -47,36 +47,129 @@ const NavBarComponent = () => {
         <div className="ml-4 text-2xl font-bold">FitZone</div>
       </Link>
 
-      <nav className="flex-1 flex items-center justify-center">
-        <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-          {["Home", "Plans", "Contact Us"].map((item, index) => {
-            const lowerCaseItem = item.toLowerCase();
-            const route =
-              lowerCaseItem === "home"
-                ? "/home"
-                : lowerCaseItem === "plans"
-                ? "/plans"
-                : "/contact";
+      {user?.role === "user" ? (
+  <nav className="flex-1 flex items-center justify-center">
+    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+      {["Home", "Plans", "Contact Us", "Appointments"].map((item, index) => {
+        const lowerCaseItem = item.toLowerCase();
+        const route =
+          lowerCaseItem === "home"
+            ? "/home"
+            : lowerCaseItem === "plans"
+            ? "/plans"
+            : lowerCaseItem === "contact us"
+            ? "/contact"
+            : "/appointments";
 
-            return (
-              <li key={index} className="relative group">
-                <Link
-                  href={route}
-                  className="text-white text-sm sm:text-base font-medium px-3 py-2"
-                >
-                  {item}
-                </Link>
-                <span
-                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                    pathname === route ? "scale-x-100" : "scale-x-0"
-                  }`}
-                />
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+        return (
+          <li key={index} className="relative group">
+            <Link
+              href={route}
+              className="text-white text-sm sm:text-base font-medium px-3 py-2"
+            >
+              {item}
+            </Link>
+            <span
+              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                pathname === route ? "scale-x-100" : "scale-x-0"
+              }`}
+            />
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+) : user?.role === "admin" ? (
+  <nav className="flex-1 flex items-center justify-center">
+    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+      {["Users", "Coaches", "Admins"].map((item, index) => {
+        const lowerCaseItem = item.toLowerCase();
+        const route =
+          lowerCaseItem === "users"
+            ? "/users"
+            : lowerCaseItem === "coaches"
+            ? "/coaches"
+            : "/admins";
+
+        return (
+          <li key={index} className="relative group">
+            <Link
+              href={route}
+              className="text-white text-sm sm:text-base font-medium px-3 py-2"
+            >
+              {item}
+            </Link>
+            <span
+              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                pathname === route ? "scale-x-100" : "scale-x-0"
+              }`}
+            />
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+) : user?.role === "coach" ? (
+  <nav className="flex-1 flex items-center justify-center">
+    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+      {["Training Management"].map((item, index) => {
+        const lowerCaseItem = item.toLowerCase();
+        const route = lowerCaseItem === "training management" ? "/training-management" : "#"; 
+        
+        return (
+          <li key={index} className="relative group">
+            <Link
+              href={route}
+              className="text-white text-sm sm:text-base font-medium px-3 py-2"
+            >
+              {item}
+            </Link>
+            <span
+              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                pathname === route ? "scale-x-100" : "scale-x-0"
+              }`}
+            />
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+) : !isLogged ? (
+  <nav className="flex-1 flex items-center justify-center">
+    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+      {["Home", "Plans", "Contact Us"].map((item, index) => {
+        const lowerCaseItem = item.toLowerCase();
+        const route =
+          lowerCaseItem === "home"
+            ? "/home"
+            : lowerCaseItem === "plans"
+            ? "/plans"
+            : "/contact";
+
+        return (
+          <li key={index} className="relative group">
+            <Link
+              href={route}
+              className="text-white text-sm sm:text-base font-medium px-3 py-2"
+            >
+              {item}
+            </Link>
+            <span
+              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                pathname === route ? "scale-x-100" : "scale-x-0"
+              }`}
+            />
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+) : null}
+
 
       {isLogged ? (
         <div className="relative" ref={menuRef}>
@@ -85,7 +178,10 @@ const NavBarComponent = () => {
             onClick={toggleMenu}
           >
             <img
-              src={user?.imgUrl ?? "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"}
+              src={
+                user?.imgUrl ??
+                "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"
+              }
               alt="avatar"
               className="w-full h-full rounded-full"
             />
@@ -110,14 +206,13 @@ const NavBarComponent = () => {
                 >
                   Dashboard
                 </button>
-                
+
                 <button
                   onClick={handleLogout}
                   className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-100"
                 >
                   Log Out
                 </button>
-                
               </>
             )}
           </div>

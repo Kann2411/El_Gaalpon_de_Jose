@@ -20,6 +20,7 @@ export const UserContext = createContext<IUserContext>({
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<Partial<IUser> | null>(null);
     const [isLogged, setIsLogged] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true); 
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
