@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -23,6 +24,11 @@ export class ClassesController {
     try {
       return await this.classesService.getClasses();
     } catch (error) {}
+  }
+
+  @Get('seeder')
+  getClassesSeeder() {
+    return this.classesService.classesSeeder();
   }
 
   @Get(':id')
