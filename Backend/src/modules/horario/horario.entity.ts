@@ -13,8 +13,11 @@ export class Horario {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: 'Día de la semana', enum: Dia })
-  @Column()
+  @ApiProperty({
+    description: 'Día de la semana',
+    enum: Dia,
+  })
+  @Column({ unique: true })
   dia: Dia;
 
   @ApiProperty({

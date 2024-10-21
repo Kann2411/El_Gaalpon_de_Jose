@@ -1,43 +1,104 @@
 [
-    {
-      "name": "Crossfit Avanzado",
-      "capacidad": 20,
-      "estado": "ACTIVA",
-      "horario": {
-        "dia": "Lunes",
-        "horaInicio": "06:00",
-        "horaFin": "07:30"
+  {
+    "dia": "LUNES",
+    "horaInicio": "06:00:00",
+    "horaFin": "22:00:00",
+    "classes": [
+      {
+        "name": "Yoga",
+        "capacidad": 20,
+        "estado": "ACTIVA"
+      },
+      {
+        "name": "Spinning",
+        "capacidad": 15,
+        "estado": "ACTIVA"
       }
-    },
-    {
-      "name": "Yoga para Principiantes",
-      "capacidad": 15,
-      "estado": "ACTIVA",
-      "horario": {
-        "dia": "Martes",
-        "horaInicio": "18:00",
-        "horaFin": "19:30"
+    ]
+  },
+  {
+    "dia": "MARTES",
+    "horaInicio": "06:00:00",
+    "horaFin": "22:00:00",
+    "classes": [
+      {
+        "name": "Entrenamiento Funcional",
+        "capacidad": 25,
+        "estado": "ACTIVA"
+      },
+      {
+        "name": "Zumba",
+        "capacidad": 30,
+        "estado": "ACTIVA"
       }
-    },
-    {
-      "name": "Entrenamiento Funcional",
-      "capacidad": 25,
-      "estado": "ACTIVA",
-      "horario": {
-        "dia": "Miércoles",
-        "horaInicio": "08:00",
-        "horaFin": "09:30"
+    ]
+  },
+  {
+    "dia": "MIERCOLES",
+    "horaInicio": "06:00:00",
+    "horaFin": "22:00:00",
+    "classes": [
+      {
+        "name": "Pilates",
+        "capacidad": 20,
+        "estado": "ACTIVA"
+      },
+      {
+        "name": "Boxeo",
+        "capacidad": 15,
+        "estado": "ACTIVA"
       }
-    },
-    {
-      "name": "Boxeo Intermedio",
-      "capacidad": 10,
-      "estado": "ACTIVA",
-      "horario": {
-        "dia": "Jueves",
-        "horaInicio": "19:00",
-        "horaFin": "20:30"
+    ]
+  },
+  {
+    "dia": "JUEVES",
+    "horaInicio": "06:00:00",
+    "horaFin": "22:00:00",
+    "classes": [
+      {
+        "name": "CrossFit",
+        "capacidad": 25,
+        "estado": "ACTIVA"
+      },
+      {
+        "name": "Aeróbicos",
+        "capacidad": 20,
+        "estado": "ACTIVA"
       }
-    }
-  ]
-  
+    ]
+  },
+  {
+    "dia": "VIERNES",
+    "horaInicio": "06:00:00",
+    "horaFin": "22:00:00",
+    "classes": [
+      {
+        "name": "Yoga",
+        "capacidad": 20,
+        "estado": "ACTIVA"
+      },
+      {
+        "name": "Spinning",
+        "capacidad": 15,
+        "estado": "ACTIVA"
+      }
+    ]
+  },
+  {
+    "dia": "SABADO",
+    "horaInicio": "08:00:00",
+    "horaFin": "14:00:00",
+    "classes": [
+      {
+        "name": "Entrenamiento Funcional",
+        "capacidad": 25,
+        "estado": "ACTIVA"
+      },
+      {
+        "name": "Zumba",
+        "capacidad": 30,
+        "estado": "ACTIVA"
+      }
+    ]
+  }
+]

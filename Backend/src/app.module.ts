@@ -10,6 +10,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TrainingModule } from './modules/training/training.module';
+import { HorarioModule } from './modules/horario/horario.module';
+import { ClassesModule } from './modules/classes/classes.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { TrainingModule } from './modules/training/training.module';
     }),
     ChatBotModule,
     FileUploadModule,
+    HorarioModule,
+    ClassesModule,
     UsersModule,
     AuthModule,
     TrainingModule,

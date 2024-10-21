@@ -27,6 +27,11 @@ export class HorarioController {
     }
   }
 
+  @Get('seeder')
+  horariosSeeder() {
+    return this.horarioService.horariosSeeder();
+  }
+
   @Get(':id')
   async getHorarioById(@Param(ParseUUIDPipe) id: UUID) {
     try {
