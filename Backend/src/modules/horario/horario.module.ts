@@ -11,5 +11,10 @@ import { Horario } from './horario.entity';
   providers: [HorarioService, HorarioRepository],
 })
 export class HorarioModule {
-  constructor() {}
+  constructor(private readonly horarioRepository: HorarioRepository) {}
+
+  async onModuleInit() {
+    console.log('preload Horarios');
+    await this.horarioRepository.horariosSeeder();
+  }
 }

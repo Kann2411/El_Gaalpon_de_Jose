@@ -14,4 +14,11 @@ import { Class } from './classes.entity';
   providers: [ClassService, ClassRepository],
   controllers: [ClassesController],
 })
-export class ClassesModule {}
+export class ClassesModule {
+  constructor(private readonly classRepository: ClassRepository) {}
+
+  async onModuleInit() {
+    console.log('preload Classes');
+    await this.classRepository.classesSeeder();
+  }
+}
