@@ -223,13 +223,13 @@ const NavBarComponent = () => {
             href="/login"
             className="text-white text-sm sm:text-base font-medium px-3 py-2"
           >
-            Iniciar Sesión
+            Login
           </Link>
           <Link
             href="/register"
             className="text-lg font-medium px-4 py-2 rounded-md bg-red-600 text-white shadow-md hover:bg-red-800 transition-colors"
           >
-            Inscribirme
+            Sign Up
           </Link>
         </div>
       )}
