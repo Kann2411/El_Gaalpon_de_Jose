@@ -62,7 +62,7 @@ export default function LoginForm() {
             <Field
               type="email"
               name="email"
-              placeholder="Correo electrónico"
+              placeholder="Email"
               className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
@@ -71,7 +71,7 @@ export default function LoginForm() {
             <Field
               type="password"
               name="password"
-              placeholder="Contraseña"
+              placeholder="Password"
               className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
@@ -81,7 +81,7 @@ export default function LoginForm() {
             disabled={!isValid || !dirty}
             className="w-full bg-red-600 text-white py-3 rounded hover:bg-red-800"
           >
-            Iniciar Sesión
+            Login
           </button>
         </Form>
       )}

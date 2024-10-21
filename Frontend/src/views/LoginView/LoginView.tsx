@@ -16,11 +16,11 @@ const LoginView = () => {
 
       {/* Contenedor del formulario */}
       <div className="w-full max-w-md bg-black bg-opacity-50 p-8 rounded shadow-lg relative z-10">
-        <h2 className="text-2xl font-bold mb-6 text-center text-white">Iniciar Sesión</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">Login</h2>
         <LoginForm />
         <div className="flex items-center justify-center my-4">
           <hr className="flex-grow border-gray-400" />
-          <span className="mx-2 text-white">O acceder con</span>
+          <span className="mx-2 text-white">Or access with</span>
           <hr className="flex-grow border-gray-400" />
         </div>
         <button
@@ -35,8 +35,8 @@ const LoginView = () => {
         </button>
         <div className="text-center mt-4">
           <p className="text-sm text-white">
-            ¿No tienes una cuenta?{" "}
-            <a href="/register" className="text-red-600">Regístrate</a>
+              Don't have an account?{" "}
+            <a href="/register" className="text-red-600">Sign up</a>
           </p>
         </div>
       </div>

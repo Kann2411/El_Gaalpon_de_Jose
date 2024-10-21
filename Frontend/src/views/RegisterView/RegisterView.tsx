@@ -19,11 +19,11 @@ const RegisterView = () => {
 
       {/* Form content */}
       <div className="relative w-full max-w-md bg-black bg-opacity-50 p-8 rounded shadow-lg z-10">
-        <h2 className="text-2xl font-bold mb-6 text-center text-white">Registro</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">Register</h2>
         <RegisterFormComponent />
         <div className="flex items-center justify-center my-4">
           <hr className="flex-grow border-gray-400" />
-          <span className="mx-2 text-gray-300">O acceder con</span>
+          <span className="mx-2 text-gray-300">Or access with</span>
           <hr className="flex-grow border-gray-400" />
         </div>
         <button
@@ -38,8 +38,8 @@ const RegisterView = () => {
         </button>
         <div className="text-center mt-4">
           <p className="text-sm text-gray-300">
-            ¿Ya tienes una cuenta?{" "}
-            <a href="/login" className="text-red-500">Inicia sesión</a>
+              Don't have an account?{" "}
+            <a href="/login" className="text-red-500">Login</a>
           </p>
         </div>
       </div>

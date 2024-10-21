@@ -68,7 +68,7 @@ export default function RegisterFormComponent() {
               type="text"
               id="name"
               name="name"
-              placeholder="Nombre"
+              placeholder="Name"
               className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
@@ -78,7 +78,7 @@ export default function RegisterFormComponent() {
               type="email"
               id="email"
               name="email"
-              placeholder="Correo electrónico"
+              placeholder="Email"
               className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
@@ -88,7 +88,7 @@ export default function RegisterFormComponent() {
               type="text"
               id="phone"
               name="phone"
-              placeholder="Teléfono"
+              placeholder="Phone"
               className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <ErrorMessage name="phone" component="div" className="text-red-500 text-sm" />
@@ -108,7 +108,7 @@ export default function RegisterFormComponent() {
               type="password"
               id="password"
               name="password"
-              placeholder="Contraseña"
+              placeholder="Password"
               className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
@@ -118,7 +118,7 @@ export default function RegisterFormComponent() {
               type="password"
               id="confirmPassword"
               name="confirmPassword"
-              placeholder="Confirmar contraseña"
+              placeholder="Confirm password"
               className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm" />
@@ -129,7 +129,7 @@ export default function RegisterFormComponent() {
               disabled={!isValid || !dirty}
               className="w-full bg-red-600 text-white py-3 rounded hover:bg-red-800"
             >
-              Registrarse
+              Sign Up
             </button>
           </div>
         </Form>
