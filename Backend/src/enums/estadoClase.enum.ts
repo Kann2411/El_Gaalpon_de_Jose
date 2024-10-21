@@ -1,5 +1,5 @@
 export enum EstadoClase {
-  DISPONIBLE = 'Disponible',
-  COMPLETADA = 'Completada',
+  ACTIVA = 'Activa',
+  FINALIZADA = 'Finalizada',
   CANCELADA = 'Cancelada',
 }

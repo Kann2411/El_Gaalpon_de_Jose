@@ -3,14 +3,17 @@ import { Class } from './classes.entity';
 import { UUID } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { HorarioRepository } from '../horario/horario.repository';
+import { Horario } from '../horario/horario.entity';
+import * as clases from '../../utils/clases.json';
+import { EstadoClase } from 'src/enums/estadoClase.enum';
 
 @Injectable()
 export class ClassRepository {
   constructor(
+    @InjectRepository(Horario)
+    private readonly horarioDBRepository: Repository<Horario>,
     @InjectRepository(Class)
     private readonly classesRepository: Repository<Class>,
-    private readonly horarioRepository: HorarioRepository,
     @InjectDataSource() private dataSource: DataSource,
   ) {}
 
@@ -24,6 +27,31 @@ export class ClassRepository {
     } catch (error) {
       throw error;
     }
+  }
+
+  async classesSeeder() {
+    const horarios = await this.horarioDBRepository.find();
+
+    for (const element of clases) {
+      const horario = horarios.find(
+        (horario) =>
+          horario.dia.toLocaleLowerCase() === element.dia.toLocaleLowerCase(),
+      );
+
+      if (horario) {
+        for (const classItem of element.classes) {
+          const nuevaClase = new Class();
+          nuevaClase.name = classItem.name;
+          nuevaClase.capacidad = classItem.capacidad;
+          nuevaClase.estado =
+            EstadoClase[classItem.estado as keyof EstadoClase];
+          nuevaClase.horario = horario;
+
+          await this.classesRepository.save(nuevaClase);
+        }
+      }
+    }
+    return { message: 'Clases creadas con éxito' };
   }
 
   async getClassById(id: UUID) {
