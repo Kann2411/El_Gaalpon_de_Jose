@@ -15,6 +15,10 @@ export class HorarioService {
     }
   }
 
+  horariosSeeder() {
+    return this.horarioesRepository.horariosSeeder();
+  }
+
   async getHorarioById(id: UUID) {
     try {
       return await this.horarioesRepository.getHorarioById(id);

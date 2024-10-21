@@ -15,6 +15,10 @@ export class ClassService {
     }
   }
 
+  classesSeeder() {
+    return this.classesRepository.classesSeeder();
+  }
+
   async getClassById(id: UUID) {
     try {
       return await this.classesRepository.getClassById(id);
