@@ -1,6 +1,7 @@
-import { ILogin, IRegister, IUser } from "@/interfaces/interfaces";
+import { ILogin, IRegister, IUser, IUserResponse } from "@/interfaces/interfaces";
 
-export async function postSignIn(credential: ILogin): Promise<IUser | null> {
+// Asegúrate de que el tipo devuelto sea IUserResponse en lugar de IUser
+export async function postSignIn(credential: ILogin): Promise<IUserResponse | null> {
   try {
       if (!credential.email || !credential.password) {
           console.error("Email y contraseña son obligatorios");
@@ -21,7 +22,7 @@ export async function postSignIn(credential: ILogin): Promise<IUser | null> {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
 
-      const result = await response.json();
+      const result: IUserResponse = await response.json(); // Asegúrate de que el resultado cumpla con IUserResponse
       return result;
 
   } catch (error) {
@@ -107,4 +108,3 @@ export const changeUserRole = async (userId: string, newRole: 'user' | 'admin' |
 
   return await response.json();
 };
-
