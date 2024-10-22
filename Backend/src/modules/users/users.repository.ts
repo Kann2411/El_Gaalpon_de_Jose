@@ -34,6 +34,30 @@ export class UsersRepository {
     }
   }
 
+  async getUserByIdImag(id: string) : Promise<string> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+        select: {
+          imgUrl:true
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundException(`Usuario con id ${id} no existe`);
+      }
+
+      return user.imgUrl;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Error al obtener el usuario por ID',
+      );
+    }
+  }
+
   async getUserById(id: string): Promise<User> {
     try {
       const user = await this.userRepository.findOne({
