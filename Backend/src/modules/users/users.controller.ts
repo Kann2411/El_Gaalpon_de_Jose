@@ -36,6 +36,11 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+  @Get('img-profile/:id')
+  getUserByIdImag(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.getUserByIdImag(id);
+  }
+
   @Get(':id')
   getUserById(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.getUserById(id);

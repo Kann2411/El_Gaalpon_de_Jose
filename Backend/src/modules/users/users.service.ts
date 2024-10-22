@@ -14,6 +14,10 @@ export class UsersService {
     return this.usersRepository.getUsers();
   }
 
+  getUserByIdImag(id: string) {
+    return this.usersRepository.getUserByIdImag(id);
+  }
+
   getUserById(id: string) {
     return this.usersRepository.getUserById(id);
   }
