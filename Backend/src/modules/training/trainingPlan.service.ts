@@ -5,15 +5,20 @@ import { User } from '../users/users.entity';
 
 @Injectable()
 export class TrainingPlanService {
+
   constructor(
     private readonly trainingPlanRepository: TrainingPlanRepository,
   ) {}
 
-  async createTrainingPlan(planDto: CreateTrainingPlanDto, coach: User) {
-    return await this.trainingPlanRepository.createTrainingPlan(planDto, coach);
+   createTrainingPlan(planDto: CreateTrainingPlanDto, coach: User) {
+    return  this.trainingPlanRepository.createTrainingPlan(planDto, coach);
   }
 
-  async getAllTrainingPlans() {
-    return await this.trainingPlanRepository.getAllTrainingPlans();
+   getAllTrainingPlans() {
+    return  this.trainingPlanRepository.getAllTrainingPlans();
+  }
+
+  deleteTrainingPlans(id:string) {
+    return this.trainingPlanRepository.deleteTrainingPlans(id);
   }
 }
