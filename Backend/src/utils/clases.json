@@ -9,14 +9,18 @@
         "capacity": 20,
         "intensity": "Low",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://www.hola.com/horizon/landscape/5ebfb61babb7-yoga-2t-t.jpg",
+        "description": "Yoga is a mind-body practice that combines physical postures, breathing exercises, and meditation to promote relaxation and improve flexibility."
       },
       {
         "name": "Spinning",
         "capacity": 15,
         "intensity": "High",
         "status": "ACTIVE",
-        "duration": "45 minutes"
+        "duration": "45 minutes",
+        "image": "https://i.blogs.es/f7460a/1/1366_2000.jpg",
+        "description": "Spinning is a high-intensity indoor cycling workout that improves cardiovascular health and strengthens lower body muscles."
       }
     ]
   },
@@ -30,14 +34,18 @@
         "capacity": 25,
         "intensity": "Medium",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://www.ciafitness.com.pe/wp-content/uploads/2019/11/BLOG-CIA-FITNESS-FUNCTIONAL-IMG.jpg",
+        "description": "Functional training focuses on exercises that mimic everyday movements, helping to improve strength, balance, and coordination."
       },
       {
         "name": "Zumba",
         "capacity": 30,
         "intensity": "Medium",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://img.freepik.com/foto-gratis/gente-sonriente-divirtiendose-clase-zumba_23-2149074876.jpg",
+        "description": "Zumba is a high-energy dance fitness program that combines Latin and international music with fun dance moves."
       }
     ]
   },
@@ -45,21 +53,24 @@
     "day": "WEDNESDAY",
     "startTime": "06:00:00",
     "endTime": "08:00:00",
-    "duration": "16 hours",
     "classes": [
       {
         "name": "Pilates",
         "capacity": 20,
         "intensity": "Low",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://xanopilates.com/wp-content/uploads/2019/05/AdobeStock_165519637-e1565000891865.jpeg",
+        "description": "Pilates is a system of exercises focused on improving flexibility, strength, and body awareness. It is ideal for strengthening the core and improving posture."
       },
       {
         "name": "Boxing",
         "capacity": 15,
         "intensity": "High",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://cdn.valenciaplaza.com/public/Image/2023/4/gimnasios-boxeo-murcia_forCrop.jpg",
+        "description": "Boxing is a high-intensity sport that improves strength, coordination, and cardiovascular fitness through punches and defensive moves."
       }
     ]
   },
@@ -67,21 +78,24 @@
     "day": "THURSDAY",
     "startTime": "06:00:00",
     "endTime": "07:45:00",
-    "duration": "16 hours",
     "classes": [
       {
         "name": "CrossFit",
         "capacity": 25,
         "intensity": "High",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://cloudfront-us-east-1.images.arcpublishing.com/copesa/KYKH74KAYREOHPDQJLLFRMPGX4.jpeg",
+        "description": "CrossFit is a strength and conditioning workout that combines elements of weightlifting, aerobics, and gymnastics to build endurance, strength, and agility."
       },
       {
         "name": "Aerobics",
         "capacity": 20,
         "intensity": "Medium",
         "status": "ACTIVE",
-        "duration": "45 minutes"
+        "duration": "45 minutes",
+        "image": "https://img.freepik.com/fotos-premium/grupo-personas-deportivas-haciendo-aerobic-clase-gimnasio_1301-6064.jpg",
+        "description": "Aerobics is a cardio workout that focuses on rhythmic exercises to improve cardiovascular endurance and burn calories."
       }
     ]
   },
@@ -95,14 +109,18 @@
         "capacity": 20,
         "intensity": "Low",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://www.hola.com/horizon/landscape/5ebfb61babb7-yoga-2t-t.jpg",
+        "description": "Yoga is a mind-body practice that combines physical postures, breathing exercises, and meditation to promote relaxation and improve flexibility."
       },
       {
         "name": "Spinning",
         "capacity": 15,
         "intensity": "High",
         "status": "ACTIVE",
-        "duration": "45 minutes"
+        "duration": "45 minutes",
+        "image": "https://i.blogs.es/f7460a/1/1366_2000.jpg",
+        "description": "Spinning is a high-intensity indoor cycling workout that improves cardiovascular health and strengthens lower body muscles."
       }
     ]
   },
@@ -116,14 +134,18 @@
         "capacity": 25,
         "intensity": "Medium",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://www.ciafitness.com.pe/wp-content/uploads/2019/11/BLOG-CIA-FITNESS-FUNCTIONAL-IMG.jpg",
+        "description": "Functional training focuses on exercises that mimic everyday movements, helping to improve strength, balance, and coordination."
       },
       {
         "name": "Zumba",
         "capacity": 30,
         "intensity": "Medium",
         "status": "ACTIVE",
-        "duration": "1 hour"
+        "duration": "1 hour",
+        "image": "https://img.freepik.com/foto-gratis/gente-sonriente-divirtiendose-clase-zumba_23-2149074876.jpg",
+        "description": "Zumba is a high-energy dance fitness program that combines Latin and international music with fun dance moves."
       }
     ]
   }
