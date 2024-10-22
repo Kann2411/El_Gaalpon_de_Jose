@@ -28,7 +28,7 @@ export default function LoginForm() {
         customClass: {
           popup: 'bg-black text-white', 
           title: 'text-red-600',
-          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
         },
         buttonsStyling: false, 
       })
@@ -42,7 +42,7 @@ export default function LoginForm() {
         customClass: {
           popup: 'bg-black text-white', 
           title: 'text-red-600',
-          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
         },
         buttonsStyling: false, 
       })
