@@ -7,47 +7,27 @@ import { ClassRepository } from './classes.repository';
 export class ClassService {
   constructor(private readonly classesRepository: ClassRepository) {}
 
-  async getClasses() {
-    try {
-      return await this.classesRepository.getClasses();
-    } catch (error) {
-      throw error;
-    }
+  getClasses() {
+    return this.classesRepository.getClasses();
   }
 
   classesSeeder() {
     return this.classesRepository.classesSeeder();
   }
 
-  async getClassById(id: UUID) {
-    try {
-      return await this.classesRepository.getClassById(id);
-    } catch (error) {
-      throw error;
-    }
+  getClassById(id: UUID) {
+    return this.classesRepository.getClassById(id);
   }
 
-  async createClass(classData: Class) {
-    try {
-      return this.classesRepository.createClass(classData);
-    } catch (error) {
-      throw error;
-    }
+  createClass(classData: Class) {
+    return this.classesRepository.createClass(classData);
   }
 
-  async updateClass(id: UUID, classData: Class) {
-    try {
-      return this.classesRepository.updateClass(id, classData);
-    } catch (error) {
-      throw error;
-    }
+  updateClass(id: UUID, classData: Class) {
+    return this.classesRepository.updateClass(id, classData);
   }
 
-  async deleteClass(id: UUID) {
-    try {
-      return this.classesRepository.deleteClass(id);
-    } catch (error) {
-      throw error;
-    }
+  deleteClass(id: UUID) {
+    return this.classesRepository.deleteClass(id);
   }
 }

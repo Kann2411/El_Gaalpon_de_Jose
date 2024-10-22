@@ -18,7 +18,7 @@ export class Horario {
     enum: Dia,
   })
   @Column({ unique: true })
-  dia: Dia;
+  day: Dia;
 
   @ApiProperty({
     description: 'Hora de inicio del horario',
@@ -27,7 +27,7 @@ export class Horario {
     default: '00:00:00',
   })
   @Column({ type: 'time', default: '00:00:00' })
-  horaInicio: Date;
+  starttime: Date;
 
   @ApiProperty({
     description: 'Hora de fin del horario',
@@ -35,12 +35,12 @@ export class Horario {
     format: 'time',
   })
   @Column({ type: 'time' })
-  horaFin: Date;
+  endtime: Date;
 
   @ApiProperty({
     description: 'Clases asignadas a este horario',
     type: () => [Class],
   })
-  @OneToMany(() => Class, (classEntity) => classEntity.horario)
+  @OneToMany(() => Class, (classEntity) => classEntity.schedule)
   classes: Class[];
 }

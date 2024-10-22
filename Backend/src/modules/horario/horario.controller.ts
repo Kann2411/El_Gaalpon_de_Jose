@@ -19,12 +19,8 @@ export class HorarioController {
   constructor(private readonly horarioService: HorarioService) {}
 
   @Get()
-  async getHorario() {
-    try {
-      return await this.horarioService.getHorarios();
-    } catch (error) {
-      return error;
-    }
+  getHorario() {
+    return this.horarioService.getHorarios();
   }
 
   @Get('seeder')
@@ -33,41 +29,25 @@ export class HorarioController {
   }
 
   @Get(':id')
-  async getHorarioById(@Param(ParseUUIDPipe) id: UUID) {
-    try {
-      return await this.horarioService.getHorarioById(id);
-    } catch (error) {
-      return error;
-    }
+  getHorarioById(@Param(ParseUUIDPipe) id: UUID) {
+    return this.horarioService.getHorarioById(id);
   }
 
   @Post()
-  async createHorario(@Body() horarioData: Horario) {
-    try {
-      return this.horarioService.createHorario(horarioData);
-    } catch (error) {
-      return error;
-    }
+  createHorario(@Body() horarioData: Horario) {
+    return this.horarioService.createHorario(horarioData);
   }
 
   @Put()
-  async updateHorario(
+  updateHorario(
     @Param('id', ParseUUIDPipe) id: UUID,
     @Body() horarioData: Horario,
   ) {
-    try {
-      return this.horarioService.updateHorario(id, horarioData);
-    } catch (error) {
-      return error;
-    }
+    return this.horarioService.updateHorario(id, horarioData);
   }
 
   @Delete()
-  async deleteClass(@Param(ParseUUIDPipe) id: UUID) {
-    try {
-      return this.horarioService.deleteHorario(id);
-    } catch (error) {
-      return error;
-    }
+  deleteClass(@Param(ParseUUIDPipe) id: UUID) {
+    return this.horarioService.deleteHorario(id);
   }
 }

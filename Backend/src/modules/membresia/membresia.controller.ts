@@ -19,30 +19,30 @@ export class MembresiaController {
   constructor(private readonly membresiaService: membresiaService) {}
 
   @Get()
-  async getMembresias() {
-    return await this.membresiaService.getMembresias();
+  getMembresias() {
+    return this.membresiaService.getMembresias();
   }
 
   @Get(':id')
-  async getMembresiaById(@Param('id', ParseUUIDPipe) id: UUID) {
-    return await this.membresiaService.getMembresiaById(id);
+  getMembresiaById(@Param('id', ParseUUIDPipe) id: UUID) {
+    return this.membresiaService.getMembresiaById(id);
   }
 
   @Post()
-  async createMembresia(@Body() membresia: Membresia) {
-    return await this.membresiaService.createMembresia(membresia);
+  createMembresia(@Body() membresia: Membresia) {
+    return this.membresiaService.createMembresia(membresia);
   }
 
   @Put()
-  async updateMembresia(
+  updateMembresia(
     @Param('id', ParseUUIDPipe) id: UUID,
     @Body() membresia: Membresia,
   ) {
-    await this.membresiaService.updateMembresia(id, membresia);
+    this.membresiaService.updateMembresia(id, membresia);
   }
 
   @Delete()
-  async deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
-    await this.membresiaService.deleteMembresia(id);
+  deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
+    this.membresiaService.deleteMembresia(id);
   }
 }

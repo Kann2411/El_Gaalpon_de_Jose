@@ -20,10 +20,8 @@ export class ClassesController {
   constructor(private readonly classesService: ClassService) {}
 
   @Get()
-  async getClasses() {
-    try {
-      return await this.classesService.getClasses();
-    } catch (error) {}
+  getClasses() {
+    return this.classesService.getClasses();
   }
 
   @Get('seeder')
@@ -32,33 +30,22 @@ export class ClassesController {
   }
 
   @Get(':id')
-  async getClassById(@Param(ParseUUIDPipe) id: UUID) {
-    try {
-      return await this.classesService.getClassById(id);
-    } catch (error) {}
+  getClassById(@Param(ParseUUIDPipe) id: UUID) {
+    return this.classesService.getClassById(id);
   }
 
   @Post()
-  async createClass(@Body() classData: Class) {
-    try {
-      return this.classesService.createClass(classData);
-    } catch (error) {}
+  createClass(@Body() classData: Class) {
+    return this.classesService.createClass(classData);
   }
 
   @Put()
-  async updateClass(
-    @Param('id', ParseUUIDPipe) id: UUID,
-    @Body() classData: Class,
-  ) {
-    try {
-      return this.classesService.updateClass(id, classData);
-    } catch (error) {}
+  updateClass(@Param('id', ParseUUIDPipe) id: UUID, @Body() classData: Class) {
+    return this.classesService.updateClass(id, classData);
   }
 
   @Delete()
-  async deleteClass(@Param(ParseUUIDPipe) id: UUID) {
-    try {
-      return this.classesService.deleteClass(id);
-    } catch (error) {}
+  deleteClass(@Param(ParseUUIDPipe) id: UUID) {
+    return this.classesService.deleteClass(id);
   }
 }

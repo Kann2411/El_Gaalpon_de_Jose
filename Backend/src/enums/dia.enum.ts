@@ -1,9 +1,9 @@
 export enum Dia {
-  LUNES = 'Lunes',
-  MARTES = 'Martes',
-  MIERCOLES = 'Miercoles',
-  JUEVES = 'Jueves',
-  VIERNES = 'Viernes',
-  SABADO = 'Sabado',
-  DOMINGO = 'Domingo',
+  MONDAY = 'Monday',
+  TUESDAY = 'Tuesday',
+  WEDNESDAY = 'Wednesday',
+  THURSDAY = 'Thursday',
+  FRIDAY = 'Friday',
+  SATURDAY = 'Saturday',
+  SUNDAY = 'Sunday',
 }

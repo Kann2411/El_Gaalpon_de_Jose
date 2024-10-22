@@ -1,103 +1,129 @@
 [
   {
-    "dia": "LUNES",
-    "horaInicio": "06:00:00",
-    "horaFin": "22:00:00",
+    "day": "MONDAY",
+    "startTime": "06:00:00",
+    "endTime": "07:45:00",
     "classes": [
       {
         "name": "Yoga",
-        "capacidad": 20,
-        "estado": "ACTIVA"
+        "capacity": 20,
+        "intensity": "Low",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       },
       {
         "name": "Spinning",
-        "capacidad": 15,
-        "estado": "ACTIVA"
+        "capacity": 15,
+        "intensity": "High",
+        "status": "ACTIVE",
+        "duration": "45 minutes"
       }
     ]
   },
   {
-    "dia": "MARTES",
-    "horaInicio": "06:00:00",
-    "horaFin": "22:00:00",
+    "day": "TUESDAY",
+    "startTime": "06:00:00",
+    "endTime": "08:00:00",
     "classes": [
       {
-        "name": "Entrenamiento Funcional",
-        "capacidad": 25,
-        "estado": "ACTIVA"
+        "name": "Functional Training",
+        "capacity": 25,
+        "intensity": "Medium",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       },
       {
         "name": "Zumba",
-        "capacidad": 30,
-        "estado": "ACTIVA"
+        "capacity": 30,
+        "intensity": "Medium",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       }
     ]
   },
   {
-    "dia": "MIERCOLES",
-    "horaInicio": "06:00:00",
-    "horaFin": "22:00:00",
+    "day": "WEDNESDAY",
+    "startTime": "06:00:00",
+    "endTime": "08:00:00",
+    "duration": "16 hours",
     "classes": [
       {
         "name": "Pilates",
-        "capacidad": 20,
-        "estado": "ACTIVA"
+        "capacity": 20,
+        "intensity": "Low",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       },
       {
-        "name": "Boxeo",
-        "capacidad": 15,
-        "estado": "ACTIVA"
+        "name": "Boxing",
+        "capacity": 15,
+        "intensity": "High",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       }
     ]
   },
   {
-    "dia": "JUEVES",
-    "horaInicio": "06:00:00",
-    "horaFin": "22:00:00",
+    "day": "THURSDAY",
+    "startTime": "06:00:00",
+    "endTime": "07:45:00",
+    "duration": "16 hours",
     "classes": [
       {
         "name": "CrossFit",
-        "capacidad": 25,
-        "estado": "ACTIVA"
+        "capacity": 25,
+        "intensity": "High",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       },
       {
-        "name": "Aeróbicos",
-        "capacidad": 20,
-        "estado": "ACTIVA"
+        "name": "Aerobics",
+        "capacity": 20,
+        "intensity": "Medium",
+        "status": "ACTIVE",
+        "duration": "45 minutes"
       }
     ]
   },
   {
-    "dia": "VIERNES",
-    "horaInicio": "06:00:00",
-    "horaFin": "22:00:00",
+    "day": "FRIDAY",
+    "startTime": "06:00:00",
+    "endTime": "07:45:00",
     "classes": [
       {
         "name": "Yoga",
-        "capacidad": 20,
-        "estado": "ACTIVA"
+        "capacity": 20,
+        "intensity": "Low",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       },
       {
         "name": "Spinning",
-        "capacidad": 15,
-        "estado": "ACTIVA"
+        "capacity": 15,
+        "intensity": "High",
+        "status": "ACTIVE",
+        "duration": "45 minutes"
       }
     ]
   },
   {
-    "dia": "SABADO",
-    "horaInicio": "08:00:00",
-    "horaFin": "14:00:00",
+    "day": "SATURDAY",
+    "startTime": "06:00:00",
+    "endTime": "08:00:00",
     "classes": [
       {
-        "name": "Entrenamiento Funcional",
-        "capacidad": 25,
-        "estado": "ACTIVA"
+        "name": "Functional Training",
+        "capacity": 25,
+        "intensity": "Medium",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       },
       {
         "name": "Zumba",
-        "capacidad": 30,
-        "estado": "ACTIVA"
+        "capacity": 30,
+        "intensity": "Medium",
+        "status": "ACTIVE",
+        "duration": "1 hour"
       }
     ]
   }

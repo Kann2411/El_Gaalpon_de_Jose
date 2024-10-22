@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Horario } from '../horario/horario.entity';
+import { Horario as Schedule } from '../horario/horario.entity';
 
 @Entity({ name: 'classes' })
 export class Class {
@@ -18,24 +18,33 @@ export class Class {
   name: string;
 
   @ApiProperty({
+    description: 'Intensidad de la clase',
+  })
+  @Column()
+  intensity: string;
+
+  @ApiProperty({
     description: 'Capacidad máxima de la clase',
     type: 'integer',
     default: 0,
   })
   @Column({ type: 'int', default: 0 })
-  capacidad: number;
+  capacity: number;
 
   @ApiProperty({
     description: 'Estado actual de la clase',
     enum: EstadoClase,
   })
   @Column()
-  estado: EstadoClase;
+  status: EstadoClase;
+
+  @Column()
+  duration: string;
 
   @ApiProperty({
     description: 'Horario asignado a la clase',
-    type: () => Horario,
+    type: () => Schedule,
   })
-  @ManyToOne(() => Horario, (horario) => horario.classes)
-  horario: Horario;
+  @ManyToOne(() => Schedule, (horario) => horario.classes)
+  schedule: Schedule;
 }
