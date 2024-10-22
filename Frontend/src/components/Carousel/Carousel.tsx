@@ -33,7 +33,7 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col">
       <div className="flex-grow">
         <div className="relative w-full h-[calc(100vh-80px)]">
           <AnimatePresence initial={false}>

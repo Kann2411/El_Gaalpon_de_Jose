@@ -1,9 +1,13 @@
 import CarouselComponent from "@/components/Carousel/Carousel";
+import TestimonialCard from "@/components/TestimonialCard/TestimonialCard";
 import React from "react";
 
 const LandingPage = () => {
   return (
-    <CarouselComponent/>
+    <div>
+      <CarouselComponent />
+      <TestimonialCard />
+    </div>
   );
 };
 
