@@ -5,27 +5,118 @@ import Link from "next/link";
 import logo from "@/public/icons/icono-principal.png";
 import { usePathname, useRouter } from "next/navigation";
 import { UserContext } from "@/context/user";
+import ModalProfilePhoto from "../ModalProfilePhoto/ModalProfilePhoto";
+import Swal from "sweetalert2";
 
 const NavBarComponent = () => {
-  const { user, logOut, isLogged } = useContext(UserContext);
+  const { user, logOut, isLogged, setUser, imgUrl, setImgUrl } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
+  const [file, setFile] = useState<File | null>(null); 
+  const [showModal, setShowModal] = useState<boolean>(false); 
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
   const handleLogout = () => {
-    logOut(); // Usamos la función del contexto para cerrar sesión
+    logOut();
     setIsMenuOpen(false);
-    router.push("/"); // Redirigir al inicio tras cerrar sesión
+    router.push("/");
   };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+        setFile(e.target.files[0]);
+        setShowModal(true); // Mostrar el modal cuando se seleccione un archivo
+    }
+};
+  
+const handleCancel = () => {
+    setShowModal(false); // Cerrar el modal sin subir
+    setFile(null); // Limpiar el archivo si se cancela
+}
+
+  const handleUpload = async () => {
+    if (!file || !user) return;
+console.log(user.id)
+console.log('user:' + user.imgUrl)
+
+    const formData = new FormData();
+    formData.append("file", file); 
+
+    setShowModal(false); // Cerrar el modal después de subir la foto
+    setFile(null)
+
+    
+  
+    try {
+      const response = await fetch(
+        `http://localhost:3000/files/profileImages/${user.id}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+  
+      if (response.ok) {
+        const data = await response.json();
+        setImgUrl(() => (data.imgUrl ));
+        localStorage.setItem('imgUrl', data.imgUrl);
+        Swal.fire({
+            title: 'Super!',
+            text: 'Profile photo updated successfully!',
+            icon: 'success',
+            confirmButtonText: 'Great',
+            customClass: {
+              popup: 'bg-black text-white', 
+              title: 'text-red-600',
+              confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+            },
+            buttonsStyling: false, 
+          })
+       
+        setIsMenuOpen(false);
+      } else {
+        const errorData = await response.json();
+        console.error("Error details:", errorData);
+        Swal.fire({
+            title: 'Mmm...',
+            text: `Failed to upload profile photo: ${errorData.message || "Unknown error"}`,
+            icon: 'error',
+            confirmButtonText: 'Ok',
+            customClass: {
+              popup: 'bg-black text-white', 
+              title: 'text-red-600',
+              confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+            },
+            buttonsStyling: false, 
+          })
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      Swal.fire({
+        title: 'Mmm...',
+        text: "Error when uploading the file.",
+        icon: 'error',
+        confirmButtonText: 'Ok',
+        customClass: {
+          popup: 'bg-black text-white', 
+          title: 'text-red-600',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+        },
+        buttonsStyling: false, 
+      })
+    }
+  };
+  
+  
 
   useEffect(() => {
     if (isLogged) {
-      router.push("/home"); // Redirigir al usuario logueado a la página de inicio
+      router.push("/home");
     }
   }, [isLogged, router]);
 
@@ -47,6 +138,7 @@ const NavBarComponent = () => {
         <div className="ml-4 text-2xl font-bold">FitZone</div>
       </Link>
 
+      {/* Menús basados en el rol del usuario */}
       {user?.role === "user" ? (
   <nav className="flex-1 flex items-center justify-center">
     <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
@@ -71,8 +163,7 @@ const NavBarComponent = () => {
             </Link>
             <span
               className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"
-              }`}
+                pathname === route ? "scale-x-100" : "scale-x-0"}`}
             />
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
           </li>
@@ -102,8 +193,7 @@ const NavBarComponent = () => {
             </Link>
             <span
               className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"
-              }`}
+                pathname === route ? "scale-x-100" : "scale-x-0"}`}
             />
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
           </li>
@@ -128,8 +218,7 @@ const NavBarComponent = () => {
             </Link>
             <span
               className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"
-              }`}
+                pathname === route ? "scale-x-100" : "scale-x-0"}`}
             />
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
           </li>
@@ -159,8 +248,7 @@ const NavBarComponent = () => {
             </Link>
             <span
               className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"
-              }`}
+                pathname === route ? "scale-x-100" : "scale-x-0"}`}
             />
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
           </li>
@@ -169,8 +257,7 @@ const NavBarComponent = () => {
     </ul>
   </nav>
 ) : null}
-
-
+      
       {isLogged ? (
         <div className="relative" ref={menuRef}>
           <div
@@ -179,7 +266,7 @@ const NavBarComponent = () => {
           >
             <img
               src={
-                user?.imgUrl ??
+                imgUrl ??
                 "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"
               }
               alt="avatar"
@@ -213,6 +300,26 @@ const NavBarComponent = () => {
                 >
                   Log Out
                 </button>
+
+                {/* Botón para cambiar la foto de perfil */}
+                <button
+                onClick={() => document.getElementById("fileInput")?.click()}
+                className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
+            >
+                Change profile photo
+            </button>
+
+            {/* Input oculto para subir archivos */}
+            <input
+                type="file"
+                id="fileInput"
+                style={{ display: "none" }}
+                accept="image/*"
+                onChange={handleFileChange}
+            />
+
+            {/* Modal de confirmación */}
+           
               </>
             )}
           </div>
@@ -233,6 +340,10 @@ const NavBarComponent = () => {
           </Link>
         </div>
       )}
+
+<ModalProfilePhoto isOpen={showModal} onClose={handleCancel} onAccept={handleUpload}>
+                Are you sure you want to change your photo?
+            </ModalProfilePhoto>
     </header>
   );
 };

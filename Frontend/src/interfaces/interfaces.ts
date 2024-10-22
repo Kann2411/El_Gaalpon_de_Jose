@@ -35,6 +35,7 @@ export interface IUser {
 export interface IUserResponse {
     user: Partial<IUser> | null
     token: string
+    imgUrl?: string
 }
 
 export interface IUserContext{
@@ -45,6 +46,8 @@ export interface IUserContext{
     signIn: (credential : ILogin) => Promise<boolean>
     signUp: (user: Omit<IUser, "id">) => Promise<boolean>
     logOut: () => void
+    imgUrl: string | null
+    setImgUrl: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 
