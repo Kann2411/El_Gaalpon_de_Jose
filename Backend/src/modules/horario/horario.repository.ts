@@ -25,6 +25,7 @@ export class HorarioRepository {
       throw error;
     }
   }
+
   async horariosSeeder() {
     horarios.map(async (element) => {
       await this.horarioRepository
@@ -32,9 +33,9 @@ export class HorarioRepository {
         .insert()
         .into(Horario)
         .values({
-          dia: Dia[element.dia as keyof Dia],
-          horaInicio: element.horaInicio,
-          horaFin: element.horaFin,
+          day: Dia[element.day as keyof Dia],
+          starttime: element.startTime,
+          endtime: element.endTime,
         })
         .orIgnore()
         .execute();

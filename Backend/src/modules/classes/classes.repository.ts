@@ -35,17 +35,19 @@ export class ClassRepository {
     for (const element of clases) {
       const horario = horarios.find(
         (horario) =>
-          horario.dia.toLocaleLowerCase() === element.dia.toLocaleLowerCase(),
+          horario.day.toLocaleLowerCase() === element.day.toLocaleLowerCase(),
       );
 
       if (horario) {
         for (const classItem of element.classes) {
           const nuevaClase = new Class();
           nuevaClase.name = classItem.name;
-          nuevaClase.capacidad = classItem.capacidad;
-          nuevaClase.estado =
-            EstadoClase[classItem.estado as keyof EstadoClase];
-          nuevaClase.horario = horario;
+          nuevaClase.capacity = classItem.capacity;
+          nuevaClase.intensity = classItem.intensity;
+          nuevaClase.duration = classItem.duration;
+          nuevaClase.status =
+            EstadoClase[classItem.status as keyof EstadoClase];
+          nuevaClase.schedule = horario;
 
           await this.classesRepository.save(nuevaClase);
         }
@@ -58,7 +60,7 @@ export class ClassRepository {
     try {
       const classData = await this.classesRepository.findOne({
         where: { id },
-        relations: { horario: true },
+        relations: { schedule: true },
       });
       if (!classData) {
         throw new Error('No se encontró la clase.');
