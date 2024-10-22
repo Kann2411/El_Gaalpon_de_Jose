@@ -7,7 +7,6 @@ import { SetPasswordDto } from 'src/dtos/setPassword.dto';
 
 @Injectable()
 export class UsersService {
-
   constructor(private usersRepository: UsersRepository) {}
 
   getUsers() {
@@ -31,11 +30,11 @@ export class UsersService {
   }
 
   changePassword(id: string, changePasswordDto: ChangePasswordDto) {
-    return this.usersRepository.changePassword(id,changePasswordDto)
+    return this.usersRepository.changePassword(id, changePasswordDto);
   }
 
   setPassword(id: string, setPasswordDto: SetPasswordDto) {
-    return this.usersRepository.setPassword(id,setPasswordDto)
+    return this.usersRepository.setPassword(id, setPasswordDto);
   }
 
   delete(id: string) {

@@ -27,7 +27,7 @@ import { SetPasswordDto } from 'src/dtos/setPassword.dto';
 @UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   @Roles(Role.Admin)
@@ -69,7 +69,6 @@ export class UsersController {
   ) {
     return this.usersService.setPassword(id, setPasswordDto);
   }
-
 
   @Patch('changeRole/:id')
   @Roles(Role.Admin)
