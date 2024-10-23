@@ -56,8 +56,8 @@ export class Membresia {
     nullable: true,
     enum: EstadoMembresia,
   })
-  @Column()
-  status?: EstadoMembresia;
+  @Column({ nullable: true })
+  status: EstadoMembresia;
 
   @OneToMany(() => FeatureEntity, (feature) => feature.membresia, {
     cascade: true,

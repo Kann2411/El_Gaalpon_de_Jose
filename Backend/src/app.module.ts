@@ -12,6 +12,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { TrainingModule } from './modules/training/training.module';
 import { HorarioModule } from './modules/horario/horario.module';
 import { ClassesModule } from './modules/classes/classes.module';
+import { MembresiaModule } from './modules/membresia/membresia.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ClassesModule } from './modules/classes/classes.module';
     FileUploadModule,
     HorarioModule,
     ClassesModule,
+    MembresiaModule,
     UsersModule,
     AuthModule,
     TrainingModule,

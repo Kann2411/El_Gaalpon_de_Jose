@@ -25,12 +25,9 @@ export class TrainingPlanController {
   constructor(private readonly trainingPlanService: TrainingPlanService) {}
 
   @Post()
-  create(
-    @Body() createTrainingPlanDto: CreateTrainingPlanDto,
-    @Request() req,
-  ) {
+  create(@Body() createTrainingPlanDto: CreateTrainingPlanDto, @Request() req) {
     const coach = req.user;
-    return  this.trainingPlanService.createTrainingPlan(
+    return this.trainingPlanService.createTrainingPlan(
       createTrainingPlanDto,
       coach,
     );
@@ -38,11 +35,11 @@ export class TrainingPlanController {
 
   @Get()
   getAll() {
-    return  this.trainingPlanService.getAllTrainingPlans();
+    return this.trainingPlanService.getAllTrainingPlans();
   }
 
   @Delete(':id')
-   delete(@Param('id', ParseUUIDPipe) id: string) {
-    return  this.trainingPlanService.deleteTrainingPlans(id);
+  delete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.trainingPlanService.deleteTrainingPlans(id);
   }
 }
