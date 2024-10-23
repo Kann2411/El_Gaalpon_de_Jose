@@ -25,12 +25,10 @@ export class MembresiaRepository {
 
   async seederData() {
     const queryRunner = this.dataSouce.createQueryRunner();
-
     await queryRunner.startTransaction();
 
     try {
       for (const membershipData of memberships) {
-        // Verificar si existe una membresía con los mismos datos exactos
         const existingMembership = await queryRunner.manager.findOne(
           Membresia,
           {
@@ -45,43 +43,40 @@ export class MembresiaRepository {
 
         if (existingMembership) {
           console.log(
-            `Membresía con plan ${membershipData.plan} ya existe con los mismos valores, no se volverá a guardar.`,
+            `Membresía con plan ${membershipData.plan} ya existe, omitiendo...`,
           );
           continue;
         }
 
-        const membresia = new Membresia();
-        membresia.plan = membershipData.plan;
-        membresia.price = membershipData.price;
-        membresia.currency = membershipData.currency;
-        membresia.billing_period = membershipData.billing_period;
+        const membresia = queryRunner.manager.create(Membresia, {
+          ...membershipData,
+          features: [],
+        });
 
         await queryRunner.manager.save(Membresia, membresia);
 
         const features = Object.entries(membershipData.features).map(
-          ([name, value]) => {
-            const feature = new FeatureEntity();
-            feature.name = name;
-            feature.value = typeof value === 'boolean' ? value : null; // Manejar el caso de strings si es necesario
-            feature.membresia = membresia; // Asocia la membresía ya guardada
-            return feature;
-          },
+          ([name, value]) => ({
+            name,
+            value: Boolean(value),
+            membresia,
+          }),
         );
-        const savedFeatures = await queryRunner.manager.save(
+
+        membresia.features = await queryRunner.manager.save(
           FeatureEntity,
           features,
         );
-        membresia.features = savedFeatures;
+
         await queryRunner.manager.save(Membresia, membresia);
       }
+
       await queryRunner.commitTransaction();
     } catch (error) {
-      // Retrocede si hay algún error
       await queryRunner.rollbackTransaction();
       console.error('Error during seeding:', error);
       throw error;
     } finally {
-      // Libera el query runner
       await queryRunner.release();
     }
   }
