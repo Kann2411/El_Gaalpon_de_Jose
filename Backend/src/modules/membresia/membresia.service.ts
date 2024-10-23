@@ -8,7 +8,11 @@ export class membresiaService {
   constructor(private readonly membresiaRepository: MembresiaRepository) {}
 
   getMembresias() {
-    this.membresiaRepository.getMembresias();
+    return this.membresiaRepository.getMembresias();
+  }
+
+  seederData() {
+    return this.membresiaRepository.seederData();
   }
 
   getMembresiaById(id: UUID) {

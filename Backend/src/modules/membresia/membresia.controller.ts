@@ -23,6 +23,11 @@ export class MembresiaController {
     return this.membresiaService.getMembresias();
   }
 
+  @Get('seeder')
+  seederData() {
+    return this.membresiaService.seederData();
+  }
+
   @Get(':id')
   getMembresiaById(@Param('id', ParseUUIDPipe) id: UUID) {
     return this.membresiaService.getMembresiaById(id);
