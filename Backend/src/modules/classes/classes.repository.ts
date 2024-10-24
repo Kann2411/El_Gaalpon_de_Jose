@@ -19,7 +19,9 @@ export class ClassRepository {
 
   async getClasses() {
     try {
-      const classes = await this.classesRepository.find();
+      const classes = await this.classesRepository.find({
+        relations: ['schedule'],
+      });
       if (!classes) {
         throw new Error('No se encontraron clases.');
       }
