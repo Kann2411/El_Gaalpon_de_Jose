@@ -78,3 +78,8 @@ export interface FormValues {
     email: string;
     message: string;
   }
+
+  export interface IPlan {
+    description: string;
+    file: File | null;
+  }

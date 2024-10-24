@@ -2,16 +2,10 @@
 import { createPlan, uploadImage } from '@/lib/server/fetchCoaches';
 import React, { useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
 import { UserContext } from '@/context/user';
+import { IPlan } from '@/interfaces/interfaces';
+import { planValidationSchema } from '@/utils/planValidationSchema';
 
-const validationSchema = Yup.object().shape({
-  description: Yup.string()
-    .required('La descripción es obligatoria')
-    .matches(/^[a-zA-Z0-9 ]*$/, 'La descripción solo puede contener letras y números'),
-  file: Yup.mixed()
-    .required('El archivo es obligatorio'),
-});
 
 export default function TrainingManagement() {
   const {user} = useContext(UserContext)
@@ -19,11 +13,6 @@ export default function TrainingManagement() {
     description: '',
     file: null,
   };
-
-  interface IPlan {
-    description: string;
-    file: File | null;
-  }
 
   const onSubmit = async (values: IPlan) => {
     console.log(values);
@@ -37,7 +26,7 @@ export default function TrainingManagement() {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={planValidationSchema}
       onSubmit={onSubmit}
     >
       {({ setFieldValue }) => (
