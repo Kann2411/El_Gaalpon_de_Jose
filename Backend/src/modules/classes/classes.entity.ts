@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ClassRegistration } from './classesRegistration.entity';
 
 @Entity({ name: 'classes' })
 export class Class {
@@ -54,4 +55,10 @@ export class Class {
 
   @Column({ type: 'time' })
   endtime: string;
+
+  @OneToMany(
+    () => ClassRegistration,
+    (classRegistration) => classRegistration.classEntity,
+  )
+  registrations: ClassRegistration[];
 }

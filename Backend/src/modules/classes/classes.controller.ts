@@ -49,4 +49,12 @@ export class ClassesController {
   deleteClass(@Param(ParseUUIDPipe) id: UUID) {
     return this.classesService.deleteClass(id);
   }
+
+  @Post(':classId/register/:userId')
+  registerUserToClass(
+    @Param('classId') classId: string,
+    @Param('userId') userId: string,
+  ) {
+    return this.classesService.registerUserToClass(classId, userId);
+  }
 }
