@@ -38,6 +38,12 @@ export class Class {
   @Column()
   status: EstadoClase;
 
+  @Column({ type: 'varchar', default: 'defaultImage.webp' })
+  image: string;
+
+  @Column({ type: 'text' })
+  description: string;
+
   @Column()
   duration: string;
 

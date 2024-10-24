@@ -17,6 +17,7 @@ const Button: React.FC<IButtonProps> = ({ content, onClick, redirectTo }) => {
   return (
     <button
       className="px-5 py-2 font-bold tracking-wide rounded-md bg-red-600 transition duration-300 ease-in-out hover:bg-red-700 text-sm text-white"
+
       onClick={handleClick}
     >
       {content}

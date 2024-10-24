@@ -5,6 +5,9 @@ import {
   Get,
   UseGuards,
   Request,
+  Delete,
+  ParseUUIDPipe,
+  Param,
 } from '@nestjs/common';
 import { TrainingPlanService } from './trainingPlan.service';
 import { CreateTrainingPlanDto } from '../../dtos/createTrainingPlan.dto';
@@ -22,19 +25,21 @@ export class TrainingPlanController {
   constructor(private readonly trainingPlanService: TrainingPlanService) {}
 
   @Post()
-  async create(
-    @Body() createTrainingPlanDto: CreateTrainingPlanDto,
-    @Request() req,
-  ) {
+  create(@Body() createTrainingPlanDto: CreateTrainingPlanDto, @Request() req) {
     const coach = req.user;
-    return await this.trainingPlanService.createTrainingPlan(
+    return this.trainingPlanService.createTrainingPlan(
       createTrainingPlanDto,
       coach,
     );
   }
 
   @Get()
-  async getAll() {
-    return await this.trainingPlanService.getAllTrainingPlans();
+  getAll() {
+    return this.trainingPlanService.getAllTrainingPlans();
+  }
+
+  @Delete(':id')
+  delete(@Param('id', ParseUUIDPipe) id: string) {
+    return this.trainingPlanService.deleteTrainingPlans(id);
   }
 }

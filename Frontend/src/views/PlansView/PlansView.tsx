@@ -16,7 +16,7 @@ interface PlanCardProps {
 
 const PlansView: React.FC = () => {
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center py-12">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center">
       {/* Title */}
       <h2 className="text-4xl font-extrabold mb-8">
         Check out our <span className="text-red-600">plans</span>
