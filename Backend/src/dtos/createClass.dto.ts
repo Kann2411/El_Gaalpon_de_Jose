@@ -7,7 +7,7 @@ import {
   IsString,
   Max,
   Min,
-  IsUUID,
+  Matches,
 } from 'class-validator';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
 
@@ -25,7 +25,7 @@ export class CreateClassDto {
   @ApiProperty({ description: 'Capacidad máxima de la clase', example: 20 })
   @IsInt()
   @Min(0)
-  @Max(100)
+  @Max(20)
   capacity: number;
 
   @ApiProperty({ description: 'Estado actual de la clase', enum: EstadoClase })
@@ -57,10 +57,24 @@ export class CreateClassDto {
   @IsNotEmpty()
   duration: string;
 
+  @ApiProperty({ description: 'Día de la clase', example: 'Lunes' })
+  @IsString()
+  @IsNotEmpty()
+  day: string;
+
   @ApiProperty({
-    description: 'ID del horario asignado a la clase',
-    example: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+    description: 'Hora de inicio de la clase',
+    example: '08:00',
   })
-  @IsUUID()
-  scheduleId: string; // El ID del horario asociado, como referencia
+  @Matches(/^\d{2}:\d{2}$/, { message: 'starttime must be in HH:mm format' })
+  @IsNotEmpty()
+  starttime: string;
+
+  @ApiProperty({
+    description: 'Hora de finalización de la clase',
+    example: '09:00',
+  })
+  @Matches(/^\d{2}:\d{2}$/, { message: 'endtime must be in HH:mm format' })
+  @IsNotEmpty()
+  endtime: string;
 }

@@ -6,6 +6,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Horario } from '../horario/horario.entity';
 import * as clases from '../../utils/clases.json';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
+import { CreateClassDto } from 'src/dtos/createClass.dto';
 
 @Injectable()
 export class ClassRepository {
@@ -61,19 +62,26 @@ export class ClassRepository {
     }
   }
 
-  async createClass(classData: Class) {
-    return await this.dataSource.transaction(async (manager) => {
-      try {
-        // Esto por si necesita el front
-        // const horario = this.horarioRepository.createHorario(classData.horario)
-        // newClass.horario = horario
-        const newClass = manager.create(Class, classData);
-        await manager.save(newClass);
-        return newClass;
-      } catch (error) {
-        throw error;
-      }
+  async createClass(classData: CreateClassDto) {
+    const nuevaClase = new Class();
+    nuevaClase.name = classData.name;
+    nuevaClase.capacity = classData.capacity;
+    nuevaClase.status = classData.status;
+    nuevaClase.image = classData.image;
+    nuevaClase.description = classData.description;
+    nuevaClase.duration = classData.duration;
+    nuevaClase.intensity = classData.intensity;
+    nuevaClase.day = classData.day;
+    nuevaClase.starttime = classData.starttime;
+    nuevaClase.endtime = classData.endtime;
+
+    await this.classesRepository.save(nuevaClase);
+
+    const savedClass = await this.classesRepository.findOneBy({
+      name: nuevaClase.name,
     });
+
+    return savedClass;
   }
 
   async updateClass(id: UUID, classData: Class) {
