@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassRepository } from './classes.repository';
+import { CreateClassDto } from 'src/dtos/createClass.dto';
 
 @Injectable()
 export class ClassService {
@@ -19,7 +20,7 @@ export class ClassService {
     return this.classesRepository.getClassById(id);
   }
 
-  createClass(classData: Class) {
+  createClass(classData: CreateClassDto) {
     return this.classesRepository.createClass(classData);
   }
 

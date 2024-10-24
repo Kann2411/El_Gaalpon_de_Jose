@@ -13,6 +13,7 @@ import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassService } from './classes.service';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateClassDto } from 'src/dtos/createClass.dto';
 
 @ApiTags('Class')
 @Controller('class')
@@ -35,7 +36,7 @@ export class ClassesController {
   }
 
   @Post()
-  createClass(@Body() classData: Class) {
+  createClass(@Body() classData: CreateClassDto) {
     return this.classesService.createClass(classData);
   }
 
