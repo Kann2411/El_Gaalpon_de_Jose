@@ -11,18 +11,19 @@ const CreateTrainingPlan: React.FC = () => {
 
     const validationSchema = Yup.object().shape({
         description: Yup.string()
-            .required('La descripción es obligatoria')
-            .max(255, 'La descripción no puede exceder 255 caracteres'),
+            .required('Description is required')
+            .max(255, 'Description cannot exceed 255 characters'),
         file: Yup.mixed()
-            .required('Se requiere un archivo')
-            .test('fileSize', 'El archivo debe ser menor a 200KB', (value) => {
+            .required('A file is required')
+            .test('fileSize', 'The file must be smaller than 200KB', (value) => {
                 return value && value instanceof File && value.size <= 200 * 1024;
             })
-            .test('fileType', 'Solo se permiten archivos JPG, JPEG, PNG o WEBP', (value) => {
+            .test('fileType', 'Only JPG, JPEG, PNG, or WEBP files are allowed', (value) => {
                 return value && value instanceof File && 
                     ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(value.type);
             }),
     });
+    
 
     const formik = useFormik<FormValues>({
         initialValues: {
@@ -49,7 +50,7 @@ const CreateTrainingPlan: React.FC = () => {
     return (
         <form onSubmit={formik.handleSubmit}>
             <div>
-                <label htmlFor="description">Descripción</label>
+                <label htmlFor="description">Description</label>
                 <input
                     id="description"
                     name="description"
@@ -64,7 +65,7 @@ const CreateTrainingPlan: React.FC = () => {
             </div>
 
             <div>
-                <label htmlFor="file">Imagen</label>
+                <label htmlFor="file">Image</label>
                 <input
                     id="file"
                     name="file"
@@ -80,7 +81,7 @@ const CreateTrainingPlan: React.FC = () => {
             </div>
 
             
-            <button type="submit">Crear Plan</button>
+            <button type="submit">Create Plan</button>
         </form>
     );
 };

@@ -20,28 +20,28 @@ const CreateGymClassForm: React.FC = () => {
       endtime: '',
     },
     validationSchema: Yup.object({
-      name: Yup.string().required('El nombre es obligatorio'),
-      intensity: Yup.string().required('La intensidad es obligatoria'),
+      name: Yup.string().required('Name is required'),
+      intensity: Yup.string().required('Intensity is required'),
       capacity: Yup.number()
-        .required('La capacidad es obligatoria')
-        .min(1, 'La capacidad debe ser al menos 1'),
-      status: Yup.string().required('El estado es obligatorio'),
-      image: Yup.string().url('Debe ser una URL válida').required('La imagen es obligatoria'),
-      description: Yup.string().required('La descripción es obligatoria'),
-      duration: Yup.string().required('La duración es obligatoria'),
-      day: Yup.string().required('El día es obligatorio'),
-      starttime: Yup.string().required('La hora de inicio es obligatoria'),
-      endtime: Yup.string().required('La hora de fin es obligatoria'),
-    }),
+          .required('Capacity is required')
+          .min(1, 'Capacity must be at least 1'),
+      status: Yup.string().required('Status is required'),
+      image: Yup.string().url('Must be a valid URL').required('Image is required'),
+      description: Yup.string().required('Description is required'),
+      duration: Yup.string().required('Duration is required'),
+      day: Yup.string().required('Day is required'),
+      starttime: Yup.string().required('Start time is required'),
+      endtime: Yup.string().required('End time is required'),
+  }),
+  
     onSubmit: async (values) => {
         try {
             const response = await createGymClass(values);
-            alert('Clase creada con éxito: ' + response.id);
-            // Resetea el formulario si es necesario
+            alert('Class created successfully: ' + response.id);
             formik.resetForm();
           } catch (error) {
-            const errorMessage = (error as Error).message || 'Error desconocido';
-            alert('Error al crear la clase: ' + errorMessage);
+            const errorMessage = (error as Error).message || 'Unknow error';
+            alert('Error when creating the class ' + errorMessage);
           }
     },
   });
@@ -49,7 +49,7 @@ const CreateGymClassForm: React.FC = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div>
-        <label htmlFor="name">Nombre</label>
+        <label htmlFor="name">Name</label>
         <input
           id="name"
           name="name"
@@ -61,7 +61,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="intensity">Intensidad</label>
+        <label htmlFor="intensity">Intensity</label>
         <input
           id="intensity"
           name="intensity"
@@ -73,7 +73,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="capacity">Capacidad</label>
+        <label htmlFor="capacity">Capacity</label>
         <input
           id="capacity"
           name="capacity"
@@ -85,7 +85,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="status">Estado</label>
+        <label htmlFor="status">Status</label>
         <select
           id="status"
           name="status"
@@ -100,7 +100,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="image">Imagen URL</label>
+        <label htmlFor="image">URL Image</label>
         <input
           id="image"
           name="image"
@@ -112,7 +112,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="description">Descripción</label>
+        <label htmlFor="description">Description</label>
         <textarea
           id="description"
           name="description"
@@ -123,7 +123,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="duration">Duración</label>
+        <label htmlFor="duration">Duration</label>
         <input
           id="duration"
           name="duration"
@@ -135,7 +135,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="day">Día</label>
+        <label htmlFor="day">Day</label>
         <input
           id="day"
           name="day"
@@ -147,7 +147,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="starttime">Hora de Inicio</label>
+        <label htmlFor="starttime">Start Time</label>
         <input
           id="starttime"
           name="starttime"
@@ -159,7 +159,7 @@ const CreateGymClassForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="endtime">Hora de Fin</label>
+        <label htmlFor="endtime">End Time</label>
         <input
           id="endtime"
           name="endtime"
@@ -170,7 +170,7 @@ const CreateGymClassForm: React.FC = () => {
         {formik.errors.endtime && <div>{formik.errors.endtime}</div>}
       </div>
 
-      <button type="submit">Crear Clase</button>
+      <button type="submit">Create class</button>
     </form>
   );
 };
