@@ -41,7 +41,7 @@ export default function RegisterFormComponent() {
     } else {
       Swal.fire({
         title: 'Ups!',
-        text: 'This email already exists!',
+        text: 'Something went wrong!',
         icon: 'error',
         confirmButtonText: 'Try Again',
         customClass: {

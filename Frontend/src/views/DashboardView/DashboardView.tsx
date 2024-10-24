@@ -1,9 +1,9 @@
 'use client'
-import { UserContext } from '@/context/user'
-import React, { useContext } from 'react'
 import AdminDashboardView from '../AdminDashboardView/AdminDashboardView'
 import CoachDashboardView from '../CoachDashboardView/CoachDashboardView'
 import UserDashboardview from '../UserDashboardView/UserDashboardview'
+import React, { useContext } from 'react'
+import { UserContext } from '@/context/user'
 
 export default function DashboardView() {
     const {user} = useContext(UserContext)
