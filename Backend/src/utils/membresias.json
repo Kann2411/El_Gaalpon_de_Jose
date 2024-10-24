@@ -39,12 +39,11 @@
     "features": {
       "unlimited_gym_access": true,
       "24_7_gym_access": true,
-      "private_training_sessions": "2/month",
+      "private_training_sessions": true,
       "access_to_all_group_classes": true,
       "exclusive_locker_room_area": true,
       "unlimited_personalized_training_plans": true,
-      "access_to_spa_and_wellness_services": true,
-      "free_supplements": "1/month"
+      "access_to_spa_and_wellness_services": true
     }
   },
   {
@@ -87,12 +86,11 @@
     "features": {
       "unlimited_gym_access": true,
       "24_7_gym_access": true,
-      "private_training_sessions": "24/year",
+      "private_training_sessions": true,
       "access_to_all_group_classes": true,
       "exclusive_locker_room_area": true,
       "unlimited_personalized_training_plans": true,
-      "access_to_spa_and_wellness_services": true,
-      "free_supplements": "12/year"
+      "access_to_spa_and_wellness_services": true
     }
   }
 ]

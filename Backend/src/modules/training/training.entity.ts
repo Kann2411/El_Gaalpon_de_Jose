@@ -15,17 +15,16 @@ export class Training {
   @ApiProperty({
     description: 'Fecha del entrenamiento',
     type: 'string',
-    format: 'date',
   })
-  @Column({ type: 'date' })
-  date: Date;
+  @Column({ type: 'varchar' })
+  date: string;
 
   @ApiProperty({
     description: 'Duración del entrenamiento en horas',
-    type: 'float',
+    type: 'string',
   })
-  @Column({ type: 'float' })
-  duration: number;
+  @Column({ type: 'varchar' })
+  duration: string;
 
   @ApiProperty({ description: 'Progreso del entrenamiento' })
   @Column({ type: 'varchar', length: 255 })

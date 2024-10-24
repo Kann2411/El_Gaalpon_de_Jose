@@ -45,6 +45,8 @@ export class ClassRepository {
           nuevaClase.capacity = classItem.capacity;
           nuevaClase.intensity = classItem.intensity;
           nuevaClase.duration = classItem.duration;
+          nuevaClase.image = classItem.image;
+          nuevaClase.description = classItem.description;
           nuevaClase.status =
             EstadoClase[classItem.status as keyof EstadoClase];
           nuevaClase.schedule = horario;
