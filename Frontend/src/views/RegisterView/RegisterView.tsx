@@ -1,8 +1,31 @@
 "use client";
 import { FcGoogle } from "react-icons/fc";
 import RegisterFormComponent from "@/components/RegisterForm/RegisterForm";
+import { signIn } from "next-auth/react";
+import { useContext } from 'react';
+import { UserContext } from '@/context/user';
+
 
 const RegisterView = () => {
+  const { signIn: contextSignIn } = useContext(UserContext);
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const result = await signIn('google', {
+        callbackUrl: '/api/auth/callback/google',
+        redirect: false,
+      });
+
+      if (result?.error) {
+        console.error('Error en el inicio de sesión con Google:', result.error);
+      } else if (result?.url) {
+        // Redirige manualmente al usuario a la URL de callback
+        window.location.href = result.url;
+      }
+    } catch (error) {
+      console.error('Error inesperado durante el inicio de sesión con Google:', error);
+    }
+  };
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-black">
       {/* Background image */}
@@ -27,10 +50,7 @@ const RegisterView = () => {
           <hr className="flex-grow border-gray-400" />
         </div>
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href = "http://localhost:3000/auth/google";
-          }}
+          onClick={handleGoogleSignUp}
           className="w-full mt-4 bg-gray-600 text-white py-3 rounded hover:bg-gray-700 flex items-center justify-center"
         >
           <FcGoogle className="mr-3 w-6 h-6" />
