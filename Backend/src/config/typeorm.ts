@@ -13,10 +13,14 @@ const config = {
   password: process.env.DB_PASSWORD,
   autoLoadEntities: true,
 <<<<<<< HEAD
+<<<<<<< HEAD
   //dropSchema: true,
 =======
   // dropSchema: true,
 >>>>>>> aa4ec1bd71aa547b054839e7fa95a41a792862f4
+=======
+  // dropSchema: true,
+>>>>>>> 3641f2a783135d5c4d32fe6bce7dca55739ee961
   synchronize: true,
   logging: true,
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
