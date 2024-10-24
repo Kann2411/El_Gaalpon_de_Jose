@@ -97,3 +97,8 @@ export interface FormValues {
     endtime: string;
   }
   
+
+  export interface FormValues {
+    description: string;
+    file: File | null;
+}
