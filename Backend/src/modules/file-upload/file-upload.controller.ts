@@ -5,7 +5,7 @@ import {
   Param,
   ParseFilePipe,
   ParseUUIDPipe,
-  Post,
+  Patch,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -18,7 +18,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class FileUploadController {
   constructor(private readonly fileService: FileService) {}
 
-  @Post('uploadImage/:id')
+  @Patch('uploadImage/:id')
   @UseInterceptors(FileInterceptor('file'))
   uploadImage(
     @Param('id', ParseUUIDPipe) trainingId: string,
@@ -40,7 +40,7 @@ export class FileUploadController {
     return this.fileService.updateClassImage(trainingId, file);
   }
 
-  @Post('profileImages/:id')
+  @Patch('profileImages/:id')
   @UseInterceptors(FileInterceptor('file'))
   imageProfile(
     @Param('id') id: string,
