@@ -142,7 +142,7 @@ console.log('user:' + user.imgUrl)
       {user?.role === "user" ? (
   <nav className="flex-1 flex items-center justify-center">
     <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Home", "Plans", "Contact Us", "Appointments"].map((item, index) => {
+      {["Home", "Plans", "Contact Us", "Appointments", "Training Plans"].map((item, index) => {
         const lowerCaseItem = item.toLowerCase();
         const route =
           lowerCaseItem === "home"
@@ -151,7 +151,9 @@ console.log('user:' + user.imgUrl)
             ? "/plans"
             : lowerCaseItem === "contact us"
             ? "/contact"
-            : "/appointments";
+            : lowerCaseItem === "appointments"
+            ? "/appointments"
+            : "/training-plans"
 
         return (
           <li key={index} className="relative group">
