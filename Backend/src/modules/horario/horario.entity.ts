@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Dia } from 'src/enums/dia.enum';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Class } from '../classes/classes.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'horarios' })
 export class Horario {
@@ -36,11 +35,4 @@ export class Horario {
   })
   @Column({ type: 'time' })
   endtime: Date;
-
-  @ApiProperty({
-    description: 'Clases asignadas a este horario',
-    type: () => [Class],
-  })
-  @OneToMany(() => Class, (classEntity) => classEntity.schedule)
-  classes: Class[];
 }
