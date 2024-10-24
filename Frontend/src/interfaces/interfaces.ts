@@ -83,3 +83,17 @@ export interface FormValues {
     description: string;
     file: File | null;
   }
+
+  export interface GymClass {
+    name: string;
+    intensity: string;
+    capacity: number;
+    status: string;
+    image: string;
+    description: string;
+    duration: string;
+    day: string;
+    starttime: string;
+    endtime: string;
+  }
+  

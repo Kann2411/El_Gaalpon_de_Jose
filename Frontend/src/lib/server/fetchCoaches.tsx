@@ -10,7 +10,7 @@ export async function createPlan(description: string) {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Incluyendo el token en el encabezado
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(bodyData),
       });
@@ -39,10 +39,10 @@ export async function createPlan(description: string) {
 
     try {
         const response = await fetch(`http://localhost:3000/files/uploadImage/${id}`, {
-            method: 'POST',
+            method: 'PATCH',
             body: formData,
             headers: {
-                'Authorization': `Bearer ${token}` // Incluyendo el token en el encabezado
+                'Authorization': `Bearer ${token}` 
             } 
         });
 
