@@ -12,7 +12,9 @@ interface ClassInfo {
   image: string;
   description: string;
   duration: string;
-  schedule: ISchedule
+  day: string;
+  starttime: string;
+  endtime: string
 }
 
 interface ISchedule {
@@ -200,8 +202,8 @@ const HomeView: React.FC = () => {
             </div>
             <img src={selectedClass.image} alt={selectedClass.name} className="w-full h-48 object-cover rounded-lg mb-4" />
             <p className="text-gray-300 mb-4">{selectedClass.description}</p>
-            <p className="text-gray-300 mb-4">Day: {selectedClass.schedule.day}</p>
-            <p className="text-gray-300 mb-4">Start time: {selectedClass.schedule.starttime} <br/> End time: {selectedClass.schedule.endtime}</p>
+            <p className="text-gray-300 mb-4">Day: {selectedClass.day}</p>
+            <p className="text-gray-300 mb-4">Start time: {selectedClass.starttime} <br/> End time: {selectedClass.endtime}</p>
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <Clock className="w-5 h-5 mr-2 text-red-600" />

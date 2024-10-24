@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 
 export default function RegisterFormComponent() {
   const router = useRouter();
-  const { signUp } = useContext(UserContext);
+  const { signUp, user } = useContext(UserContext);
 
   const initialValues: IRegister = {
     phone: "",
@@ -37,7 +37,7 @@ export default function RegisterFormComponent() {
         },
         buttonsStyling: false, 
       })
-      router.push("/home");
+      
     } else {
       Swal.fire({
         title: 'Ups!',

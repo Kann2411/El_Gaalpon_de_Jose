@@ -9,7 +9,7 @@ import  Swal  from 'sweetalert2'
 
 export default function LoginForm() {
   const router = useRouter();
-  const { signIn } = useContext(UserContext);
+  const { signIn, user } = useContext(UserContext);
 
   const initialValues = {
     email: '',
@@ -32,7 +32,8 @@ export default function LoginForm() {
         },
         buttonsStyling: false, 
       })
-      router.push('/home');
+    
+      router.push("/home");
     } else {
       Swal.fire({
         title: 'Ups!',
