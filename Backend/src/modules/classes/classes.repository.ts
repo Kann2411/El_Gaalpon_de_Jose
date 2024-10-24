@@ -19,9 +19,7 @@ export class ClassRepository {
 
   async getClasses() {
     try {
-      const classes = await this.classesRepository.find({
-        relations: ['schedule'],
-      });
+      const classes = await this.classesRepository.find();
       if (!classes) {
         throw new Error('No se encontraron clases.');
       }
@@ -32,40 +30,28 @@ export class ClassRepository {
   }
 
   async classesSeeder() {
-    const horarios = await this.horarioDBRepository.find();
+    for (const classItem of clases) {
+      const nuevaClase = new Class();
+      nuevaClase.name = classItem.name;
+      nuevaClase.capacity = classItem.capacity;
+      nuevaClase.intensity = classItem.intensity;
+      nuevaClase.duration = classItem.duration;
+      nuevaClase.image = classItem.image;
+      nuevaClase.description = classItem.description;
+      nuevaClase.status = EstadoClase[classItem.status as keyof EstadoClase];
+      nuevaClase.day = classItem.day.toLowerCase();
+      nuevaClase.starttime = classItem.startTime;
+      nuevaClase.endtime = classItem.endTime;
 
-    for (const element of clases) {
-      const horario = horarios.find(
-        (horario) =>
-          horario.day.toLocaleLowerCase() === element.day.toLocaleLowerCase(),
-      );
-
-      if (horario) {
-        for (const classItem of element.classes) {
-          const nuevaClase = new Class();
-          nuevaClase.name = classItem.name;
-          nuevaClase.capacity = classItem.capacity;
-          nuevaClase.intensity = classItem.intensity;
-          nuevaClase.duration = classItem.duration;
-          nuevaClase.image = classItem.image;
-          nuevaClase.description = classItem.description;
-          nuevaClase.status =
-            EstadoClase[classItem.status as keyof EstadoClase];
-          nuevaClase.schedule = horario;
-
-          await this.classesRepository.save(nuevaClase);
-        }
-      }
+      await this.classesRepository.save(nuevaClase);
     }
+
     return { message: 'Clases creadas con éxito' };
   }
 
   async getClassById(id: UUID) {
     try {
-      const classData = await this.classesRepository.findOne({
-        where: { id },
-        relations: { schedule: true },
-      });
+      const classData = await this.classesRepository.findOneBy({ id });
       if (!classData) {
         throw new Error('No se encontró la clase.');
       }
