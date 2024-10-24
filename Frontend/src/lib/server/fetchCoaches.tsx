@@ -43,20 +43,18 @@ export async function uploadImage(id: string, file: File) {
             throw new Error("Token no disponible");
         }
 
-        // Validar el archivo
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-        if (!validTypes.includes(file.type) || file.size > 200 * 1024) { // 200 KB
+        if (!validTypes.includes(file.type) || file.size > 200 * 1024) {
             throw new Error("El archivo debe ser una imagen en formato jpg, jpeg, png o webp y menor a 200KB");
         }
 
         const formData = new FormData();
-        formData.append('file', file); // Agregar el archivo al FormData
+        formData.append('file', file); 
 
         const response = await fetch(`http://localhost:3000/files/uploadImage/${id}`, {
             method: "PATCH",
             headers: {
                 'Authorization': `Bearer ${token}`
-                // No se incluye 'Content-Type' porque FormData lo establece automáticamente
             },
             body: formData,
         });
@@ -76,39 +74,46 @@ export async function uploadImage(id: string, file: File) {
     }
 }
 
-
-
+// api/trainingApi.ts
 export const deleteTrainingPlan = async (id: string) => {
     try {
+        const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
         const response = await fetch(`http://localhost:3000/training-plans/${id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Agregar el encabezado de autorización
+            },
         });
 
         if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
+            const errorText = await response.text(); // Obtener el texto de error
+            throw new Error(`Error: ${response.status} ${response.statusText}, Details: ${errorText}`);
         }
 
-        const data = await response.json(); 
-        console.log('Response data:', data);
-
-        alert('Training plan deleted successfully');
-
-        return data;
+        // No se espera un JSON en la respuesta de un DELETE
+        alert('Plan de entrenamiento eliminado con éxito');
+        return true; // Retornar true si la eliminación fue exitosa
     } catch (error) {
-        console.error('Error when deleting training plan:', error);
-        alert('Error when deleting training plan');
+        console.error('Error al eliminar el plan de entrenamiento:', error);
+        alert('Error al eliminar el plan de entrenamiento');
     }
 };
 
-export const getTrainingPlans = async () => {
 
+export const getTrainingPlans = async () => {
     try {
+        const token = localStorage.getItem('token'); 
         const response = await fetch('http://localhost:3000/training-plans', {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
         });
+
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
+        
         const data = await response.json();
         console.log('Training plans data:', data);
         return data;
