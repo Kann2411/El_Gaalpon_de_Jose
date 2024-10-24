@@ -1,7 +1,22 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+'use client'
+import AdminDashboardView from '../AdminDashboardView/AdminDashboardView'
+import CoachDashboardView from '../CoachDashboardView/CoachDashboardView'
+import UserDashboardview from '../UserDashboardView/UserDashboardview'
+import React, { useContext } from 'react'
+import { UserContext } from '@/context/user'
+=======
+=======
+>>>>>>> 3641f2a783135d5c4d32fe6bce7dca55739ee961
 "use client";
 import { UserContext } from "@/context/user";
 import React, { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
+<<<<<<< HEAD
+>>>>>>> aa4ec1bd71aa547b054839e7fa95a41a792862f4
+=======
+>>>>>>> 3641f2a783135d5c4d32fe6bce7dca55739ee961
 
 export default function DashboardView() {
   const router = useRouter();
