@@ -1,57 +1,80 @@
 "use client";
 
-import { DecodedToken, ILogin, IProviderLogin, IUser, IUserContext, IUserResponse, SignInCredential } from "@/interfaces/interfaces";
+import { DecodedToken, IUser, IUserContext, IUserResponse, SignInCredential } from "@/interfaces/interfaces";
 import { postSignIn, postSignUp } from "@/lib/server/fetchUsers";
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
+import { useRouter } from 'next/navigation';
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 
-export const UserContext = createContext<IUserContext>( {
-    user: null,
-    setUser: () => {},
-    isLogged: false,
-    setIsLogged: () => {},
-    signIn: async () => false,
-    signUp: async () => false,
-    logOut: () => {},
-    imgUrl: null,
-    setImgUrl: () => {},
+export const UserContext = createContext<IUserContext>({
+  user: null,
+  setUser: () => {},
+  isLogged: false,
+  setIsLogged: () => {},
+  signIn: async () => false,
+  signUp: async () => false,
+  logOut: () => {},
+  imgUrl: null,
+  setImgUrl: () => {},
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<Partial<IUser> | null>(null);
     const [isLogged, setIsLogged] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true); 
-    const [imgUrl, setImgUrl] = useState<string | null >(null);
+    const [imgUrl, setImgUrl] = useState<string | null>(null);
+    const router = useRouter();
+    const { data: session, status } = useSession();
+    console.log("🚀 ~ UserProvider ~ status:", status)
+    console.log("🚀 ~ UserProvider ~ session:", session)
 
-    const signIn = async (credentials: SignInCredential): Promise<boolean> => {
+    useEffect(() => {
+        if (status === "authenticated" && session?.user) {
+          const { name, email, imgUrl, role, id } = session.user as IUser;
+          setUser({ name, email, imgUrl: imgUrl, role, id });
+          setIsLogged(true);
+          setImgUrl(imgUrl || null);
+    
+          // Redirigir basado en el rol
+          if (role === "admin") {
+            router.push("/users");
+          } else if (role === "coach") {
+            router.push("/training-management");
+          } else {
+            router.push("/");
+          }
+        }
+      }, [session, router]);
+
+
+      const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
-            let data: IUserResponse | null;
-
-            if ('provider' in credentials) {
-                data = { user: { name: 'Google User', role: 'user', imgUrl: 'url-to-google-profile-image' }, token: 'fake-google-token' }; 
+          let data: IUserResponse | null;
+    
+          if ('provider' in credentials) {
+            // La autenticación de Google ya está manejada por NextAuth
+            return true;
+          } else {
+            const userResponse = await postSignIn(credentials);
+            if (userResponse) {
+              data = { user: userResponse.user, token: userResponse.token };
             } else {
-                const userResponse = await postSignIn(credentials); 
-                console.log("Datos devueltos de postSignIn:", userResponse);
-
-                if (userResponse) {
-                    data = { user: userResponse.user, token: userResponse.token }; 
-                } else {
-                    data = null;
-                }
+              data = null;
             }
-
-            if (data && data.token) {
-                const decodedToken: DecodedToken = jwtDecode(data.token);
-                const role = decodedToken.roles; 
-                console.log('userID:' + decodedToken.id);
-                
-                const userWithRole = {
-                    ...data.user,
-                    role: role,
-                    id: decodedToken.id, 
-                    token: data.token,
-                }
+          }
+    
+          if (data && data.token) {
+            const decodedToken: DecodedToken = jwtDecode(data.token);
+            const role = decodedToken.roles;
+            
+            const userWithRole = {
+              ...data.user,
+              role: role,
+              id: decodedToken.id,
+              token: data.token,
+            }
                 
                 setUser(userWithRole);
                 localStorage.setItem('user', JSON.stringify(userWithRole));
