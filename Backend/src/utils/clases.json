@@ -9,7 +9,7 @@
     "description": "Yoga is a mind-body practice that combines physical postures, breathing exercises, and meditation to promote relaxation and improve flexibility.",
     "day": "MONDAY",
     "startTime": "06:00:00",
-    "endTime": "07:45:00"
+    "endTime": "07:00:00"
   },
   {
     "name": "Spinning",
@@ -20,8 +20,8 @@
     "image": "https://i.blogs.es/f7460a/1/1366_2000.jpg",
     "description": "Spinning is a high-intensity indoor cycling workout that improves cardiovascular health and strengthens lower body muscles.",
     "day": "MONDAY",
-    "startTime": "06:00:00",
-    "endTime": "07:45:00"
+    "startTime": "08:00:00",
+    "endTime": "08:45:00"
   },
   {
     "name": "Functional Training",
@@ -33,7 +33,7 @@
     "description": "Functional training focuses on exercises that mimic everyday movements, helping to improve strength, balance, and coordination.",
     "day": "TUESDAY",
     "startTime": "06:00:00",
-    "endTime": "08:00:00"
+    "endTime": "07:00:00"
   },
   {
     "name": "Zumba",
@@ -44,8 +44,8 @@
     "image": "https://img.freepik.com/foto-gratis/gente-sonriente-divirtiendose-clase-zumba_23-2149074876.jpg",
     "description": "Zumba is a high-energy dance fitness program that combines Latin and international music with fun dance moves.",
     "day": "TUESDAY",
-    "startTime": "06:00:00",
-    "endTime": "08:00:00"
+    "startTime": "08:00:00",
+    "endTime": "09:00:00"
   },
   {
     "name": "Pilates",
@@ -57,7 +57,7 @@
     "description": "Pilates is a system of exercises focused on improving flexibility, strength, and body awareness. It is ideal for strengthening the core and improving posture.",
     "day": "WEDNESDAY",
     "startTime": "06:00:00",
-    "endTime": "08:00:00"
+    "endTime": "07:00:00"
   },
   {
     "name": "Boxing",
@@ -68,7 +68,7 @@
     "image": "https://cdn.valenciaplaza.com/public/Image/2023/4/gimnasios-boxeo-murcia_forCrop.jpg",
     "description": "Boxing is a high-intensity sport that improves strength, coordination, and cardiovascular fitness through punches and defensive moves.",
     "day": "WEDNESDAY",
-    "startTime": "06:00:00",
+    "startTime": "07:00:00",
     "endTime": "08:00:00"
   },
   {
@@ -81,7 +81,7 @@
     "description": "CrossFit is a strength and conditioning workout that combines elements of weightlifting, aerobics, and gymnastics to build endurance, strength, and agility.",
     "day": "THURSDAY",
     "startTime": "06:00:00",
-    "endTime": "07:45:00"
+    "endTime": "07:00:00"
   },
   {
     "name": "Aerobics",
@@ -92,8 +92,8 @@
     "image": "https://img.freepik.com/fotos-premium/grupo-personas-deportivas-haciendo-aerobic-clase-gimnasio_1301-6064.jpg",
     "description": "Aerobics is a cardio workout that focuses on rhythmic exercises to improve cardiovascular endurance and burn calories.",
     "day": "THURSDAY",
-    "startTime": "06:00:00",
-    "endTime": "07:45:00"
+    "startTime": "08:00:00",
+    "endTime": "08:45:00"
   },
   {
     "name": "Yoga",
@@ -105,7 +105,7 @@
     "description": "Yoga is a mind-body practice that combines physical postures, breathing exercises, and meditation to promote relaxation and improve flexibility.",
     "day": "FRIDAY",
     "startTime": "06:00:00",
-    "endTime": "07:45:00"
+    "endTime": "07:00:00"
   },
   {
     "name": "Spinning",
@@ -116,8 +116,8 @@
     "image": "https://i.blogs.es/f7460a/1/1366_2000.jpg",
     "description": "Spinning is a high-intensity indoor cycling workout that improves cardiovascular health and strengthens lower body muscles.",
     "day": "FRIDAY",
-    "startTime": "06:00:00",
-    "endTime": "07:45:00"
+    "startTime": "08:00:00",
+    "endTime": "08:45:00"
   },
   {
     "name": "Functional Training",
@@ -129,7 +129,7 @@
     "description": "Functional training focuses on exercises that mimic everyday movements, helping to improve strength, balance, and coordination.",
     "day": "SATURDAY",
     "startTime": "06:00:00",
-    "endTime": "08:00:00"
+    "endTime": "07:00:00"
   },
   {
     "name": "Zumba",
@@ -140,7 +140,7 @@
     "image": "https://img.freepik.com/foto-gratis/gente-sonriente-divirtiendose-clase-zumba_23-2149074876.jpg",
     "description": "Zumba is a high-energy dance fitness program that combines Latin and international music with fun dance moves.",
     "day": "SATURDAY",
-    "startTime": "06:00:00",
+    "startTime": "07:00:00",
     "endTime": "08:00:00"
   }
 ]
