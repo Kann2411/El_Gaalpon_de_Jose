@@ -1,20 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Class } from './classes.entity';
 import { UUID } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { Horario } from '../horario/horario.entity';
 import * as clases from '../../utils/clases.json';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
+import { User } from '../users/users.entity';
+import { ClassRegistration } from './classesRegistration.entity';
 
 @Injectable()
 export class ClassRepository {
   constructor(
-    @InjectRepository(Horario)
-    private readonly horarioDBRepository: Repository<Horario>,
+    @InjectRepository(User)
+    private readonly userDBRepository: Repository<User>,
     @InjectRepository(Class)
     private readonly classesRepository: Repository<Class>,
+    @InjectRepository(ClassRegistration)
+    private readonly classRegistrationRepository: Repository<ClassRegistration>,
     @InjectDataSource() private dataSource: DataSource,
   ) {}
 
@@ -120,5 +127,27 @@ export class ClassRepository {
         throw error;
       }
     });
+  }
+
+  async registerUserToClass(classId, userId) {
+    const classEntity = await this.classesRepository.findOneBy({ id: classId });
+    if (!classEntity) {
+      throw new NotFoundException('La clase no existe');
+    }
+
+    const registrations = classEntity.registrations || [];
+    if (registrations.length >= classEntity.capacity) {
+      throw new BadRequestException('La clase está llena');
+    }
+
+    const user = await this.userDBRepository.findOneBy({ id: userId });
+    const registration = this.classRegistrationRepository.create({
+      user,
+      classEntity,
+    });
+    await this.classRegistrationRepository.save(registration);
+    return {
+      message: `${user.name} te has registrado con exito a la clase de ${classEntity.name}`,
+    };
   }
 }

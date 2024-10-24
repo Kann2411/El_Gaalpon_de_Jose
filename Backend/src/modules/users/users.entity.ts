@@ -4,6 +4,7 @@ import { Role } from '../../enums/role.enum';
 import { Training } from '../training/training.entity';
 import { TrainingPlan } from '../training/trainingPlan.entity';
 import { RegistrationMethod } from 'src/enums/registrationMethod';
+import { ClassRegistration } from '../classes/classesRegistration.entity';
 
 @Entity('users')
 export class User {
@@ -99,4 +100,10 @@ export class User {
   })
   @OneToMany(() => TrainingPlan, (trainingPlan) => trainingPlan.coach)
   trainingPlans: TrainingPlan[];
+
+  @OneToMany(
+    () => ClassRegistration,
+    (classRegistration) => classRegistration.user,
+  )
+  registrations: ClassRegistration[];
 }
