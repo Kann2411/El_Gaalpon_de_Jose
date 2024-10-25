@@ -1,50 +1,78 @@
 "use client";
+
 import { FcGoogle } from "react-icons/fc";
-import RegisterFormComponent from "@/components/RegisterForm/RegisterForm";
+import RegisterForm from "@/components/RegisterForm/RegisterForm";
+import { signIn } from "next-auth/react";
+import { useContext } from 'react';
+import { UserContext } from '@/context/user';
+import Image from 'next/image';
+import Link from 'next/link';
 
-const RegisterView = () => {
+export default function RegisterView() {
+  const { signIn: contextSignIn } = useContext(UserContext);
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const result = await signIn('google', {
+        callbackUrl: '/api/auth/callback/google',
+        redirect: false,
+        prompt: 'select_account',
+      });
+
+      if (result?.error) {
+        console.error('Error en el registro con Google:', result.error);
+      } else if (result?.url) {
+        window.location.href = result.url;
+      }
+    } catch (error) {
+      console.error('Error inesperado durante el registro con Google:', error);
+    }
+  };
+
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-black">
-      {/* Background image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: "url('https://i.postimg.cc/T3PmQycr/photo-1517836357463-d25dfeac3438.jpg')",
-          filter: "brightness(0.5)", // This makes the background darker
-        }}
-      ></div>
+    <div className="flex w-full h-screen">
+      {/* Lado izquierdo - Formulario de registro */}
+      <div className="w-1/2 h-full bg-[#222222] flex items-center justify-center">
+        <div className="w-full max-w-lg px-8 mb-10">
+          <div className="text-center my-5">
+            <h2 className="text-3xl font-bold text-white">Sign Up</h2>
+          </div>
 
-      {/* Overlay for the darkened effect */}
-      <div className="absolute inset-0 bg-black opacity-50"></div>
+          <RegisterForm />
 
-      {/* Form content */}
-      <div className="relative w-full max-w-md bg-black bg-opacity-50 p-8 rounded shadow-lg z-10">
-        <h2 className="text-2xl font-bold mb-6 text-center text-white">Register</h2>
-        <RegisterFormComponent />
-        <div className="flex items-center justify-center my-4">
-          <hr className="flex-grow border-gray-400" />
-          <span className="mx-2 text-gray-300">Or access with</span>
-          <hr className="flex-grow border-gray-400" />
-        </div>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            window.location.href = "http://localhost:3000/auth/google";
-          }}
-          className="w-full mt-4 bg-gray-600 text-white py-3 rounded hover:bg-gray-700 flex items-center justify-center"
-        >
-          <FcGoogle className="mr-3 w-6 h-6" />
-          <span>Google</span>
-        </button>
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-300">
-              Don't have an account?{" "}
-            <a href="/login" className="text-red-500">Login</a>
+          <div className="flex items-center justify-center my-7">
+            <hr className="w-full border-gray-600" />
+            <span className="px-4 text-gray-400">Or</span>
+            <hr className="w-full border-gray-600" />
+          </div>
+
+          <button
+            onClick={handleGoogleSignUp}
+            className="w-full py-4 px-4 bg-white text-black rounded-md hover:bg-gray-200 flex items-center justify-center transition duration-300"
+          >
+            <FcGoogle className="mr-2 text-2xl" />
+            <span>Sign in with Google</span>
+          </button>
+
+          <p className="text-center text-gray-400 mt-4">
+          Already have an account?{" "}
+            <Link href="/login" className="text-red-500 hover:underline">
+              Sign In
+            </Link>
           </p>
         </div>
       </div>
+
+      {/* Lado derecho - Imagen */}
+      <div className="w-1/2 h-full overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1520334298038-4182dac472e8?q=80&w=1966&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Imagen de fondo"
+          width={1920}
+          height={1080}
+          className="w-full h-full object-cover"
+        />
+      </div>
     </div>
   );
-};
-
-export default RegisterView;
+}

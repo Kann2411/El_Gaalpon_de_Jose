@@ -4,7 +4,7 @@ export interface IRegister {
     phone: string,
     dni: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
 }
 
 export interface ILogin {
@@ -25,6 +25,7 @@ export interface IUser {
     phone: string; 
     dni: string;
     imgUrl?: string;
+    image?: string;
     registrationMethod?: string; 
     password: string;
     confirmPassword: string;

@@ -9,13 +9,14 @@ import ModalProfilePhoto from "../ModalProfilePhoto/ModalProfilePhoto";
 import Swal from "sweetalert2";
 
 const NavBarComponent = () => {
-  const { user, logOut, isLogged, setUser, imgUrl, setImgUrl } = useContext(UserContext);
+  const { user, logOut, isLogged, setUser, imgUrl, setImgUrl } =
+    useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const [file, setFile] = useState<File | null>(null); 
-  const [showModal, setShowModal] = useState<boolean>(false); 
+  const [file, setFile] = useState<File | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -29,29 +30,27 @@ const NavBarComponent = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-        setFile(e.target.files[0]);
-        setShowModal(true); // Mostrar el modal cuando se seleccione un archivo
+      setFile(e.target.files[0]);
+      setShowModal(true); // Mostrar el modal cuando se seleccione un archivo
     }
-};
-  
-const handleCancel = () => {
+  };
+
+  const handleCancel = () => {
     setShowModal(false); // Cerrar el modal sin subir
     setFile(null); // Limpiar el archivo si se cancela
-}
+  };
 
   const handleUpload = async () => {
     if (!file || !user) return;
-console.log(user.id)
-console.log('user:' + user.imgUrl)
+    console.log(user.id);
+    console.log("user:" + user.imgUrl);
 
     const formData = new FormData();
-    formData.append("file", file); 
+    formData.append("file", file);
 
     setShowModal(false); // Cerrar el modal después de subir la foto
-    setFile(null)
+    setFile(null);
 
-    
-  
     try {
       const response = await fetch(
         `http://localhost:3000/files/profileImages/${user.id}`,
@@ -60,11 +59,11 @@ console.log('user:' + user.imgUrl)
           body: formData,
         }
       );
-  
+
       if (response.ok) {
         const data = await response.json();
-        setImgUrl(() => (data.imgUrl ));
-        localStorage.setItem('imgUrl', data.imgUrl);
+        setImgUrl(() => data.imgUrl);
+        localStorage.setItem("imgUrl", data.imgUrl);
         Swal.fire({
             title: 'Super!',
             text: 'Profile photo updated successfully!',
@@ -83,36 +82,38 @@ console.log('user:' + user.imgUrl)
         const errorData = await response.json();
         console.error("Error details:", errorData);
         Swal.fire({
-            title: 'Mmm...',
-            text: `Failed to upload profile photo: ${errorData.message || "Unknown error"}`,
-            icon: 'error',
-            confirmButtonText: 'Ok',
-            customClass: {
-              popup: 'bg-black text-white', 
-              title: 'text-red-600',
-              confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
-            },
-            buttonsStyling: false, 
-          })
+          title: "Mmm...",
+          text: `Failed to upload profile photo: ${
+            errorData.message || "Unknown error"
+          }`,
+          icon: "error",
+          confirmButtonText: "Ok",
+          customClass: {
+            popup: "bg-black text-white",
+            title: "text-red-600",
+            confirmButton:
+              "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none",
+          },
+          buttonsStyling: false,
+        });
       }
     } catch (error) {
       console.error("Error uploading file:", error);
       Swal.fire({
-        title: 'Mmm...',
+        title: "Mmm...",
         text: "Error when uploading the file.",
-        icon: 'error',
-        confirmButtonText: 'Ok',
+        icon: "error",
+        confirmButtonText: "Ok",
         customClass: {
-          popup: 'bg-black text-white', 
-          title: 'text-red-600',
-          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none',
+          popup: "bg-black text-white",
+          title: "text-red-600",
+          confirmButton:
+            "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none",
         },
-        buttonsStyling: false, 
-      })
+        buttonsStyling: false,
+      });
     }
   };
-  
-  
 
   useEffect(() => {
     if (isLogged) {
@@ -187,90 +188,96 @@ console.log('user:' + user.imgUrl)
             ? "/admins"
             : "/classes"
 
-        return (
-          <li key={index} className="relative group">
-            <Link
-              href={route}
-              className="text-white text-sm sm:text-base font-medium px-3 py-2"
-            >
-              {item}
-            </Link>
-            <span
-              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"}`}
-            />
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-) : user?.role === "coach" ? (
-  <nav className="flex-1 flex items-center justify-center">
-    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Training Management"].map((item, index) => {
-        const lowerCaseItem = item.toLowerCase();
-        const route = lowerCaseItem === "training management" ? "/training-management" : "#"; 
-        
-        return (
-          <li key={index} className="relative group">
-            <Link
-              href={route}
-              className="text-white text-sm sm:text-base font-medium px-3 py-2"
-            >
-              {item}
-            </Link>
-            <span
-              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"}`}
-            />
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-) : !isLogged ? (
-  <nav className="flex-1 flex items-center justify-center">
-    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Home", "Plans", "Contact Us"].map((item, index) => {
-        const lowerCaseItem = item.toLowerCase();
-        const route =
-          lowerCaseItem === "home"
-            ? "/home"
-            : lowerCaseItem === "plans"
-            ? "/plans"
-            : "/contact";
+              return (
+                <li key={index} className="relative group">
+                  <Link
+                    href={route}
+                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                  >
+                    {item}
+                  </Link>
+                  <span
+                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                      pathname === route ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      ) : user?.role === "coach" ? (
+        <nav className="flex-1 flex items-center justify-center">
+          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+            {["Training Management"].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase();
+              const route =
+                lowerCaseItem === "training management"
+                  ? "/training-management"
+                  : "#";
 
-        return (
-          <li key={index} className="relative group">
-            <Link
-              href={route}
-              className="text-white text-sm sm:text-base font-medium px-3 py-2"
-            >
-              {item}
-            </Link>
-            <span
-              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"}`}
-            />
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-) : null}
-      
+              return (
+                <li key={index} className="relative group">
+                  <Link
+                    href={route}
+                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                  >
+                    {item}
+                  </Link>
+                  <span
+                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                      pathname === route ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      ) : !isLogged ? (
+        <nav className="flex-1 flex items-center justify-center">
+          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+            {["Home", "Plans", "Contact Us"].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase();
+              const route =
+                lowerCaseItem === "home"
+                  ? "/home"
+                  : lowerCaseItem === "plans"
+                  ? "/plans"
+                  : "/contact";
+
+              return (
+                <li key={index} className="relative group">
+                  <Link
+                    href={route}
+                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                  >
+                    {item}
+                  </Link>
+                  <span
+                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                      pathname === route ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      ) : null}
+
       {isLogged ? (
         <div className="relative" ref={menuRef}>
           <div
-            className="w-10 h-10 rounded-full cursor-pointer transition-transform duration-200 hover:scale-105 me-5"
+            className="w-14 h-14 rounded-full cursor-pointer transition-transform duration-200 hover:scale-105 me-5"
             onClick={toggleMenu}
           >
             <img
               src={
-                imgUrl ??
+                imgUrl ||
                 "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"
               }
               alt="avatar"
@@ -307,23 +314,22 @@ console.log('user:' + user.imgUrl)
 
                 {/* Botón para cambiar la foto de perfil */}
                 <button
-                onClick={() => document.getElementById("fileInput")?.click()}
-                className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
-            >
-                Change profile photo
-            </button>
+                  onClick={() => document.getElementById("fileInput")?.click()}
+                  className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
+                >
+                  Change profile photo
+                </button>
 
-            {/* Input oculto para subir archivos */}
-            <input
-                type="file"
-                id="fileInput"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={handleFileChange}
-            />
+                {/* Input oculto para subir archivos */}
+                <input
+                  type="file"
+                  id="fileInput"
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
 
-            {/* Modal de confirmación */}
-           
+                {/* Modal de confirmación */}
               </>
             )}
           </div>
@@ -334,7 +340,7 @@ console.log('user:' + user.imgUrl)
             href="/login"
             className="text-white text-sm sm:text-base font-medium px-3 py-2"
           >
-            Login
+            Sign In
           </Link>
           <Link
             href="/register"
@@ -345,9 +351,13 @@ console.log('user:' + user.imgUrl)
         </div>
       )}
 
-<ModalProfilePhoto isOpen={showModal} onClose={handleCancel} onAccept={handleUpload}>
-                Are you sure you want to change your photo?
-            </ModalProfilePhoto>
+      <ModalProfilePhoto
+        isOpen={showModal}
+        onClose={handleCancel}
+        onAccept={handleUpload}
+      >
+        Are you sure you want to change your photo?
+      </ModalProfilePhoto>
     </header>
   );
 };
