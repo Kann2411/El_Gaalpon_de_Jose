@@ -145,7 +145,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        const storedImgUrl = localStorage.getItem("imgUrl"); // Recuperar imgUrl del localStorage
+        const storedImgUrl = localStorage.getItem("imgUrl"); 
 
         if (storedUser && token) {
             const parsedUser = JSON.parse(storedUser);
@@ -173,7 +173,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <UserContext.Provider
-            value={{ user, setUser, isLogged, setIsLogged, signIn, signUp, logOut, imgUrl, setImgUrl }}
+            value={{ user, setUser, isLogged, setIsLogged, signIn, signUp, logOut, imgUrl, setImgUrl, }}
         >
             {children}
         </UserContext.Provider>
