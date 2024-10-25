@@ -2,8 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Membresia } from './membresia.entity';
 import { DataSource, Repository } from 'typeorm';
-import { UUID } from 'crypto';
 import * as memberships from '../../utils/membresias.json';
+import { config as dotenvConfig } from 'dotenv';
+import { UUID } from 'crypto';
+// import MercadoPagoConfig, { Preference } from 'mercadopago';
+
+dotenvConfig({ path: '.env' });
+
+// const client = new MercadoPagoConfig({ accessToken: process.env.ACCESS_TOKEN });
 
 @Injectable()
 export class MembresiaRepository {
@@ -17,7 +23,6 @@ export class MembresiaRepository {
     const membresias = await this.membresiaRepository.find();
     return membresias;
   }
-
   async seederData() {
     const queryRunner = this.dataSouce.createQueryRunner();
     await queryRunner.startTransaction();
@@ -42,6 +47,8 @@ export class MembresiaRepository {
         }
 
         const membresia = queryRunner.manager.create(Membresia, {
+          ...membershipData,
+          features: [],
           plan: membershipData.plan,
           price: membershipData.price,
           currency: membershipData.currency,
@@ -84,12 +91,12 @@ export class MembresiaRepository {
     });
   }
 
-  async updateMembresia(id: UUID, membresia: Membresia) {
-    await this.membresiaRepository.update({ id }, membresia);
-    return await this.membresiaRepository.findOne({ where: { id } });
-  }
+  // async updateMembresia(id: UUID, membresia: Membresia) {
+  //   await this.membresiaRepository.update({ id }, membresia);
+  //   return await this.membresiaRepository.findOne({ where: { id } });
+  // }
 
-  async deleteMembresia(id: UUID) {
-    await this.membresiaRepository.delete({ id });
-  }
+  // async deleteMembresia(id: UUID) {
+  //   await this.membresiaRepository.delete({ id });
+  // }
 }
