@@ -1,9 +1,11 @@
 'use client'
-import React from "react";
+import React, { useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { UserContext } from "@/context/user";
 
 const ResetPasswordView = () => {
+  const {user} = useContext(UserContext)
   const formik = useFormik({
     initialValues: {
       newPassword: "",
@@ -15,12 +17,12 @@ const ResetPasswordView = () => {
         .min(8, "La contraseña debe tener al menos 8 caracteres"),
       confirmPassword: Yup.string()
         .required("Requerido")
-        .oneOf([Yup.ref('newPassword')], 'Las contraseñas deben coincidir'), // Eliminar `null`
+        .oneOf([Yup.ref('newPassword')], 'Las contraseñas deben coincidir'), 
     }),
     onSubmit: async (values) => {
       try {
-        // Aquí harías la solicitud para restablecer la contraseña
-        const response = await fetch(`http://localhost:3000/auth/reset-password?token=<Token>`, {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/auth/reset-password?token=${token}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -32,28 +34,26 @@ const ResetPasswordView = () => {
         });
 
         if (response.ok) {
-          // Aquí manejas la respuesta exitosa
-          alert('Contraseña restablecida exitosamente');
+          alert('Password successfully changed');
         } else {
-          // Aquí manejas el error
-          alert('Error al restablecer la contraseña');
+          alert('Error when changing password');
         }
       } catch (error) {
         console.error(error);
-        alert('Error al restablecer la contraseña');
+        alert('Error when changing password');
       }
     },
   });
 
   return (
     <div>
-      <h2>Restablecer Contraseña</h2>
+      <h2>Change Password</h2>
       <form onSubmit={formik.handleSubmit}>
         <input
           id="newPassword"
           name="newPassword"
           type="password"
-          placeholder="Nueva Contraseña"
+          placeholder="New Password"
           onChange={formik.handleChange}
           value={formik.values.newPassword}
         />
@@ -65,7 +65,7 @@ const ResetPasswordView = () => {
           id="confirmPassword"
           name="confirmPassword"
           type="password"
-          placeholder="Confirmar Contraseña"
+          placeholder="Confirm Password"
           onChange={formik.handleChange}
           value={formik.values.confirmPassword}
         />
@@ -73,7 +73,7 @@ const ResetPasswordView = () => {
           <div>{formik.errors.confirmPassword}</div>
         ) : null}
 
-        <button type="submit">Restablecer Contraseña</button>
+        <button type="submit">Change Password</button>
       </form>
     </div>
   );
