@@ -1,6 +1,7 @@
 "use client";
 import { FcGoogle } from "react-icons/fc";
 import LoginForm from "@/components/LoginForm/LoginForm";
+import Link from "next/link";
 
 const LoginView = () => {
   return (
@@ -37,6 +38,8 @@ const LoginView = () => {
           <p className="text-sm text-white">
               Don't have an account?{" "}
             <a href="/register" className="text-red-600">Sign up</a>
+            <br/>
+        <Link className="text-red-600" href="/auth/forgot-password">I forgot my password</Link>
           </p>
         </div>
       </div>
