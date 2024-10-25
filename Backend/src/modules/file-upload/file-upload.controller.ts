@@ -5,6 +5,7 @@ import {
   Param,
   ParseFilePipe,
   ParseUUIDPipe,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -18,7 +19,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class FileUploadController {
   constructor(private readonly fileService: FileService) {}
 
-  @Post('uploadImage/:id')
+  @Patch('uploadImage/:id')
   @UseInterceptors(FileInterceptor('file'))
   uploadImage(
     @Param('id', ParseUUIDPipe) trainingId: string,

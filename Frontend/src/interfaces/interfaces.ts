@@ -4,7 +4,7 @@ export interface IRegister {
     phone: string,
     dni: string,
     password: string,
-    confirmPassword: string
+    confirmPassword: string,
 }
 
 export interface ILogin {
@@ -25,12 +25,13 @@ export interface IUser {
     phone: string; 
     dni: string;
     imgUrl?: string;
-    image: string;
+    image?: string;
     registrationMethod?: string; 
     password: string;
     confirmPassword: string;
-    role: string | 'admin' | 'user' | 'coach'; 
-    token: string;
+    role?: string | 'admin' | 'user' | 'coach'; 
+    token?: string;
+
   }
 
 export interface IUserResponse {
@@ -44,8 +45,11 @@ export interface IUserContext{
     setUser: React.Dispatch<React.SetStateAction<Partial<IUser> | null>>
     isLogged: boolean
     setIsLogged: (isLogged: boolean) => void
-    signIn: (credential : ILogin) => Promise<boolean>
-    signUp: (user: Omit<IUser, "id">) => Promise<boolean>
+    signIn: (credential: ILogin) => Promise<boolean>;
+
+    // Actualizar el tipo de signUp
+    signUp: (user: Omit<IUser, "id">) => Promise<{ success: boolean; errorMessage?: string }>;
+
     logOut: () => void
     imgUrl: string | null
     setImgUrl: React.Dispatch<React.SetStateAction<string | null>>
@@ -75,3 +79,27 @@ export interface FormValues {
     email: string;
     message: string;
   }
+
+  export interface IPlan {
+    description: string;
+    file: File | null;
+  }
+
+  export interface GymClass {
+    name: string;
+    intensity: string;
+    capacity: number;
+    status: string;
+    image: string;
+    description: string;
+    duration: string;
+    day: string;
+    starttime: string;
+    endtime: string;
+  }
+  
+
+  export interface FormValues {
+    description: string;
+    file: File | null;
+}

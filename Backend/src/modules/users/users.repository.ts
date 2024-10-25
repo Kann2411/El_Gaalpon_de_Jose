@@ -13,12 +13,14 @@ import { Role } from 'src/enums/role.enum';
 import { UpdateProfileDto } from 'src/dtos/updateProfile.dto';
 import { ChangePasswordDto } from 'src/dtos/changePassword.dto';
 import { SetPasswordDto } from 'src/dtos/setPassword.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -217,12 +219,6 @@ export class UsersRepository {
         throw new NotFoundException(`Usuario con id ${id} no existe`);
       }
 
-      if (user.password) {
-        throw new BadRequestException(
-          'El usuario ya tiene una contraseña establecida.',
-        );
-      }
-
       if (newPassword !== confirmPassword) {
         throw new BadRequestException(
           'La nueva contraseña y la confirmación no coinciden.',
@@ -259,6 +255,34 @@ export class UsersRepository {
         throw error;
       }
       throw new InternalServerErrorException('Error al eliminar el usuario');
+    }
+  }
+
+  async resetPassword(token: string, setPasswordDto: SetPasswordDto): Promise<string> {
+    try {
+      // Verificar el token
+      const decoded = this.jwtService.verify(token);
+      const user = await this.userRepository.findOne({ where: { id: decoded.id } });
+
+      if (!user) {
+        throw new NotFoundException('Usuario no encontrado');
+      }
+
+      const { newPassword, confirmPassword } = setPasswordDto;
+      if (newPassword !== confirmPassword) {
+        throw new BadRequestException('Las contraseñas no coinciden.');
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+
+      await this.userRepository.save(user);
+      return 'Contraseña restablecida con éxito';
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new BadRequestException('El enlace ha expirado. Solicita uno nuevo.');
+      }
+      throw new BadRequestException('El enlace no es válido.');
     }
   }
 }

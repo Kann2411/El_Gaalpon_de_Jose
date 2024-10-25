@@ -23,7 +23,8 @@ export default function RegisterForm() {
 
   const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
     console.log("Valores enviados:", values);
-    const success = await signUp(values);
+    const { success } = await signUp(values); // Asegúrate de que signUp devuelve un objeto que contiene `success`
+
     if (success) {
       Swal.fire({
         title: 'Success!',
@@ -31,28 +32,28 @@ export default function RegisterForm() {
         icon: 'success',
         confirmButtonText: 'Accept',
         customClass: {
-          popup: 'bg-[#222222] text-white',
-          title: 'text-[#B0E9FF]',
-          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none rounded-md transition-colors duration-300',
+          popup: 'bg-black text-white',
+          title: 'text-red-600',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
         },
         buttonsStyling: false,
       });
-      router.push("/home");
+      resetForm(); // Mover resetForm aquí para que se ejecute solo en éxito
+      router.push('/'); // Redirigir después de un registro exitoso
     } else {
       Swal.fire({
-        title: '¡Ups!',
-        text: '¡Este correo electrónico ya existe!',
+        title: 'Ups!',
+        text: 'Something went wrong!',
         icon: 'error',
         confirmButtonText: 'Intentar de nuevo',
         customClass: {
-          popup: 'bg-[#222222] text-white',
-          title: 'text-[#B0E9FF]',
-          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none rounded-md transition-colors duration-300',
+          popup: 'bg-black text-white',
+          title: 'text-red-600',
+          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
         },
         buttonsStyling: false,
       });
     }
-    resetForm();
   };
 
   return (
@@ -157,7 +158,7 @@ export default function RegisterForm() {
           <button
             type="submit"
             disabled={!isValid || !dirty}
-            className="col-span-2 w-full bg-red-600 text-[#222222] py-3 rounded-md hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"  
+            className="col-span-2 w-full bg-red-600 text-[#222222] py-3 rounded-md hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Sign Up
           </button>

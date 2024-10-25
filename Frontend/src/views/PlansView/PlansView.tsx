@@ -1,5 +1,7 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
+import { getMembresia } from "@/lib/server/fetchMembresias";
 
 // Interface for the plan's features
 interface Feature {
@@ -15,6 +17,40 @@ interface PlanCardProps {
 }
 
 const PlansView: React.FC = () => {
+  const [plans, setPlans] = useState<PlanCardProps[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getMembresia()
+      .then((data) => {
+      
+        const formattedPlans = data.map((plan: any) => ({
+          title: plan.plan,
+          price: Number(plan.price),
+          features: plan.features.map((feature: any) => ({
+            text: feature.name.replace(/_/g, " ").toLowerCase(),
+            included: feature.value,
+          })),
+        }));
+        setPlans(formattedPlans);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching membership data:", err);
+        setError("Failed to load plans.");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="text-white">Loading plans...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
       {/* Title */}
@@ -35,51 +71,15 @@ const PlansView: React.FC = () => {
           max-w-7xl
         "
       >
-        {/* Basic Plan */}
-        <PlanCard
-          title="Basic Plan"
-          price={49}
-          features={[
-            { text: "Unlimited gym access", included: true },
-            { text: "24/7 gym access", included: false },
-            { text: "Basic group classes", included: true },
-            { text: "Advanced group classes", included: false },
-            { text: "Access to locker rooms and showers", included: true },
-            { text: "One basic training plan", included: false },
-            { text: "Access to cardio zones", included: true },
-          ]}
-        />
-
-        {/* Premium Plan */}
-        <PlanCard
-          title="Premium Plan"
-          price={55}
-          features={[
-            { text: "Unlimited gym access", included: true },
-            { text: "24/7 gym access", included: true },
-            { text: "Basic group classes", included: true },
-            { text: "Advanced group classes", included: true },
-            { text: "Access to locker rooms and showers", included: true },
-            { text: "One personalized training plan", included: true },
-            { text: "Access to cardio and strength zones", included: true },
-          ]}
-        />
-
-        {/* VIP Plan */}
-        <PlanCard
-          title="VIP Plan"
-          price={75}
-          features={[
-            { text: "Unlimited gym access", included: true },
-            { text: "24/7 gym access", included: true },
-            { text: "Private training sessions (2/month)", included: true },
-            { text: "Access to all group classes", included: true },
-            { text: "Exclusive locker room area", included: true },
-            { text: "Unlimited personalized training plans", included: true },
-            { text: "Access to spa and wellness services", included: true },
-            { text: "Free supplements (1/month)", included: true },
-          ]}
-        />
+        {/* Render the plans dynamically */}
+        {plans.map((plan, index) => (
+          <PlanCard
+            key={index}
+            title={plan.title}
+            price={plan.price}
+            features={plan.features}
+          />
+        ))}
       </div>
     </div>
   );

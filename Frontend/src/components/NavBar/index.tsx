@@ -65,19 +65,18 @@ const NavBarComponent = () => {
         setImgUrl(() => data.imgUrl);
         localStorage.setItem("imgUrl", data.imgUrl);
         Swal.fire({
-          title: "Super!",
-          text: "Profile photo updated successfully!",
-          icon: "success",
-          confirmButtonText: "Great",
-          customClass: {
-            popup: "bg-black text-white",
-            title: "text-red-600",
-            confirmButton:
-              "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none",
-          },
-          buttonsStyling: false,
-        });
-
+            title: 'Super!',
+            text: 'Profile photo updated successfully!',
+            icon: 'success',
+            confirmButtonText: 'Great',
+            customClass: {
+              popup: 'bg-black text-white', 
+              title: 'text-red-600',
+              confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
+            },
+            buttonsStyling: false, 
+          })
+       
         setIsMenuOpen(false);
       } else {
         const errorData = await response.json();
@@ -142,51 +141,52 @@ const NavBarComponent = () => {
 
       {/* Menús basados en el rol del usuario */}
       {user?.role === "user" ? (
-        <nav className="flex-1 flex items-center justify-center">
-          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Home", "Plans", "Contact Us", "Appointments"].map(
-              (item, index) => {
-                const lowerCaseItem = item.toLowerCase();
-                const route =
-                  lowerCaseItem === "home"
-                    ? "/home"
-                    : lowerCaseItem === "plans"
-                    ? "/plans"
-                    : lowerCaseItem === "contact us"
-                    ? "/contact"
-                    : "/appointments";
+  <nav className="flex-1 flex items-center justify-center">
+    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+      {["Home", "Plans", "Contact Us", "Appointments", "Training Plans"].map((item, index) => {
+        const lowerCaseItem = item.toLowerCase();
+        const route =
+          lowerCaseItem === "home"
+            ? "/home"
+            : lowerCaseItem === "plans"
+            ? "/plans"
+            : lowerCaseItem === "contact us"
+            ? "/contact"
+            : lowerCaseItem === "appointments"
+            ? "/appointments"
+            : "/training-plans"
 
-                return (
-                  <li key={index} className="relative group">
-                    <Link
-                      href={route}
-                      className="text-white text-sm sm:text-base font-medium px-3 py-2"
-                    >
-                      {item}
-                    </Link>
-                    <span
-                      className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                        pathname === route ? "scale-x-100" : "scale-x-0"
-                      }`}
-                    />
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-                  </li>
-                );
-              }
-            )}
-          </ul>
-        </nav>
-      ) : user?.role === "admin" ? (
-        <nav className="flex-1 flex items-center justify-center">
-          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Users", "Coaches", "Admins"].map((item, index) => {
-              const lowerCaseItem = item.toLowerCase();
-              const route =
-                lowerCaseItem === "users"
-                  ? "/users"
-                  : lowerCaseItem === "coaches"
-                  ? "/coaches"
-                  : "/admins";
+        return (
+          <li key={index} className="relative group">
+            <Link
+              href={route}
+              className="text-white text-sm sm:text-base font-medium px-3 py-2"
+            >
+              {item}
+            </Link>
+            <span
+              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                pathname === route ? "scale-x-100" : "scale-x-0"}`}
+            />
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+) : user?.role === "admin" ? (
+  <nav className="flex-1 flex items-center justify-center">
+    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+      {["Users", "Coaches", "Admins", "Classes"].map((item, index) => {
+        const lowerCaseItem = item.toLowerCase();
+        const route =
+          lowerCaseItem === "users"
+            ? "/users"
+            : lowerCaseItem === "coaches"
+            ? "/coaches"
+             : lowerCaseItem === "admins"
+            ? "/admins"
+            : "/classes"
 
               return (
                 <li key={index} className="relative group">

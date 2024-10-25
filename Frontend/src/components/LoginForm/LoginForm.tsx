@@ -34,7 +34,8 @@ export default function LoginForm() {
         },
         buttonsStyling: false,
       });
-      router.push('/home');
+      
+      router.push("/home");
     } else {
       Swal.fire({
         title: 'Ups!',
