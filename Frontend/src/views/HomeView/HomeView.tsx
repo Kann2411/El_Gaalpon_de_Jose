@@ -1,7 +1,9 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ChevronLeft, ChevronRight, Clock, Zap, X } from 'lucide-react';
 import { getClassData } from '@/lib/server/fetchClasses';
+import { UserContext } from '@/context/user';
+import Button from '@/components/Button/Button';
 
 interface ClassInfo {
   id: number;
@@ -40,14 +42,56 @@ const carouselImages: CarouselImage[] = [
   { id: 5, src: 'https://i.pinimg.com/736x/fe/2b/d8/fe2bd8ef822cd67fc9414b3f787aabda.jpg', alt: 'Locker rooms' },
 ];
 
+
 const HomeView: React.FC = () => {
+  const {user} = useContext(UserContext)
   const [classesData, setClassesData] = useState<ClassInfo[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
-
-  const fetchClassData = async () => {
+  const onClick = async () => {
+    if (!selectedClass || !user) {
+      console.error('No class selected or user not logged in');
+      alert('Please select a class and make sure you are logged in.');
+      return;
+    }
+  
+    try {
+      const claseId = selectedClass.id;
+      console.log('classId' + claseId)
+      const userId = user.id; // Asumiendo que tienes el ID del usuario en el contexto `UserContext`
+  console.log('userId'+ userId)
+      const response = await fetch(`http://localhost:3000/class/${claseId}/register/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        // Intenta obtener el mensaje de error del cuerpo de la respuesta
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to reserve the class. Please try again.');
+      }
+  
+      const data = await response.json();
+      alert('Class reserved successfully!');
+      console.log('Class reserved successfully:', data);
+    } catch (error: unknown) {
+      // Aquí hacemos una afirmación de tipo
+      if (error instanceof Error) {
+        alert(`Error reserving the class: ${error.message}`);
+        console.error('Error reserving the class:', error);
+      } else {
+        alert('An unknown error occurred.');
+        console.error('Unknown error:', error);
+      }
+    }
+  };
+  
+  
+    const fetchClassData = async () => {
     try {
       const data = await getClassData(); 
       setClassesData(data); 
@@ -185,6 +229,7 @@ const HomeView: React.FC = () => {
                 </div>
                 <span className="text-sm">{classInfo.intensity}</span>
               </div>
+              
             </div>
           </div>
         ))}
@@ -214,6 +259,11 @@ const HomeView: React.FC = () => {
                 <span>{selectedClass.intensity}</span>
               </div>
             </div>
+            {user?.role === "user" && (
+                <div className='flex justify-center mt-4'>
+                <Button content='Schedule' onClick={onClick} />
+              </div>
+              )}
           </div>
         </div>
       )}

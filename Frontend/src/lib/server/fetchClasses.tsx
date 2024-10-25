@@ -19,11 +19,6 @@ export const getClassData = async () => {
   };
 
 
-  // Función para enviar datos
-// Cambia la firma de la función
-// classService.ts
-
-
 
 export const createGymClass = async (gymClass: GymClass) => {
   try {
@@ -47,3 +42,24 @@ export const createGymClass = async (gymClass: GymClass) => {
   }
 };
 
+export const reserveClass = async (claseId: string, userId: string) => {
+  try {
+    const response = await fetch(`http://localhost:3000/class/${claseId}/register/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to reserve the class.');
+    }
+
+    const data = await response.json();
+    console.log('Class reserved successfully:', data);
+    return data; 
+  } catch (error) {
+    console.error('Error reserving the class:', error);
+    throw error;
+  }
+};
