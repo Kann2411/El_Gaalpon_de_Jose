@@ -14,7 +14,7 @@ export default function RegisterView() {
   const handleGoogleSignUp = async () => {
     try {
       const result = await signIn('google', {
-        callbackUrl: '/api/auth/callback/google',
+        callbackUrl: '/auth/callback/google',
         redirect: false,
         prompt: 'select_account',
       });

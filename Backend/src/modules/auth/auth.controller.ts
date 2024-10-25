@@ -3,6 +3,8 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -25,18 +27,14 @@ export class AuthController {
   @Get('google')
   @UseGuards(GoogleOauthGuard)
   async googleAuth(@Req() req) {
-    // Inicia la autenticación con Google
   }
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleLoginCallback(@Req() req, @Res() res) {
-    // Obtén el token de la validación de Google
     const tokenData = await this.authService.validateOAuthLogin(req.user);
-
-    // En lugar de redirigir, devolvemos un JSON con el token
     return res.status(200).json({
-      token: tokenData.token, // El token JWT que se generó
+      token: tokenData.token, 
       message: 'Login successful',
     });
   }
@@ -70,4 +68,5 @@ export class AuthController {
   ) {
     return this.authService.resetPassword(token, setPasswordDto);
   }
+
 }
