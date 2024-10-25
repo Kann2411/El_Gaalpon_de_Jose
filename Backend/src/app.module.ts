@@ -16,6 +16,7 @@ import { MembresiaModule } from './modules/membresia/membresia.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MercadoPagoModule } from './modules/mercadopago/mercadopago.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
     UsersModule,
     AuthModule,
     TrainingModule,
+    MercadoPagoModule,
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },
