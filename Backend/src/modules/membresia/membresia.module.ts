@@ -4,13 +4,9 @@ import { membresiaService } from './membresia.service';
 import { MembresiaRepository } from './membresia.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Membresia } from './membresia.entity';
-import { FeatureEntity } from './features.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Membresia]),
-    TypeOrmModule.forFeature([FeatureEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([Membresia])],
   controllers: [MembresiaController],
   providers: [membresiaService, MembresiaRepository],
 })
