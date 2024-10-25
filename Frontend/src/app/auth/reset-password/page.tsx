@@ -1,11 +1,24 @@
 'use client'
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { UserContext } from "@/context/user";
+import { useRouter } from 'next/navigation'; 
 
 const ResetPasswordView = () => {
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext);
+  const router = useRouter(); 
+  const [token, setToken] = useState<string>(""); 
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const tokenFromUrl = url.searchParams.get('token'); 
+
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl);
+    }
+  }, []); 
+
   const formik = useFormik({
     initialValues: {
       newPassword: "",
@@ -17,11 +30,11 @@ const ResetPasswordView = () => {
         .min(8, "La contraseña debe tener al menos 8 caracteres"),
       confirmPassword: Yup.string()
         .required("Requerido")
-        .oneOf([Yup.ref('newPassword')], 'Las contraseñas deben coincidir'), 
+        .oneOf([Yup.ref('newPassword')], 'Las contraseñas deben coincidir'),
     }),
     onSubmit: async (values) => {
       try {
-        const token = localStorage.getItem('token');
+        // Usa el token desde el estado
         const response = await fetch(`http://localhost:3000/auth/reset-password?token=${token}`, {
           method: 'PUT',
           headers: {
@@ -35,6 +48,7 @@ const ResetPasswordView = () => {
 
         if (response.ok) {
           alert('Password successfully changed');
+          router.push('/login'); 
         } else {
           alert('Error when changing password');
         }

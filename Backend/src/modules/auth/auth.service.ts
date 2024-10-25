@@ -51,7 +51,7 @@ export class AuthService {
       });
     }
 
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    const payload = { id: user.id, email: user.email, role: user.role };
     const token = this.jwtService.sign(payload);
 
     return { token };
@@ -120,7 +120,7 @@ export class AuthService {
       console.log(`Generated reset token: ${token}`);
 
 
-    const resetLink = `http://localhost:3001/reset-password?token=${token}`;
+    const resetLink = `http://localhost:3001/auth/reset-password?token=${token}`;
     const htmlContent = `
       <h1>Restablecimiento de contraseña</h1>
       <p>Hola, ${user.name}!</p>

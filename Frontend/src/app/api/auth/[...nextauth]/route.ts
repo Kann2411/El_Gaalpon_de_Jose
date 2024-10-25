@@ -10,8 +10,8 @@ const authOptions: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET as string,
   session: {
-    strategy: "jwt",  // Usar JWT en lugar de cookies para la persistencia.
-    maxAge: 24 * 60 * 60, // La sesión expira en 24 horas.
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, 
   },
   callbacks: {
     async jwt({ token, account, profile }) {
@@ -39,7 +39,7 @@ const authOptions: NextAuthOptions = {
   },
 };
 
-// Exporta los métodos HTTP
+
 const handler = NextAuth(authOptions);
 
-export { handler as POST, handler as GET }; // Maneja las solicitudes POST
+export { handler as POST, handler as GET }; 
