@@ -46,15 +46,19 @@ export class AuthService {
         email,
         name,
         password: '',
-        dni: '0000000',
-        phone: null,
+        dni: '',
+        phone: '',
         registrationMethod: RegistrationMethod.Google,
         role: Role.User,
         confirmPassword: '',
       });
     }
 
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    if (user.isBanned) {
+      throw new BadRequestException('Tu cuenta ha sido baneada.');
+    }
+
+    const payload = { id: user.id, email: user.email, role: user.role };
     const token = this.jwtService.sign(payload);
 
     return { token };
@@ -92,6 +96,10 @@ export class AuthService {
 
     if (!user) throw new BadRequestException('credenciales invalidas');
 
+    if (user.isBanned) {
+      throw new BadRequestException('Tu cuenta ha sido baneada.');
+    }
+
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) throw new BadRequestException('credenciales invalidas');
@@ -120,7 +128,7 @@ export class AuthService {
 
     console.log(`Generated reset token: ${token}`);
 
-    const resetLink = `http://localhost:3001/reset-password?token=${token}`;
+    const resetLink = `http://localhost:3001/auth/reset-password?token=${token}`;
     const htmlContent = `
       <h1>Restablecimiento de contraseña</h1>
       <p>Hola, ${user.name}!</p>

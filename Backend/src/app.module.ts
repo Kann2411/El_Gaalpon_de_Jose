@@ -42,13 +42,6 @@ import { MercadoPagoModule } from './modules/mercadopago/mercadopago.module';
       defaults: {
         from: '"No Reply" <noreply@.com>',
       },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
     }),
     ChatBotModule,
     FileUploadModule,
@@ -58,6 +51,7 @@ import { MercadoPagoModule } from './modules/mercadopago/mercadopago.module';
     UsersModule,
     AuthModule,
     TrainingModule,
+    MercadoPagoModule,
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },
