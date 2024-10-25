@@ -8,7 +8,7 @@ import { UserContext } from "@/context/user";
 interface ISuscriptionData {
   title: string;
   quantity: number;
-  unit_price: string;
+  unit_price: number;
   currency_id: string;
 }
 interface PlanCardProps {
@@ -99,8 +99,10 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description,
       title: plan,
       quantity: 1,
       currency_id: currency,
-      unit_price: price,
+      unit_price: Number(price),
     };
+
+    console.log(suscripcionData)
   
     try {
       const response = await fetch("http://localhost:3000/mercadopago/create_preference", {
