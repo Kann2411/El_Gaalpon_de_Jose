@@ -3,17 +3,18 @@ import React, { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { getMembresia } from "@/lib/server/fetchMembresias";
 
-// Interface for the plan's features
 interface Feature {
   text: string;
   included: boolean;
 }
 
-// Interface for the PlanCard component props
 interface PlanCardProps {
-  title: string;
-  price: number;
-  features: Feature[];
+  plan: string;
+  price: string;
+  currency: string;
+  description: string;
+  benefits: string[];
+  idealFor: string;
 }
 
 const PlansView: React.FC = () => {
@@ -23,24 +24,24 @@ const PlansView: React.FC = () => {
 
   useEffect(() => {
     getMembresia()
-      .then((data) => {
-      
-        const formattedPlans = data.map((plan: any) => ({
-          title: plan.plan,
-          price: Number(plan.price),
-          features: plan.features.map((feature: any) => ({
-            text: feature.name.replace(/_/g, " ").toLowerCase(),
-            included: feature.value,
-          })),
-        }));
-        setPlans(formattedPlans);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching membership data:", err);
-        setError("Failed to load plans.");
-        setLoading(false);
-      });
+    .then((data) => {
+      const formattedPlans = data.map((plan: any) => ({
+        plan: plan.plan,
+        price: plan.price,
+        currency: plan.currency || "$",  
+        description: plan.description,
+        benefits: plan.benefits,
+        idealFor: plan.idealFor
+      }));
+      setPlans(formattedPlans);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Error fetching membership data:", err);
+      setError("Failed to load plans.");
+      setLoading(false);
+    });
+    
   }, []);
 
   if (loading) {
@@ -53,31 +54,20 @@ const PlansView: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
-      {/* Title */}
       <h2 className="text-4xl font-extrabold mb-8">
         Check out our <span className="text-red-600">plans</span>
       </h2>
 
-      {/* Plans container */}
-      <div
-        className="
-          grid 
-          grid-cols-1 
-          md:grid-cols-2 
-          lg:grid-cols-3 
-          gap-8 
-          w-full 
-          px-8 
-          max-w-7xl
-        "
-      >
-        {/* Render the plans dynamically */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full px-8 max-w-7xl">
         {plans.map((plan, index) => (
           <PlanCard
             key={index}
-            title={plan.title}
+            plan={plan.plan}
             price={plan.price}
-            features={plan.features}
+            currency={plan.currency}
+            description={plan.description}
+            benefits={plan.benefits}
+            idealFor={plan.idealFor}
           />
         ))}
       </div>
@@ -85,39 +75,25 @@ const PlansView: React.FC = () => {
   );
 };
 
-// Component for each plan card
-const PlanCard: React.FC<PlanCardProps> = ({ title, price, features }) => (
-  <div className="bg-zinc-900 p-8 rounded-lg shadow-lg flex flex-col justify-between min-h-[600px] cursor-pointer transition duration-300 hover:scale-105">
-    {/* Plan header */}
-    <div className="text-center">
-      <h3 className="text-2xl font-bold mb-4">{title}</h3>
-      <div className="text-5xl font-extrabold mb-2">
-        ${price}
-        <span className="text-lg font-medium text-gray-400">/Month</span>
-      </div>
+const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description, benefits, idealFor }) => {
+  return (
+    <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg flex flex-col justify-between">
+      <h3 className="text-2xl font-bold mb-4">{plan}</h3>
+      <p className="text-xl mb-2">{currency}{price}</p>
+      <p className="mb-4">{description}</p>
+      <ul className="mb-6">
+        {benefits.map((benefit, index) => (
+          <li key={index} className="flex items-center mb-2">
+            <FaCheck className="text-green-500 mr-2" />
+            <span>{benefit}</span>
+          </li>
+        ))}
+      </ul>
+      <button className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-200">
+        Get Plan
+      </button>
     </div>
-
-    {/* Features list with icons */}
-    <ul className="space-y-4 text-white">
-      {features.map((feature: Feature, index: number) => (
-        <li key={index} className="flex justify-between items-center">
-          <span>{feature.text}</span>
-          <div
-            className={`w-6 h-6 rounded-full flex items-center justify-center ${
-              feature.included ? "bg-red-600" : "bg-gray-600"
-            }`}
-          >
-            {feature.included && <FaCheck className="text-white" />}
-          </div>
-        </li>
-      ))}
-    </ul>
-
-    {/* Button to choose the plan */}
-    <button className="bg-red-600 text-white py-2 px-6 rounded mt-6 hover:bg-red-700 transition">
-      Choose Plan
-    </button>
-  </div>
-);
+  );
+};
 
 export default PlansView;

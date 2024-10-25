@@ -7,13 +7,11 @@ export async function getMembresia() {
       }
   
       const data = await response.json();
-      console.log(data); // Aquí puedes manejar los datos que recibes
+      console.log(data); 
       return data;
     } catch (error) {
       console.error('Error fetching membresia:', error);
     }
   }
   
-  // Llamada a la función
-  getMembresia();
   

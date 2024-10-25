@@ -120,7 +120,7 @@ export class AuthService {
 
     console.log(`Generated reset token: ${token}`);
 
-    const resetLink = `http://localhost:3001/reset-password?token=${token}`;
+    const resetLink = `http://localhost:3001/auth/reset-password?token=${token}`;
     const htmlContent = `
       <h1>Restablecimiento de contraseña</h1>
       <p>Hola, ${user.name}!</p>
