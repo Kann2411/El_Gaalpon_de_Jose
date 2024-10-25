@@ -18,36 +18,36 @@ import { ApiTags } from '@nestjs/swagger';
 export class MembresiaController {
   constructor(private readonly membresiaService: membresiaService) {}
 
-  @Get()
-  getMembresias() {
-    return this.membresiaService.getMembresias();
-  }
+  // @Get()
+  // getMembresias() {
+  //   return this.membresiaService.getMembresias();
+  // }
 
-  @Get('seeder')
-  seederData() {
-    return this.membresiaService.seederData();
-  }
+  // @Get('seeder')
+  // seederData() {
+  //   return this.membresiaService.seederData();
+  // }
 
-  @Get(':id')
-  getMembresiaById(@Param('id', ParseUUIDPipe) id: UUID) {
-    return this.membresiaService.getMembresiaById(id);
-  }
+  // @Get(':id')
+  // getMembresiaById(@Param('id', ParseUUIDPipe) id: UUID) {
+  //   return this.membresiaService.getMembresiaById(id);
+  // }
 
-  @Post()
+  @Post('create_preference')
   createMembresia(@Body() membresia: Membresia) {
     return this.membresiaService.createMembresia(membresia);
   }
 
-  @Put()
-  updateMembresia(
-    @Param('id', ParseUUIDPipe) id: UUID,
-    @Body() membresia: Membresia,
-  ) {
-    this.membresiaService.updateMembresia(id, membresia);
-  }
+  // @Put()
+  // updateMembresia(
+  //   @Param('id', ParseUUIDPipe) id: UUID,
+  //   @Body() membresia: Membresia,
+  // ) {
+  //   this.membresiaService.updateMembresia(id, membresia);
+  // }
 
-  @Delete()
-  deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
-    this.membresiaService.deleteMembresia(id);
-  }
+  // @Delete()
+  // deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
+  //   this.membresiaService.deleteMembresia(id);
+  // }
 }

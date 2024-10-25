@@ -10,7 +10,6 @@ const client = new MercadoPagoConfig({ accessToken: process.env.ACCESS_TOKEN });
 export class MercadoPagoController{
     @Post('create_preference')
     async createPreference(@Body() bodySuscription) {
-        console.log(bodySuscription)
         const body = {
         items: [
             {
@@ -24,7 +23,6 @@ export class MercadoPagoController{
         }
         try {
         const preference = await new Preference(client).create({body});
-        console.log("preference: ",preference);
         return {redirectUrl: preference.init_point};
         } catch (error) {
         console.log("error: ",error);
