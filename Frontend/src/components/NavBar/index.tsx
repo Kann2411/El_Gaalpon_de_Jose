@@ -68,7 +68,6 @@ const NavBarComponent = () => {
             title: 'Super!',
             text: 'Profile photo updated successfully!',
             icon: 'success',
-            confirmButtonText: 'Great',
             customClass: {
               popup: 'bg-black text-white', 
               title: 'text-red-600',
@@ -87,7 +86,6 @@ const NavBarComponent = () => {
             errorData.message || "Unknown error"
           }`,
           icon: "error",
-          confirmButtonText: "Ok",
           customClass: {
             popup: "bg-black text-white",
             title: "text-red-600",
@@ -103,7 +101,6 @@ const NavBarComponent = () => {
         title: "Mmm...",
         text: "Error when uploading the file.",
         icon: "error",
-        confirmButtonText: "Ok",
         customClass: {
           popup: "bg-black text-white",
           title: "text-red-600",
@@ -143,10 +140,10 @@ const NavBarComponent = () => {
       {user?.role === "user" ? (
   <nav className="flex-1 flex items-center justify-center">
     <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Home", "Plans", "Contact Us", "Appointments", "Training Plans"].map((item, index) => {
+      {["Classes", "Plans", "Contact Us", "Appointments", "Training Plans"].map((item, index) => {
         const lowerCaseItem = item.toLowerCase();
         const route =
-          lowerCaseItem === "home"
+          lowerCaseItem === "classes"
             ? "/home"
             : lowerCaseItem === "plans"
             ? "/plans"
