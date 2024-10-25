@@ -30,7 +30,6 @@ export default function RegisterForm() {
         title: 'Success!',
         text: 'You have registered successfully!',
         icon: 'success',
-        confirmButtonText: 'Accept',
         customClass: {
           popup: 'bg-black text-white',
           title: 'text-red-600',
@@ -45,7 +44,6 @@ export default function RegisterForm() {
         title: 'Ups!',
         text: 'Something went wrong!',
         icon: 'error',
-        confirmButtonText: 'Intentar de nuevo',
         customClass: {
           popup: 'bg-black text-white',
           title: 'text-red-600',
