@@ -4,22 +4,17 @@ import { Membresia } from './membresia.entity';
 import { DataSource, Repository } from 'typeorm';
 import { UUID } from 'crypto';
 import * as memberships from '../../utils/membresias.json';
-import { FeatureEntity } from './features.entity';
 
 @Injectable()
 export class MembresiaRepository {
   constructor(
     @InjectRepository(Membresia)
     private readonly membresiaRepository: Repository<Membresia>,
-    @InjectRepository(FeatureEntity)
-    private readonly featureRepository: Repository<FeatureEntity>,
     private readonly dataSouce: DataSource,
   ) {}
 
   async getMembresias() {
-    const membresias = await this.membresiaRepository.find({
-      relations: ['features'],
-    });
+    const membresias = await this.membresiaRepository.find();
     return membresias;
   }
 
@@ -28,15 +23,13 @@ export class MembresiaRepository {
     await queryRunner.startTransaction();
 
     try {
-      for (const membershipData of memberships) {
+      for (const membershipData of memberships.memberships) {
         const existingMembership = await queryRunner.manager.findOne(
           Membresia,
           {
             where: {
               plan: membershipData.plan,
               price: membershipData.price,
-              currency: membershipData.currency,
-              billing_period: membershipData.billing_period,
             },
           },
         );
@@ -49,24 +42,13 @@ export class MembresiaRepository {
         }
 
         const membresia = queryRunner.manager.create(Membresia, {
-          ...membershipData,
-          features: [],
+          plan: membershipData.plan,
+          price: membershipData.price,
+          currency: membershipData.currency,
+          description: membershipData.description,
+          benefits: membershipData.benefits,
+          idealFor: membershipData.idealFor,
         });
-
-        await queryRunner.manager.save(Membresia, membresia);
-
-        const features = Object.entries(membershipData.features).map(
-          ([name, value]) => ({
-            name,
-            value: Boolean(value),
-            membresia,
-          }),
-        );
-
-        membresia.features = await queryRunner.manager.save(
-          FeatureEntity,
-          features,
-        );
 
         await queryRunner.manager.save(Membresia, membresia);
       }
@@ -85,8 +67,21 @@ export class MembresiaRepository {
     return await this.membresiaRepository.findOne({ where: { id } });
   }
 
-  async createMembresia(membresia: Membresia) {
-    return await this.membresiaRepository.save(membresia);
+  async createMembresia(membresiaDto) {
+    const { plan, price, currency, description, benefits, idealFor } =
+      membresiaDto;
+    const membresia = this.membresiaRepository.create({
+      plan,
+      price,
+      currency,
+      description,
+      benefits,
+      idealFor,
+    });
+    await this.membresiaRepository.save(membresia);
+    return await this.membresiaRepository.findOne({
+      where: { id: membresia.id },
+    });
   }
 
   async updateMembresia(id: UUID, membresia: Membresia) {
