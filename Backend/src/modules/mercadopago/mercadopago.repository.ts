@@ -3,6 +3,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import MercadoPagoConfig, { Preference } from 'mercadopago';
 import { MercadoPagoService } from './mercadopago.service';
 import { config as dotenvConfig } from 'dotenv';
+import { Pago } from "./pago.entity";
+import { Repository } from "typeorm";
 
 dotenvConfig({ path: '.env' });
 
@@ -11,7 +13,7 @@ const client = new MercadoPagoConfig({ accessToken: process.env.ACCESS_TOKEN });
 @Injectable()
 export class MercadoPagoRepository{
     constructor(
-        // @InjectRepository('mercado_pago') private readonly mercadoPagoRepository: Repository<any>,
+        @InjectRepository(Pago) private readonly mercadoPagoRepository: Repository<Pago>,
     ){}
 
     async createPreference(bodySuscription){
