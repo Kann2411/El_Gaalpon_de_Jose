@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { deleteTrainingPlan, getTrainingPlans } from '@/lib/server/fetchCoaches';
 import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-modal';
@@ -7,7 +7,7 @@ import { UserContext } from '@/context/user';
 interface TrainingPlan {
   id: string;
   description: string;
-  file: string; 
+  file: string;
 }
 
 const TrainingPlans: React.FC = () => {
@@ -24,12 +24,11 @@ const TrainingPlans: React.FC = () => {
         const plans = await getTrainingPlans();
         setTrainingPlans(plans);
       } catch (err) {
-        setError('Error when fetching training plans');
+        setError('Error fetching training plans');
       } finally {
         setLoading(false);
       }
     };
-
     fetchTrainingPlans();
   }, []);
 
@@ -52,7 +51,7 @@ const TrainingPlans: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading training plan...</div>;
+    return <div>Loading training plans...</div>;
   }
 
   if (error) {
@@ -60,49 +59,56 @@ const TrainingPlans: React.FC = () => {
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">Planes de Entrenamiento</h2>
-      {trainingPlans.length === 0 ? (
-        <div>There's no training plans to show</div>
-      ) : (
-        <ul>
-          {trainingPlans.map(plan => (
-            <li key={plan.id} className="mb-4">
-              <p className="mb-2">{plan.description}</p>
+    <div className="min-h-screen bg-black text-white flex flex-col items-center p-6">
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-extrabold">
+          My <span className="text-red-600">Training Plans</span>
+        </h1>
+      </div>
 
-              {user?.role === 'coach' && ( // Mostrar el botón "Eliminar" solo si el rol es "coach"
-                <button 
-                  onClick={() => handleDelete(plan.id)} 
-                  className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              )}
+      <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
+        {trainingPlans.length === 0 ? (
+          <p>No training plans available</p>
+        ) : (
+          <ul>
+            {trainingPlans.map(plan => (
+              <li key={plan.id} className="bg-zinc-900 p-4 rounded-lg shadow-md mb-4 flex justify-between items-center">
+                <h2 className="text-lg font-semibold">{plan.description}</h2>
+                <div className="flex space-x-4">
+                  <button
+                    onClick={() => openModal(plan.file)}
+                    className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 transition"
+                  >
+                    View Plan
+                  </button>
+                  {user?.role === 'coach' && (
+                    <button
+                      onClick={() => handleDelete(plan.id)}
+                      className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
+                    >
+                      Delete Plan
+                    </button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
-              <button 
-                onClick={() => openModal(plan.file)} 
-                className="ml-4 bg-gray-700 text-white py-1 px-3 rounded hover:bg-gray-800"
-              >
-                Show plan
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <Modal 
-        isOpen={!!selectedPlan} 
-        onRequestClose={closeModal} 
+      <Modal
+        isOpen={!!selectedPlan}
+        onRequestClose={closeModal}
         className="flex items-center justify-center"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50"
       >
         <div className="bg-white p-4 rounded">
           {selectedPlan && <img src={selectedPlan} alt="Training Plan" className="max-w-full h-auto" />}
-          <button 
-            onClick={closeModal} 
+          <button
+            onClick={closeModal}
             className="mt-4 bg-gray-500 text-white py-1 px-3 rounded hover:bg-gray-600"
           >
-            Cerrar
+            Close
           </button>
         </div>
       </Modal>
