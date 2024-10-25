@@ -1,17 +1,13 @@
 import {
   Body,
   Controller,
-  Delete,
+  // Delete,
   Get,
-  Param,
-  ParseUUIDPipe,
   Post,
-  Put,
+  // Put,
   UseGuards,
 } from '@nestjs/common';
 import { membresiaService } from './membresia.service';
-import { UUID } from 'crypto';
-import { Membresia } from './membresia.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { MembresiaDto } from 'src/dtos/createMembresia.dto';
 import { Roles } from 'src/decorators/role.decorator';
@@ -35,10 +31,10 @@ export class MembresiaController {
     return this.membresiaService.seederData();
   }
 
-  @Get(':id')
-  getMembresiaById(@Param('id', ParseUUIDPipe) id: UUID) {
-    return this.membresiaService.getMembresiaById(id);
-  }
+  // @Get(':id')
+  // getMembresiaById(@Param('id', ParseUUIDPipe) id: UUID) {
+  //   return this.membresiaService.getMembresiaById(id);
+  // }
 
   @Roles(Role.Admin)
   @UseGuards(RolesGuard)
@@ -47,20 +43,20 @@ export class MembresiaController {
     return this.membresiaService.createMembresia(membresiaDto);
   }
 
-  @Roles(Role.Admin)
-  @UseGuards(RolesGuard)
-  @Put()
-  updateMembresia(
-    @Param('id', ParseUUIDPipe) id: UUID,
-    @Body() membresia: Membresia,
-  ) {
-    this.membresiaService.updateMembresia(id, membresia);
-  }
+  // @Roles(Role.Admin)
+  // @UseGuards(RolesGuard)
+  // @Put()
+  // updateMembresia(
+  //   @Param('id', ParseUUIDPipe) id: UUID,
+  //   @Body() membresia: Membresia,
+  // ) {
+  //   this.membresiaService.updateMembresia(id, membresia);
+  // }
 
-  @Roles(Role.Admin)
-  @UseGuards(RolesGuard)
-  @Delete()
-  deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
-    this.membresiaService.deleteMembresia(id);
-  }
+  // @Roles(Role.Admin)
+  // @UseGuards(RolesGuard)
+  // @Delete()
+  // deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
+  //   this.membresiaService.deleteMembresia(id);
+  // }
 }

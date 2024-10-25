@@ -1,7 +1,5 @@
-import { UUID } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { MembresiaRepository } from './membresia.repository';
-import { Membresia } from './membresia.entity';
 import { MembresiaDto } from 'src/dtos/createMembresia.dto';
 
 @Injectable()
@@ -16,19 +14,19 @@ export class membresiaService {
     return this.membresiaRepository.seederData();
   }
 
-  getMembresiaById(id: UUID) {
-    return this.membresiaRepository.getMembresiaById(id);
-  }
+  // getMembresiaById(id: UUID) {
+  //   return this.membresiaRepository.getMembresiaById(id);
+  // }
 
   createMembresia(membresiaDto: MembresiaDto) {
     return this.membresiaRepository.createMembresia(membresiaDto);
   }
 
-  updateMembresia(id: UUID, membresia: Membresia) {
-    this.membresiaRepository.updateMembresia(id, membresia);
-  }
+  // updateMembresia(id: UUID, membresia: Membresia) {
+  //   this.membresiaRepository.updateMembresia(id, membresia);
+  // }
 
-  deleteMembresia(id: UUID) {
-    this.membresiaRepository.deleteMembresia(id);
-  }
+  // deleteMembresia(id: UUID) {
+  //   this.membresiaRepository.deleteMembresia(id);
+  // }
 }
