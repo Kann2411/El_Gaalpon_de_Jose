@@ -6,11 +6,10 @@ import { UserContext } from "@/context/user";
 
 
 interface ISuscriptionData {
-  userId: string;
-  plan: string;
-  price: string;
-  currency: string;
-  planId: string;
+  title: string;
+  quantity: number;
+  unit_price: string;
+  currency_id: string;
 }
 interface PlanCardProps {
   planId: string;
@@ -97,15 +96,14 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description,
     }
   
     const suscripcionData: ISuscriptionData = {
-      userId: user.id,
-      plan,
-      price,
-      currency,
-      planId,
+      title: plan,
+      quantity: 1,
+      currency_id: currency,
+      unit_price: price,
     };
   
     try {
-      const response = await fetch("http://localhost:3000/mercadopago/create_subscription", {
+      const response = await fetch("http://localhost:3000/mercadopago/create_preference", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
