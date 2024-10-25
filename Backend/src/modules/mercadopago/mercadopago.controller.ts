@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { MercadoPagoService } from './mercadopago.service';
 
-@Controller('payment')
+@Controller('mercadopago')
 export class MercadoPagoController {
   constructor(private readonly mercadoPagoService: MercadoPagoService)
   {}
