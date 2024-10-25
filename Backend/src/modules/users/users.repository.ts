@@ -285,4 +285,13 @@ export class UsersRepository {
       throw new BadRequestException('El enlace no es válido.');
     }
   }
+
+  async toggleBanUser(id: string, isBanned: boolean): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    user.isBanned = isBanned;
+    return this.userRepository.save(user);
+  }
 }

@@ -3,6 +3,8 @@ import {
   Body,
   Controller,
   Get,
+  Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -63,4 +65,5 @@ export class AuthController {
   async resetPassword(@Query('token') token: string, @Body() setPasswordDto: SetPasswordDto) {
     return this.authService.resetPassword(token, setPasswordDto);
   }
+
 }

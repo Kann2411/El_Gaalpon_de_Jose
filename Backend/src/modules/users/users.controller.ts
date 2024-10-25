@@ -80,8 +80,10 @@ export class UsersController {
     return this.usersService.patchUser(id, role);
   }
 
-  @Delete(':id')
-  deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-    return this.usersService.delete(id);
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuard)
+  @Patch('ban-user/:id')
+  async banUser(@Param('id') id: string, @Body('isBanned') isBanned: boolean) {
+    return this.usersService.toggleUserBan(id, isBanned);
   }
 }

@@ -87,6 +87,13 @@ export class User {
   registrationMethod: RegistrationMethod;
 
   @ApiProperty({
+    description: 'Indica si el usuario está baneado',
+    default: false,
+  })
+  @Column({ type: 'boolean', default: false })
+  isBanned: boolean;
+
+  @ApiProperty({
     description: 'Entrenamientos asociados al usuario',
     type: () => [Training],
   })

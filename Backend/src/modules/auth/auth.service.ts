@@ -43,12 +43,16 @@ export class AuthService {
         email,
         name,
         password: '',
-        dni: '0000000',
-        phone: null,
+        dni: '',
+        phone: '',
         registrationMethod: RegistrationMethod.Google,
         role: Role.User,
         confirmPassword: '',
       });
+    }
+
+    if (user.isBanned) {
+      throw new BadRequestException('Tu cuenta ha sido baneada.');
     }
 
     const payload = { id: user.id, email: user.email, role: user.role };
@@ -88,6 +92,10 @@ export class AuthService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) throw new BadRequestException('credenciales invalidas');
+
+    if (user.isBanned) {
+      throw new BadRequestException('Tu cuenta ha sido baneada.');
+    }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
