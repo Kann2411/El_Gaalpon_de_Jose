@@ -1,27 +1,96 @@
 [
-    {
-      "tipo": "BASICA",
-      "fechaInicio": "2024-01-01",
-      "fechaFin": "2024-12-31",
-      "estado": "ACTIVA"
-    },
-    {
-      "tipo": "PREMIUM",
-      "fechaInicio": "2024-02-15",
-      "fechaFin": "2025-02-15",
-      "estado": "ACTIVA"
-    },
-    {
-      "tipo": "VIP",
-      "fechaInicio": "2023-11-01",
-      "fechaFin": "2024-10-31",
-      "estado": "INACTIVA"
-    },
-    {
-      "tipo": "BASICA",
-      "fechaInicio": "2024-03-10",
-      "fechaFin": "2024-09-10",
-      "estado": "ACTIVA"
+  {
+    "plan": "Basic Plan",
+    "price": 49,
+    "currency": "USD",
+    "billing_period": "Monthly",
+    "features": {
+      "unlimited_gym_access": true,
+      "24_7_gym_access": true,
+      "basic_group_classes": true,
+      "advanced_group_classes": false,
+      "access_to_locker_rooms_and_showers": true,
+      "personalized_training_plan": false,
+      "access_to_cardio_zones": true,
+      "access_to_strength_zones": false
     }
-  ]
-  
+  },
+  {
+    "plan": "Premium Plan",
+    "price": 55,
+    "currency": "USD",
+    "billing_period": "Monthly",
+    "features": {
+      "unlimited_gym_access": true,
+      "24_7_gym_access": true,
+      "basic_group_classes": true,
+      "advanced_group_classes": true,
+      "access_to_locker_rooms_and_showers": true,
+      "personalized_training_plan": true,
+      "access_to_cardio_zones": true,
+      "access_to_strength_zones": true
+    }
+  },
+  {
+    "plan": "VIP Plan",
+    "price": 75,
+    "currency": "USD",
+    "billing_period": "Monthly",
+    "features": {
+      "unlimited_gym_access": true,
+      "24_7_gym_access": true,
+      "private_training_sessions": true,
+      "access_to_all_group_classes": true,
+      "exclusive_locker_room_area": true,
+      "unlimited_personalized_training_plans": true,
+      "access_to_spa_and_wellness_services": true
+    }
+  },
+  {
+    "plan": "Basic Plan",
+    "price": 499,
+    "currency": "USD",
+    "billing_period": "Annual",
+    "features": {
+      "unlimited_gym_access": true,
+      "24_7_gym_access": true,
+      "basic_group_classes": true,
+      "advanced_group_classes": false,
+      "access_to_locker_rooms_and_showers": true,
+      "personalized_training_plan": false,
+      "access_to_cardio_zones": true,
+      "access_to_strength_zones": false
+    }
+  },
+  {
+    "plan": "Premium Plan",
+    "price": 599,
+    "currency": "USD",
+    "billing_period": "Annual",
+    "features": {
+      "unlimited_gym_access": true,
+      "24_7_gym_access": true,
+      "basic_group_classes": true,
+      "advanced_group_classes": true,
+      "access_to_locker_rooms_and_showers": true,
+      "personalized_training_plan": true,
+      "access_to_cardio_zones": true,
+      "access_to_strength_zones": true
+    }
+  },
+  {
+    "plan": "VIP Plan",
+    "price": 799,
+    "currency": "USD",
+    "billing_period": "Annual",
+    "features": {
+      "unlimited_gym_access": true,
+      "24_7_gym_access": true,
+      "private_training_sessions": true,
+      "access_to_all_group_classes": true,
+      "exclusive_locker_room_area": true,
+      "unlimited_personalized_training_plans": true,
+      "access_to_spa_and_wellness_services": true
+    }
+  }
+]

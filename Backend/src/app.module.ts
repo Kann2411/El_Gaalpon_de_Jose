@@ -10,6 +10,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TrainingModule } from './modules/training/training.module';
+import { HorarioModule } from './modules/horario/horario.module';
+import { ClassesModule } from './modules/classes/classes.module';
+import { MembresiaModule } from './modules/membresia/membresia.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -22,8 +28,32 @@ import { TrainingModule } from './modules/training/training.module';
       useFactory: (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+      defaults: {
+        from: '"No Reply" <noreply@.com>',
+      },
+      template: {
+        dir: join(__dirname, 'templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
     ChatBotModule,
     FileUploadModule,
+    HorarioModule,
+    ClassesModule,
+    MembresiaModule,
     UsersModule,
     AuthModule,
     TrainingModule,

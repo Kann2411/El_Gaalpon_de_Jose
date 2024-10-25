@@ -17,6 +17,9 @@ import { Role } from '../../enums/role.enum';
 import { Roles } from '../../decorators/role.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UpdateProfileDto } from 'src/dtos/updateProfile.dto';
+import { ChangePasswordDto } from 'src/dtos/changePassword.dto';
+import { SetPasswordDto } from 'src/dtos/setPassword.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -33,17 +36,38 @@ export class UsersController {
     return this.usersService.getUsers();
   }
 
+  @Get('img-profile/:id')
+  getUserByIdImag(@Param('id', ParseUUIDPipe) id: string) {
+    return this.usersService.getUserByIdImag(id);
+  }
+
   @Get(':id')
   getUserById(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.getUserById(id);
   }
 
-  @Put(':id')
-  updateUser(
+  @Put('profile/:id')
+  updateProfile(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateUserDto: CreateUserDto,
+    @Body() updateProfileDto: UpdateProfileDto,
   ) {
-    return this.usersService.updateUser(id, updateUserDto);
+    return this.usersService.updateProfile(id, updateProfileDto);
+  }
+
+  @Put('change-password/:id')
+  async changePassword(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.usersService.changePassword(id, changePasswordDto);
+  }
+
+  @Put('set-password/:id')
+  async setPassword(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() setPasswordDto: SetPasswordDto,
+  ) {
+    return this.usersService.setPassword(id, setPasswordDto);
   }
 
   @Patch('changeRole/:id')

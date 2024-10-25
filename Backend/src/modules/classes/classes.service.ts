@@ -2,48 +2,37 @@ import { Injectable } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassRepository } from './classes.repository';
+import { CreateClassDto } from 'src/dtos/createClass.dto';
 
 @Injectable()
 export class ClassService {
   constructor(private readonly classesRepository: ClassRepository) {}
 
-  async getClasses() {
-    try {
-      return await this.classesRepository.getClasses();
-    } catch (error) {
-      throw error;
-    }
+  getClasses() {
+    return this.classesRepository.getClasses();
   }
 
-  async getClassById(id: UUID) {
-    try {
-      return await this.classesRepository.getClassById(id);
-    } catch (error) {
-      throw error;
-    }
+  classesSeeder() {
+    return this.classesRepository.classesSeeder();
   }
 
-  async createClass(classData: Class) {
-    try {
-      return this.classesRepository.createClass(classData);
-    } catch (error) {
-      throw error;
-    }
+  getClassById(id: UUID) {
+    return this.classesRepository.getClassById(id);
   }
 
-  async updateClass(id: UUID, classData: Class) {
-    try {
-      return this.classesRepository.updateClass(id, classData);
-    } catch (error) {
-      throw error;
-    }
+  createClass(classData: CreateClassDto) {
+    return this.classesRepository.createClass(classData);
   }
 
-  async deleteClass(id: UUID) {
-    try {
-      return this.classesRepository.deleteClass(id);
-    } catch (error) {
-      throw error;
-    }
+  updateClass(id: UUID, classData: Class) {
+    return this.classesRepository.updateClass(id, classData);
+  }
+
+  deleteClass(id: UUID) {
+    return this.classesRepository.deleteClass(id);
+  }
+
+  registerUserToClass(classId: string, userId: string) {
+    return this.classesRepository.registerUserToClass(classId, userId);
   }
 }

@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { CreateUserDto } from '../../dtos/createUser.dto';
+import { UpdateProfileDto } from 'src/dtos/updateProfile.dto';
+import { ChangePasswordDto } from 'src/dtos/changePassword.dto';
+import { SetPasswordDto } from 'src/dtos/setPassword.dto';
 
 @Injectable()
 export class UsersService {
@@ -8,6 +11,10 @@ export class UsersService {
 
   getUsers() {
     return this.usersRepository.getUsers();
+  }
+
+  getUserByIdImag(id: string) {
+    return this.usersRepository.getUserByIdImag(id);
   }
 
   getUserById(id: string) {
@@ -18,8 +25,16 @@ export class UsersService {
     return this.usersRepository.patchUser(id, role);
   }
 
-  updateUser(id: string, updateUserDto: CreateUserDto) {
-    return this.usersRepository.updateUser(id, updateUserDto);
+  updateProfile(id: string, updateProfileDto: UpdateProfileDto) {
+    return this.usersRepository.updateProfile(id, updateProfileDto);
+  }
+
+  changePassword(id: string, changePasswordDto: ChangePasswordDto) {
+    return this.usersRepository.changePassword(id, changePasswordDto);
+  }
+
+  setPassword(id: string, setPasswordDto: SetPasswordDto) {
+    return this.usersRepository.setPassword(id, setPasswordDto);
   }
 
   delete(id: string) {

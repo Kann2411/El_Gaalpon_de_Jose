@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -12,6 +13,7 @@ import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassService } from './classes.service';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateClassDto } from 'src/dtos/createClass.dto';
 
 @ApiTags('Class')
 @Controller('class')
@@ -19,40 +21,40 @@ export class ClassesController {
   constructor(private readonly classesService: ClassService) {}
 
   @Get()
-  async getClasses() {
-    try {
-      return await this.classesService.getClasses();
-    } catch (error) {}
+  getClasses() {
+    return this.classesService.getClasses();
+  }
+
+  @Get('seeder')
+  getClassesSeeder() {
+    return this.classesService.classesSeeder();
   }
 
   @Get(':id')
-  async getClassById(@Param(ParseUUIDPipe) id: UUID) {
-    try {
-      return await this.classesService.getClassById(id);
-    } catch (error) {}
+  getClassById(@Param(ParseUUIDPipe) id: UUID) {
+    return this.classesService.getClassById(id);
   }
 
   @Post()
-  async createClass(@Body() classData: Class) {
-    try {
-      return this.classesService.createClass(classData);
-    } catch (error) {}
+  createClass(@Body() classData: CreateClassDto) {
+    return this.classesService.createClass(classData);
   }
 
   @Put()
-  async updateClass(
-    @Param('id', ParseUUIDPipe) id: UUID,
-    @Body() classData: Class,
-  ) {
-    try {
-      return this.classesService.updateClass(id, classData);
-    } catch (error) {}
+  updateClass(@Param('id', ParseUUIDPipe) id: UUID, @Body() classData: Class) {
+    return this.classesService.updateClass(id, classData);
   }
 
   @Delete()
-  async deleteClass(@Param(ParseUUIDPipe) id: UUID) {
-    try {
-      return this.classesService.deleteClass(id);
-    } catch (error) {}
+  deleteClass(@Param(ParseUUIDPipe) id: UUID) {
+    return this.classesService.deleteClass(id);
+  }
+
+  @Post(':classId/register/:userId')
+  registerUserToClass(
+    @Param('classId') classId: string,
+    @Param('userId') userId: string,
+  ) {
+    return this.classesService.registerUserToClass(classId, userId);
   }
 }

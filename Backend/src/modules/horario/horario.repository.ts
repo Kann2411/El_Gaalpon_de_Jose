@@ -3,6 +3,8 @@ import { UUID } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Horario } from './horario.entity';
+import * as horarios from '../../utils/clases.json';
+import { Dia } from 'src/enums/dia.enum';
 
 @Injectable()
 export class HorarioRepository {
@@ -22,6 +24,23 @@ export class HorarioRepository {
     } catch (error) {
       throw error;
     }
+  }
+
+  async horariosSeeder() {
+    horarios.map(async (element) => {
+      await this.horarioRepository
+        .createQueryBuilder()
+        .insert()
+        .into(Horario)
+        .values({
+          day: Dia[element.day as keyof Dia],
+          starttime: element.startTime,
+          endtime: element.endTime,
+        })
+        .orIgnore()
+        .execute();
+    });
+    return { message: 'Horarios creados con exito' };
   }
 
   async getHorarioById(id: UUID) {

@@ -1,21 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsDate, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateTrainingDto {
   @ApiProperty({
     description: 'Fecha del entrenamiento',
     type: 'string',
-    format: 'date-time',
   })
-  @IsDate()
-  date: Date;
+  @IsString()
+  date: string;
 
   @ApiProperty({
     description: 'Duración del entrenamiento en horas',
-    type: 'number',
+    type: 'string',
   })
-  @IsNumber()
-  duration: number;
+  @IsString()
+  duration: string;
 
   @ApiProperty({
     description: 'Progreso del entrenamiento en texto',

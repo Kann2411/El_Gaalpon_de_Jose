@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
-import { TipoMembresia } from 'src/enums/tipoMembresia.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { FeatureEntity } from './features.entity';
 
 @Entity({ name: 'membresias' })
 export class Membresia {
@@ -13,27 +13,54 @@ export class Membresia {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: 'Tipo de membresía', enum: TipoMembresia })
+  @ApiProperty({ description: 'Tipo de membresía' })
   @Column()
-  tipo: TipoMembresia;
+  plan: string;
+
+  @Column({ type: 'decimal' })
+  price: number;
+
+  @ApiProperty({
+    description: 'Moneda del plan',
+    type: 'string',
+  })
+  @Column()
+  currency: string;
 
   @ApiProperty({
     description: 'Fecha de inicio de la membresía',
     type: 'string',
     format: 'date',
   })
-  @Column({ type: 'date' })
-  fechaInicio: Date;
+  @Column({ type: 'date', nullable: true })
+  startDate?: Date;
 
   @ApiProperty({
     description: 'Fecha de fin de la membresía',
     type: 'string',
     format: 'date',
+    nullable: true,
   })
-  @Column({ type: 'date' })
-  fechaFin: Date;
+  @Column({ type: 'date', nullable: true })
+  endDate?: Date;
 
-  @ApiProperty({ description: 'Estado de la membresía', enum: EstadoMembresia })
+  @ApiProperty({
+    description: 'Período de facturación del plan',
+    type: 'string',
+  })
   @Column()
-  estado: EstadoMembresia;
+  billing_period: string;
+
+  @ApiProperty({
+    description: 'Estado de la membresía',
+    nullable: true,
+    enum: EstadoMembresia,
+  })
+  @Column({ nullable: true })
+  status: EstadoMembresia;
+
+  @OneToMany(() => FeatureEntity, (feature) => feature.membresia, {
+    cascade: true,
+  })
+  features: FeatureEntity[];
 }

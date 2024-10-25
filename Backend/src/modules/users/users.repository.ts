@@ -10,12 +10,17 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from '../../dtos/createUser.dto';
 import * as bcrypt from 'bcrypt';
 import { Role } from 'src/enums/role.enum';
+import { UpdateProfileDto } from 'src/dtos/updateProfile.dto';
+import { ChangePasswordDto } from 'src/dtos/changePassword.dto';
+import { SetPasswordDto } from 'src/dtos/setPassword.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -27,6 +32,30 @@ export class UsersRepository {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new InternalServerErrorException('Error al obtener los usuarios');
+    }
+  }
+
+  async getUserByIdImag(id: string): Promise<string> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+        select: {
+          imgUrl: true,
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundException(`Usuario con id ${id} no existe`);
+      }
+
+      return user.imgUrl;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Error al obtener el usuario por ID',
+      );
     }
   }
 
@@ -115,43 +144,102 @@ export class UsersRepository {
     }
   }
 
-  async updateUser(id: string, updateUserDto: CreateUserDto): Promise<string> {
+  async updateProfile(
+    id: string,
+    updateProfileDto: UpdateProfileDto,
+  ): Promise<User> {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
         throw new NotFoundException(`Usuario con id ${id} no existe`);
       }
-
-      if (updateUserDto.password) {
-        const passwordMatches = await bcrypt.compare(
-          updateUserDto.password,
-          user.password,
-        );
-
-        if (!passwordMatches) {
-          if (updateUserDto.password !== updateUserDto.confirmPassword) {
-            throw new BadRequestException('Las contraseñas no coinciden');
-          }
-
-          const salt = await bcrypt.genSalt(10);
-          updateUserDto.password = await bcrypt.hash(
-            updateUserDto.password,
-            salt,
-          );
-        } else {
-          delete updateUserDto.password;
-        }
-        delete updateUserDto.confirmPassword;
-      }
-
-      this.userRepository.merge(user, updateUserDto);
+      this.userRepository.merge(user, updateProfileDto);
       await this.userRepository.save(user);
-      return id;
+      return user;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
-      throw new InternalServerErrorException('Error al actualizar el usuario');
+      throw new InternalServerErrorException('Error al actualizar el perfil');
+    }
+  }
+
+  async changePassword(
+    id: string,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<string> {
+    try {
+      const { currentPassword, newPassword, confirmPassword } =
+        changePasswordDto;
+
+      const user = await this.userRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new NotFoundException(`Usuario con id ${id} no existe`);
+      }
+
+      const passwordMatches = await bcrypt.compare(
+        currentPassword,
+        user.password,
+      );
+      if (!passwordMatches) {
+        throw new BadRequestException('La contraseña actual es incorrecta.');
+      }
+
+      if (newPassword !== confirmPassword) {
+        throw new BadRequestException(
+          'La nueva contraseña y la confirmación no coinciden.',
+        );
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+
+      await this.userRepository.save(user);
+      return 'Contraseña actualizada con éxito';
+    } catch (error) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException
+      ) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Error al cambiar la contraseña');
+    }
+  }
+
+  async setPassword(
+    id: string,
+    setPasswordDto: SetPasswordDto,
+  ): Promise<string> {
+    try {
+      const { newPassword, confirmPassword } = setPasswordDto;
+
+      const user = await this.userRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new NotFoundException(`Usuario con id ${id} no existe`);
+      }
+
+      if (newPassword !== confirmPassword) {
+        throw new BadRequestException(
+          'La nueva contraseña y la confirmación no coinciden.',
+        );
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+
+      await this.userRepository.save(user);
+      return 'Contraseña establecida con éxito';
+    } catch (error) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException
+      ) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        'Error al establecer la contraseña',
+      );
     }
   }
 
@@ -167,6 +255,34 @@ export class UsersRepository {
         throw error;
       }
       throw new InternalServerErrorException('Error al eliminar el usuario');
+    }
+  }
+
+  async resetPassword(token: string, setPasswordDto: SetPasswordDto): Promise<string> {
+    try {
+      // Verificar el token
+      const decoded = this.jwtService.verify(token);
+      const user = await this.userRepository.findOne({ where: { id: decoded.id } });
+
+      if (!user) {
+        throw new NotFoundException('Usuario no encontrado');
+      }
+
+      const { newPassword, confirmPassword } = setPasswordDto;
+      if (newPassword !== confirmPassword) {
+        throw new BadRequestException('Las contraseñas no coinciden.');
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+
+      await this.userRepository.save(user);
+      return 'Contraseña restablecida con éxito';
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new BadRequestException('El enlace ha expirado. Solicita uno nuevo.');
+      }
+      throw new BadRequestException('El enlace no es válido.');
     }
   }
 }

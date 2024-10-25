@@ -7,23 +7,27 @@ import { Membresia } from './membresia.entity';
 export class membresiaService {
   constructor(private readonly membresiaRepository: MembresiaRepository) {}
 
-  async getMembresias() {
+  getMembresias() {
     return this.membresiaRepository.getMembresias();
   }
 
-  async getMembresiaById(id: UUID) {
-    return await this.membresiaRepository.getMembresiaById(id);
+  seederData() {
+    return this.membresiaRepository.seederData();
   }
 
-  async createMembresia(membresia: Membresia) {
-    return await this.membresiaRepository.createMembresia(membresia);
+  getMembresiaById(id: UUID) {
+    return this.membresiaRepository.getMembresiaById(id);
   }
 
-  async updateMembresia(id: UUID, membresia: Membresia) {
-    await this.membresiaRepository.updateMembresia(id, membresia);
+  createMembresia(membresia: Membresia) {
+    return this.membresiaRepository.createMembresia(membresia);
   }
 
-  async deleteMembresia(id: UUID) {
-    await this.membresiaRepository.deleteMembresia(id);
+  updateMembresia(id: UUID, membresia: Membresia) {
+    this.membresiaRepository.updateMembresia(id, membresia);
+  }
+
+  deleteMembresia(id: UUID) {
+    this.membresiaRepository.deleteMembresia(id);
   }
 }

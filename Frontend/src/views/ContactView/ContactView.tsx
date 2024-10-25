@@ -1,12 +1,11 @@
-'use client'
-import {Formik, Form, Field, ErrorMessage} from 'formik';
-
+'use client';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { contactValidationSchema } from '@/utils/contactValidationSchema';
 import { FormValues } from '@/interfaces/interfaces';
-
+import { FaLocationDot, FaPhone } from "react-icons/fa6";
+import { IoMdMail } from "react-icons/io";
 
 const ContactView: React.FC = () => {
-  // Valores iniciales del formulario
   const initialValues: FormValues = {
     name: '',
     username: '',
@@ -15,16 +14,15 @@ const ContactView: React.FC = () => {
     message: '',
   };
 
-  // Manejar el envío del formulario
   const handleSubmit = (values: FormValues) => {
     alert(JSON.stringify(values, null, 2));
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex justify-center items-center">
-      <div className="container mx-auto p-8 lg:flex lg:justify-between lg:items-start lg:space-x-8 lg:w-3/4 bg-zinc-950 bordershadow-lg">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center">
+      <div className="flex space-x-0">
         {/* Formulario */}
-        <div className="lg:w-3/4">
+        <div className="w-[500px] h-[920px] bg-zinc-900 p-8 ">
           <h2 className="text-3xl font-bold text-white mb-6">Contact Us</h2>
           <Formik
             initialValues={initialValues}
@@ -100,42 +98,18 @@ const ContactView: React.FC = () => {
         </div>
 
         {/* Información adicional */}
-        <div className="lg:w-1/4 mt-8 lg:mt-0  h-fit text-white">
-          <h3 className="text-2xl font-bold mb-4">More Information</h3>
-          <div className="flex items-center mb-4">
-            {/* SVG de ubicación */}
-            <svg
-              className="w-6 h-6 text-red-600 mr-2"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7zm0 9.5c-1.379 0-2.5-1.121-2.5-2.5S10.621 6.5 12 6.5s2.5 1.121 2.5 2.5-1.121 2.5-2.5 2.5z" />
-            </svg>
+        <div className="w-[445px] h-[900px] bg-gray-800 p-8 text-white">
+          <h3 className="text-2xl font-bold mb-4">More</h3>
+          <div className="flex items-center mb-5">
+            <FaLocationDot className='w-5 h-6 text-red-600 mr-2' />
             Wall Street
           </div>
           <div className="flex items-center mb-4">
-            {/* SVG de teléfono */}
-            <svg
-              className="w-6 h-6 text-red-600 mr-2"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path d="M20.487 15.14l-3.75-1.875a1.25 1.25 0 00-1.631.614l-.832 1.666a13.472 13.472 0 01-6.453-6.452l1.667-.832a1.25 1.25 0 00.613-1.631L8.86 3.514a1.25 1.25 0 00-1.45-.614L3.748 4.18a1.25 1.25 0 00-.89 1.198c0 9.05 7.331 16.381 16.38 16.381a1.25 1.25 0 001.198-.889l1.279-3.665a1.25 1.25 0 00-.614-1.45z" />
-            </svg>
+            <FaPhone className='w-5 h-6 text-red-600 mr-2' />
             (+11) 111 - 111
           </div>
           <div className="flex items-center">
-            {/* SVG de email */}
-            <svg
-              className="w-6 h-6 text-red-600 mr-2"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 4.8-8-4.8V6h16zM4 18v-8l7.437 4.646a1 1 0 001.125 0L20 10v8H4z" />
-            </svg>
+            <IoMdMail className='w-5 h-6 text-red-600 mr-2' />
             fitzone@gmail.com
           </div>
         </div>

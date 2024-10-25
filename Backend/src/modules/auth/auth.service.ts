@@ -1,7 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
+import { SetPasswordDto } from 'src/dtos/setPassword.dto';
 import { RegistrationMethod } from 'src/enums/registrationMethod';
 import { Role } from 'src/enums/role.enum';
 import { User } from 'src/modules/users/users.entity';
@@ -9,9 +11,11 @@ import { UsersRepository } from 'src/modules/users/users.repository';
 
 @Injectable()
 export class AuthService {
+
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
+    private readonly mailerService: MailerService,
   ) {}
 
   async validateOAuthLogin(profile: any): Promise<{ token: string }> {
@@ -47,7 +51,7 @@ export class AuthService {
       });
     }
 
-    const payload = { email: user.email, sub: user.id, role: user.role };
+    const payload = { id: user.id, email: user.email, role: user.role };
     const token = this.jwtService.sign(payload);
 
     return { token };
@@ -100,5 +104,41 @@ export class AuthService {
       message: 'login exitosamente',
       token,
     };
+  }
+
+  async sendPasswordResetEmail(email: string): Promise<string> {
+    const user = await this.usersRepository.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+ 
+    const token = this.jwtService.sign(  { id: user.id },
+      { expiresIn: '1h' });
+
+      console.log(`Generated reset token: ${token}`);
+
+
+    const resetLink = `http://localhost:3001/auth/reset-password?token=${token}`;
+    const htmlContent = `
+      <h1>Restablecimiento de contraseña</h1>
+      <p>Hola, ${user.name}!</p>
+      <p>Hiciste una solicitud para restablecer tu contraseña. Haz clic en el enlace a continuación para restablecerla:</p>
+      <a href="${resetLink}">Restablecer contraseña</a>
+      <p>Si no solicitaste este cambio, ignora este correo.</p>
+    `;
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Restablecimiento de contraseña',
+      html: htmlContent, 
+    });
+
+    return 'Correo de recuperación enviado con éxito';
+  }
+
+  resetPassword(token: string, setPasswordDto: SetPasswordDto) {
+   return this.usersRepository.resetPassword(token,setPasswordDto)
   }
 }

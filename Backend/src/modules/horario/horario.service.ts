@@ -7,43 +7,27 @@ import { HorarioRepository } from './horario.repository';
 export class HorarioService {
   constructor(private readonly horarioesRepository: HorarioRepository) {}
 
-  async getHorarios() {
-    try {
-      return await this.horarioesRepository.getHorarios();
-    } catch (error) {
-      throw error;
-    }
+  getHorarios() {
+    return this.horarioesRepository.getHorarios();
   }
 
-  async getHorarioById(id: UUID) {
-    try {
-      return await this.horarioesRepository.getHorarioById(id);
-    } catch (error) {
-      throw error;
-    }
+  horariosSeeder() {
+    return this.horarioesRepository.horariosSeeder();
   }
 
-  async createHorario(horarioData: Horario) {
-    try {
-      return this.horarioesRepository.createHorario(horarioData);
-    } catch (error) {
-      throw error;
-    }
+  getHorarioById(id: UUID) {
+    return this.horarioesRepository.getHorarioById(id);
   }
 
-  async updateHorario(id: UUID, horarioData: Horario) {
-    try {
-      return this.horarioesRepository.updateHorario(id, horarioData);
-    } catch (error) {
-      throw error;
-    }
+  createHorario(horarioData: Horario) {
+    return this.horarioesRepository.createHorario(horarioData);
   }
 
-  async deleteHorario(id: UUID) {
-    try {
-      return this.horarioesRepository.deleteHorario(id);
-    } catch (error) {
-      throw error;
-    }
+  updateHorario(id: UUID, horarioData: Horario) {
+    return this.horarioesRepository.updateHorario(id, horarioData);
+  }
+
+  deleteHorario(id: UUID) {
+    return this.horarioesRepository.deleteHorario(id);
   }
 }

@@ -1,114 +1,123 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
+import { FaCheck } from "react-icons/fa6";
+import { getMembresia } from "@/lib/server/fetchMembresias";
 
-const PlansView = () => {
+// Interface for the plan's features
+interface Feature {
+  text: string;
+  included: boolean;
+}
+
+// Interface for the PlanCard component props
+interface PlanCardProps {
+  title: string;
+  price: number;
+  features: Feature[];
+}
+
+const PlansView: React.FC = () => {
+  const [plans, setPlans] = useState<PlanCardProps[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getMembresia()
+      .then((data) => {
+      
+        const formattedPlans = data.map((plan: any) => ({
+          title: plan.plan,
+          price: Number(plan.price),
+          features: plan.features.map((feature: any) => ({
+            text: feature.name.replace(/_/g, " ").toLowerCase(),
+            included: feature.value,
+          })),
+        }));
+        setPlans(formattedPlans);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching membership data:", err);
+        setError("Failed to load plans.");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="text-white">Loading plans...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center">
-      {/* Título centrado */}
-      <div className="text-center">
-        <h2 className="text-3xl font-extrabold">
-          Conoce nuestros <span className="text-red-600">planes</span>
-        </h2>
-      </div>
+    <div className="min-h-screen bg-black text-white flex flex-col items-center">
+      {/* Title */}
+      <h2 className="text-4xl font-extrabold mb-8">
+        Check out our <span className="text-red-600">plans</span>
+      </h2>
 
-      {/* Contenedor de los planes */}
-      <div className="container mx-auto p-8 flex flex-col lg:flex-row lg:justify-between lg:items-start lg:space-x-8 lg:w-3/4 bg-zinc-950 shadow-lg">
-        {/* Plan Básico */}
-        <div className="lg:w-1/2 p-4 bg-zinc-900 rounded-lg shadow-md flex flex-col justify-between min-h-[600px]">
-          <div className="text-center">
-            <div className="text-lg font-extrabold text-[#aba6a6]">/Mes</div>
-            <div className="text-2xl font-extrabold text-white mt-2">
-              Plan Básico
-            </div>
-            <div className="flex justify-center items-baseline mt-4">
-              <span className="text-4xl font-extrabold text-white">$</span>
-              <span className="text-6xl font-extrabold text-white">49</span>
-            </div>
-          </div>
-          <ul className="mt-8 space-y-4 text-white">
-            <li className="flex justify-between">
-              <span>Acceso ilimitado al gimnasio</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between text-gray-500">
-              <span>Acceso 24/7 al gimnasio</span>
-            </li>
-            <li className="flex justify-between">
-              <span>Clases grupales básicas</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between text-gray-500">
-              <span>Clases grupales avanzadas</span>
-            </li>
-            <li className="flex justify-between">
-              <span>Uso de vestuarios y duchas</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between text-gray-500">
-              <span>Un plan de entrenamiento básico</span>
-            </li>
-            <li className="flex justify-between">
-              <span>Acceso a zonas de cardio</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-          </ul>
-          <div className="flex justify-center mt-4">
-            <button className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition">
-              Elegir Plan
-            </button>
-          </div>
-        </div>
-
-        {/* Plan Premium */}
-        <div className="lg:w-1/2 p-4 bg-zinc-900 rounded-lg shadow-md flex flex-col justify-between min-h-[600px] mt-10 lg:mt-0">
-          <div className="text-center">
-            <div className="text-lg font-extrabold text-[#aba6a6]">/Mes</div>
-            <div className="text-2xl font-extrabold text-white mt-2">
-              Plan Premium
-            </div>
-            <div className="flex justify-center items-baseline mt-4">
-              <span className="text-4xl font-extrabold text-white">$</span>
-              <span className="text-6xl font-extrabold text-white">55</span>
-            </div>
-          </div>
-          <ul className="mt-8 space-y-4 text-white">
-            <li className="flex justify-between">
-              <span>Acceso ilimitado al gimnasio</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between">
-              <span>Acceso 24/7 al gimnasio</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between">
-              <span>Clases grupales básicas</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between">
-              <span>Clases grupales avanzadas</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between">
-              <span>Uso de vestuarios y duchas</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between">
-              <span>Un plan de entrenamiento básico</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-            <li className="flex justify-between">
-              <span>Acceso a zonas de cardio</span>
-              <div className="w-6 h-6 bg-red-600 rounded-full" />
-            </li>
-          </ul>
-          <div className="flex justify-center mt-4">
-            <button className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition">
-              Elegir Plan
-            </button>
-          </div>
-        </div>
+      {/* Plans container */}
+      <div
+        className="
+          grid 
+          grid-cols-1 
+          md:grid-cols-2 
+          lg:grid-cols-3 
+          gap-8 
+          w-full 
+          px-8 
+          max-w-7xl
+        "
+      >
+        {/* Render the plans dynamically */}
+        {plans.map((plan, index) => (
+          <PlanCard
+            key={index}
+            title={plan.title}
+            price={plan.price}
+            features={plan.features}
+          />
+        ))}
       </div>
     </div>
   );
 };
+
+// Component for each plan card
+const PlanCard: React.FC<PlanCardProps> = ({ title, price, features }) => (
+  <div className="bg-zinc-900 p-8 rounded-lg shadow-lg flex flex-col justify-between min-h-[600px] cursor-pointer transition duration-300 hover:scale-105">
+    {/* Plan header */}
+    <div className="text-center">
+      <h3 className="text-2xl font-bold mb-4">{title}</h3>
+      <div className="text-5xl font-extrabold mb-2">
+        ${price}
+        <span className="text-lg font-medium text-gray-400">/Month</span>
+      </div>
+    </div>
+
+    {/* Features list with icons */}
+    <ul className="space-y-4 text-white">
+      {features.map((feature: Feature, index: number) => (
+        <li key={index} className="flex justify-between items-center">
+          <span>{feature.text}</span>
+          <div
+            className={`w-6 h-6 rounded-full flex items-center justify-center ${
+              feature.included ? "bg-red-600" : "bg-gray-600"
+            }`}
+          >
+            {feature.included && <FaCheck className="text-white" />}
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    {/* Button to choose the plan */}
+    <button className="bg-red-600 text-white py-2 px-6 rounded mt-6 hover:bg-red-700 transition">
+      Choose Plan
+    </button>
+  </div>
+);
 
 export default PlansView;

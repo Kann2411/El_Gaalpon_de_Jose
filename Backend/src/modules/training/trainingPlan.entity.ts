@@ -21,7 +21,7 @@ export class TrainingPlan {
     type: 'string',
   })
   @Column({ type: 'varchar', length: 255 })
-  file: string;
+  file: string = 'default-image-url';
 
   @ApiProperty({
     description: 'Entrenador asociado al plan de entrenamiento',
