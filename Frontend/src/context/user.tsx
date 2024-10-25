@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import { useRouter } from 'next/navigation';
 import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 export const UserContext = createContext<IUserContext>({
   user: null,
@@ -31,11 +31,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("🚀 ~ UserProvider ~ session:", session)
 
     useEffect(() => {
-        if (status === "authenticated" && session?.user) {
-          const { name, email, imgUrl, role, id } = session.user as IUser;
-          setUser({ name, email, imgUrl: imgUrl, role, id });
-          setIsLogged(true);
-          setImgUrl(imgUrl || null);
+      if (status === "authenticated" && session?.user) {
+        const { name, email, image, role, id } = session.user as IUser; // Cambiar `imgUrl` por `image`
+    
+        if (isLogged) return;
+    
+        setUser({ name, email, imgUrl: image, role, id }); // Usar `image` en vez de `imgUrl`
+        setIsLogged(true);
+        setImgUrl(image || null); // Asegúrate de que se guarde correctamente la URL
     
           // Redirigir basado en el rol
           if (role === "admin") {
@@ -46,7 +49,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             router.push("/");
           }
         }
-      }, [session, router]);
+      }, [session, router, isLogged]);
 
 
       const signIn = async (credentials: SignInCredential): Promise<boolean> => {
@@ -116,9 +119,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
-    const logOut = () => {
+    const logOut = async() => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+
+        await signOut({ redirect: false });  // Limpiar cookies sin redirigir automáticamente.
+
         Swal.fire({
             title: 'Come back soon!',
             text: "You are logged out!",

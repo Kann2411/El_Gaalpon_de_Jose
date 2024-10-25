@@ -1,7 +1,7 @@
 import NextAuth,{ NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
- const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -9,6 +9,10 @@ import GoogleProvider from 'next-auth/providers/google';
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET as string,
+  session: {
+    strategy: "jwt",  // Usar JWT en lugar de cookies para la persistencia.
+    maxAge: 24 * 60 * 60, // La sesión expira en 24 horas.
+  },
   callbacks: {
     async jwt({ token, account, profile }) {
       if (account && profile) {
@@ -22,9 +26,7 @@ import GoogleProvider from 'next-auth/providers/google';
       }
       return token;
     },
-    async session({ session, token }:{session:any, token:any}) {
-      console.log("🚀 ~ session ~ token:", token)
-      console.log("🚀 ~ session ~ session:", session)
+    async session({ session, token }) {
       if (session.user) {
         (session.user as any).role = token.role;
         (session.user as any).id = token.sub;
@@ -36,6 +38,7 @@ import GoogleProvider from 'next-auth/providers/google';
     signIn: '/login',
   },
 };
+
 // Exporta los métodos HTTP
 const handler = NextAuth(authOptions);
 
