@@ -63,7 +63,7 @@ const PlansView: React.FC = () => {
         Check out our <span className="text-red-600">plans</span>
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full px-8 max-w-7xl">
+      <div className="grid grid-cols-3 gap-8 px-8 max-w-7xl">
         {plans.map((plan, index) => (
           <PlanCard
             key={index}
@@ -130,13 +130,9 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description,
   
 
   return (
-    <div className="bg-gray-800 text-white p-6 rounded-lg shadow-lg flex flex-col justify-between">
-      <h3 className="text-2xl font-bold mb-4">{plan}</h3>
-      <p className="text-xl mb-2">
-        {currency}
-        {price}
-      </p>
-      <p className="mb-4">{description}</p>
+    <div className="bg-zinc-900 text-white p-6 rounded-lg shadow-lg flex flex-col">
+      <h3 className="text-2xl font-bold mb-4 text-center">{plan}</h3>
+      <p className="mb-4 text-center">{description}</p>
       <ul className="mb-6">
         {benefits.map((benefit, index) => (
           <li key={index} className="flex items-center mb-2">
@@ -145,6 +141,10 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description,
           </li>
         ))}
       </ul>
+      <div className="flex-grow"></div>
+      <p className="text-xl mb-4 text-center">
+        {price} {currency}
+      </p>
       <button
         onClick={createPreference}
         className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-200"
@@ -152,7 +152,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description,
         Get Plan
       </button>
     </div>
-  );
+  );  
 };
 
 export default PlansView;
