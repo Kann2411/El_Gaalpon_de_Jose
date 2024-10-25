@@ -69,7 +69,9 @@ export default function LoginView() {
             <Link href="/register" className="text-red-500 hover:underline">
               Sign up
             </Link>
-            <Link className="text-red-600" href="/auth/forgot-password">I forgot my password</Link>
+          </p>
+          <p className="text-center">
+            <Link className="text-red-500" href="/auth/forgot-password">I forgot my password</Link>
           </p>
         </div>
       </div>

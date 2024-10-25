@@ -26,7 +26,6 @@ export default function LoginForm() {
         title: 'Success!',
         text: 'You are logged in!',
         icon: 'success',
-        confirmButtonText: 'Accept',
         customClass: {
           popup: 'bg-[#222222] text-white',
           title: 'text-[#B0E9FF]',
@@ -41,7 +40,6 @@ export default function LoginForm() {
         title: 'Ups!',
         text: 'Email or password incorrect!',
         icon: 'error',
-        confirmButtonText: 'Try Again',
         customClass: {
           popup: 'bg-[#222222] text-white',
           title: 'text-[#B0E9FF]',
