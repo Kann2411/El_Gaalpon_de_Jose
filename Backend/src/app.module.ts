@@ -41,13 +41,6 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
       defaults: {
         from: '"No Reply" <noreply@.com>',
       },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
     }),
     ChatBotModule,
     FileUploadModule,
