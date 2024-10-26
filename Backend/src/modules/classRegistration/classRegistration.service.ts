@@ -9,6 +9,10 @@ export class ClassRegistrationService {
     return this.classRepository.getRegistrationUser(classId);
   }
 
+  getClassesForUser(userId: string) {
+    return this.classRepository.getClassesForUser(userId);
+  }
+
   registerUserToClass(classId: string, userId: string) {
     return this.classRepository.registerUserToClass(classId, userId);
   }
