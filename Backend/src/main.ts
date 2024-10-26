@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { rutasMiddleware } from './middlewares/middleware.rutas';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ExcludePasswordInterceptor } from './interceptors/omit-password.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useGlobalInterceptors(new ExcludePasswordInterceptor());
   app.use(rutasMiddleware);
 
   const swaggerConfig = new DocumentBuilder()

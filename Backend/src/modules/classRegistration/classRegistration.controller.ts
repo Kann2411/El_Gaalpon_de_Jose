@@ -5,9 +5,12 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ClassRegistrationService } from './classRegistration.service';
+import { OmitPasswordInterceptor } from 'src/interceptors/omitPasswordClassData.interceptor';
 
+@UseInterceptors(OmitPasswordInterceptor)
 @Controller('classRegistration')
 export class ClassRegistrationController {
   constructor(
