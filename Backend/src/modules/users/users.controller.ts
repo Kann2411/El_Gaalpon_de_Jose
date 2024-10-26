@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -11,7 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from '../../dtos/createUser.dto';
 import { RolesGuard } from '../../guards/roles.guard';
 import { Role } from '../../enums/role.enum';
 import { Roles } from '../../decorators/role.decorator';
