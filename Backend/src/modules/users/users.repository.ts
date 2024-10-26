@@ -258,11 +258,16 @@ export class UsersRepository {
     }
   }
 
-  async resetPassword(token: string, setPasswordDto: SetPasswordDto): Promise<string> {
+  async resetPassword(
+    token: string,
+    setPasswordDto: SetPasswordDto,
+  ): Promise<string> {
     try {
       // Verificar el token
       const decoded = this.jwtService.verify(token);
-      const user = await this.userRepository.findOne({ where: { id: decoded.id } });
+      const user = await this.userRepository.findOne({
+        where: { id: decoded.id },
+      });
 
       if (!user) {
         throw new NotFoundException('Usuario no encontrado');
@@ -280,9 +285,20 @@ export class UsersRepository {
       return 'Contraseña restablecida con éxito';
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
-        throw new BadRequestException('El enlace ha expirado. Solicita uno nuevo.');
+        throw new BadRequestException(
+          'El enlace ha expirado. Solicita uno nuevo.',
+        );
       }
       throw new BadRequestException('El enlace no es válido.');
     }
+  }
+
+  async toggleBanUser(id: string, isBanned: boolean): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    user.isBanned = isBanned;
+    return this.userRepository.save(user);
   }
 }

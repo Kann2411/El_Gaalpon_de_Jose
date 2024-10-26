@@ -30,7 +30,6 @@ export default function RegisterForm() {
         title: 'Success!',
         text: 'You have registered successfully!',
         icon: 'success',
-        confirmButtonText: 'Accept',
         customClass: {
           popup: 'bg-black text-white',
           title: 'text-red-600',
@@ -45,7 +44,6 @@ export default function RegisterForm() {
         title: 'Ups!',
         text: 'Something went wrong!',
         icon: 'error',
-        confirmButtonText: 'Intentar de nuevo',
         customClass: {
           popup: 'bg-black text-white',
           title: 'text-red-600',
@@ -158,7 +156,7 @@ export default function RegisterForm() {
           <button
             type="submit"
             disabled={!isValid || !dirty}
-            className="col-span-2 w-full bg-red-600 text-[#222222] py-3 rounded-md hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="col-span-2 w-full bg-red-600 text-[#FFFFFF] py-3 rounded-md hover:bg-red-700 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Sign Up
           </button>

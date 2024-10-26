@@ -37,7 +37,7 @@ export class UsersService {
     return this.usersRepository.setPassword(id, setPasswordDto);
   }
 
-  delete(id: string) {
-    return this.usersRepository.deleteUser(id);
+  toggleUserBan(id: string, isBanned: boolean) {
+    return this.usersRepository.toggleBanUser(id, isBanned);
   }
 }

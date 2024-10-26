@@ -1,63 +1,49 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
 import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'membresias' })
-export class Membresia {
-  @ApiProperty({
-    description: 'Identificador único de la membresía',
-    type: 'string',
-    format: 'uuid',
-  })
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class MembresiaDto {
   @ApiProperty({ description: 'Tipo de membresía' })
-  @Column()
+  @IsString()
   plan: string;
 
   @ApiProperty({
     description: 'Precio de la membresía',
-    type: 'number',
+    type: 'decimal',
   })
-  @Column({ type: 'decimal' })
+  @IsNumber()
   price: number;
 
   @ApiProperty({
-    description: 'Moneda de la membresía',
+    description: 'Moneda del plan',
     type: 'string',
   })
-  @Column()
+  @IsString()
   currency: string;
 
   @ApiProperty({
-    description: 'Descripción de la membresía',
+    description: 'Descripción del plan',
     type: 'string',
   })
-  @Column()
+  @IsString()
   description: string;
 
   @ApiProperty({
     description: 'Beneficios de la membresía',
-    type: 'array',
-    items: { type: 'string' },
   })
-  @Column('text', { array: true })
+  @IsArray()
   benefits: string[];
 
-  @ApiProperty({
-    description: 'Ideal para el tipo de persona',
-    type: 'string',
-  })
-  @Column()
+  @IsString()
   idealFor: string;
 
   @ApiProperty({
     description: 'Fecha de inicio de la membresía',
     type: 'string',
     format: 'date',
+    nullable: true,
   })
-  @Column({ type: 'date', nullable: true })
+  @IsOptional()
   startDate?: Date;
 
   @ApiProperty({
@@ -66,14 +52,14 @@ export class Membresia {
     format: 'date',
     nullable: true,
   })
-  @Column({ type: 'date', nullable: true })
+  @IsOptional()
   endDate?: Date;
 
   @ApiProperty({
     description: 'Estado de la membresía',
-    nullable: true,
     enum: EstadoMembresia,
+    nullable: true,
   })
-  @Column({ nullable: true })
-  status?: EstadoMembresia;
+  @IsOptional()
+  status: EstadoMembresia;
 }

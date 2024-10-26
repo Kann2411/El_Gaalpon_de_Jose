@@ -1,5 +1,9 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/dtos/createUser.dto';
@@ -11,7 +15,6 @@ import { UsersRepository } from 'src/modules/users/users.repository';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
@@ -43,12 +46,16 @@ export class AuthService {
         email,
         name,
         password: '',
-        dni: '0000000',
-        phone: null,
+        dni: '',
+        phone: '',
         registrationMethod: RegistrationMethod.Google,
         role: Role.User,
         confirmPassword: '',
       });
+    }
+
+    if (user.isBanned) {
+      throw new BadRequestException('Tu cuenta ha sido baneada.');
     }
 
     const payload = { id: user.id, email: user.email, role: user.role };
@@ -89,6 +96,10 @@ export class AuthService {
 
     if (!user) throw new BadRequestException('credenciales invalidas');
 
+    if (user.isBanned) {
+      throw new BadRequestException('Tu cuenta ha sido baneada.');
+    }
+
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) throw new BadRequestException('credenciales invalidas');
@@ -113,12 +124,9 @@ export class AuthService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
- 
-    const token = this.jwtService.sign(  { id: user.id },
-      { expiresIn: '1h' });
+    const token = this.jwtService.sign({ id: user.id }, { expiresIn: '1h' });
 
-      console.log(`Generated reset token: ${token}`);
-
+    console.log(`Generated reset token: ${token}`);
 
     const resetLink = `http://localhost:3001/auth/reset-password?token=${token}`;
     const htmlContent = `
@@ -132,13 +140,13 @@ export class AuthService {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Restablecimiento de contraseña',
-      html: htmlContent, 
+      html: htmlContent,
     });
 
     return 'Correo de recuperación enviado con éxito';
   }
 
   resetPassword(token: string, setPasswordDto: SetPasswordDto) {
-   return this.usersRepository.resetPassword(token,setPasswordDto)
+    return this.usersRepository.resetPassword(token, setPasswordDto);
   }
 }

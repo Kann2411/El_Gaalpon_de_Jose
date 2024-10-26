@@ -14,8 +14,8 @@ import { HorarioModule } from './modules/horario/horario.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { MembresiaModule } from './modules/membresia/membresia.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { join } from 'path';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MercadoPagoModule } from './modules/mercadopago/mercadopago.module';
+import { ClassRegistrationModule } from './modules/classRegistration/classRegistration.module';
 
 @Module({
   imports: [
@@ -41,22 +41,17 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
       defaults: {
         from: '"No Reply" <noreply@.com>',
       },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: true,
-        },
-      },
     }),
     ChatBotModule,
     FileUploadModule,
     HorarioModule,
     ClassesModule,
+    ClassRegistrationModule,
     MembresiaModule,
     UsersModule,
     AuthModule,
     TrainingModule,
+    MercadoPagoModule,
     JwtModule.register({
       global: true,
       signOptions: { expiresIn: '1h' },

@@ -20,7 +20,7 @@ const ContactView: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
-      <div className="flex space-x-0">
+      <div className="flex space-x-0 rounded-lg overflow-hidden shadow-lg">
         {/* Formulario */}
         <div className="w-[500px] h-[920px] bg-zinc-900 p-8 ">
           <h2 className="text-3xl font-bold text-white mb-6">Contact Us</h2>

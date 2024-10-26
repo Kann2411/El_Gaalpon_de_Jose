@@ -26,7 +26,6 @@ export default function LoginForm() {
         title: 'Success!',
         text: 'You are logged in!',
         icon: 'success',
-        confirmButtonText: 'Accept',
         customClass: {
           popup: 'bg-[#222222] text-white',
           title: 'text-[#B0E9FF]',
@@ -41,7 +40,6 @@ export default function LoginForm() {
         title: 'Ups!',
         text: 'Email or password incorrect!',
         icon: 'error',
-        confirmButtonText: 'Try Again',
         customClass: {
           popup: 'bg-[#222222] text-white',
           title: 'text-[#B0E9FF]',
@@ -94,7 +92,7 @@ export default function LoginForm() {
           <button
             type="submit"
             disabled={!isValid || !dirty}
-            className="w-full bg-red-600 text-[#222222] py-3 rounded-md hover:bg-red-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-red-600 text-[#FFFFFF] py-3 rounded-md hover:bg-red-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Sign In
           </button>
