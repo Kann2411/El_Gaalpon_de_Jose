@@ -35,6 +35,23 @@ export class classRegistrationRepository {
     return classEntity;
   }
 
+  async getClassesForUser(userId) {
+    const userWithClasses = await this.userDBRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.registrations', 'registration')
+      .leftJoinAndSelect('registration.classEntity', 'classEntity')
+      .where('user.id = :userId', { userId })
+      .getOne();
+
+    if (!userWithClasses) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    return userWithClasses.registrations.map(
+      (registration) => registration.classEntity,
+    );
+  }
+
   async registerUserToClass(classId, userId) {
     const classEntity = await this.classesRepository.findOneBy({ id: classId });
     if (!classEntity) {

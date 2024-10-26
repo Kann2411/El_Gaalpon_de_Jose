@@ -14,9 +14,14 @@ export class ClassRegistrationController {
     private readonly classRegistrationService: ClassRegistrationService,
   ) {}
 
-  @Get(':classId')
-  getRegistrationUser(@Param('classId') classId: string) {
+  @Get('class/:classId')
+  getRegistrationUser(@Param('classId', ParseUUIDPipe) classId: string) {
     return this.classRegistrationService.getRegistrationUser(classId);
+  }
+
+  @Get('user/:userId')
+  getClassesForUser(@Param('userId', ParseUUIDPipe) userId: string) {
+    return this.classRegistrationService.getClassesForUser(userId);
   }
 
   @Post(':classId/register/:userId')
