@@ -14,9 +14,8 @@ import { HorarioModule } from './modules/horario/horario.module';
 import { ClassesModule } from './modules/classes/classes.module';
 import { MembresiaModule } from './modules/membresia/membresia.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { join } from 'path';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MercadoPagoModule } from './modules/mercadopago/mercadopago.module';
+import { ClassRegistrationModule } from './modules/classRegistration/classRegistration.module';
 
 @Module({
   imports: [
@@ -47,6 +46,7 @@ import { MercadoPagoModule } from './modules/mercadopago/mercadopago.module';
     FileUploadModule,
     HorarioModule,
     ClassesModule,
+    ClassRegistrationModule,
     MembresiaModule,
     UsersModule,
     AuthModule,
