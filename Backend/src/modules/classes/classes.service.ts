@@ -31,8 +31,4 @@ export class ClassService {
   deleteClass(id: UUID) {
     return this.classesRepository.deleteClass(id);
   }
-
-  registerUserToClass(classId: string, userId: string) {
-    return this.classesRepository.registerUserToClass(classId, userId);
-  }
 }

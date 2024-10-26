@@ -1,4 +1,4 @@
-export enum MetodoPago{
-    MERCADOPAGO= 'Mercadopago',
-    STRIPE= 'Stripe'
+export enum MetodoPago {
+  MERCADOPAGO = 'Mercadopago',
+  STRIPE = 'Stripe',
 }

@@ -26,15 +26,14 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleOauthGuard)
-  async googleAuth(@Req() req) {
-  }
+  async googleAuth(@Req() req) {}
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleLoginCallback(@Req() req, @Res() res) {
     const tokenData = await this.authService.validateOAuthLogin(req.user);
     return res.status(200).json({
-      token: tokenData.token, 
+      token: tokenData.token,
       message: 'Login successful',
     });
   }
@@ -68,5 +67,4 @@ export class AuthController {
   ) {
     return this.authService.resetPassword(token, setPasswordDto);
   }
-
 }
