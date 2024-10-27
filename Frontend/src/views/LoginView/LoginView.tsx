@@ -16,17 +16,7 @@ export default function LoginView() {
 
   const handleGoogleSignIn = async () => {
     try {
-      /* const result = await signIn('google', {
-        callbackUrl: '/api/auth/callback/google',
-        redirect: false,
-        prompt: 'select_account',
-      });
-
-      if (result?.error) {
-        console.error('Error en el inicio de sesión con Google:', result.error);
-      } else if (result?.url) {
-        window.location.href = result.url;
-      } */
+     
      router.push('http://localhost:3000/auth/google')
     } catch (error) {
       console.error('Error inesperado durante el inicio de sesión con Google:', error);
@@ -35,7 +25,6 @@ export default function LoginView() {
 
   return (
     <div className="flex w-full h-screen -mt-4">
-      {/* Imagen de la izquierda */}
       <div className="w-1/2 h-full overflow-hidden">
         <img
           className="w-full h-full object-cover"
@@ -43,8 +32,6 @@ export default function LoginView() {
           alt="Background Image"
         />
       </div>
-
-      {/* Right side - Login form */}
       <div className="w-1/2 h-full bg-[#222222] flex items-center justify-center">
         <div className="w-full max-w-lg mb-10">
           <div className="text-center my-5">

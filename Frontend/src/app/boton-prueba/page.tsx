@@ -1,10 +1,13 @@
-'use client'
-import React, { useEffect } from 'react';
+'use client';
+import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
+import { UserContext } from '@/context/user';
 import { jwtDecode } from "jwt-decode";
 
 interface DecodedToken {
   role: string;
+  id: string;
+  email: string;
 }
 
 interface BotonPruebaProps {
@@ -15,18 +18,21 @@ interface BotonPruebaProps {
 
 export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
   const router = useRouter();
+  const { setIsLogged, setUser } = useContext(UserContext);
 
   useEffect(() => {
     const token = searchParams?.token;
 
     if (token) {
-      // Almacena el token en localStorage
       localStorage.setItem('token', token);
 
-      // Decodifica el token para obtener el rol del usuario
       const decodedToken: DecodedToken = jwtDecode(token);
-
-      // Redirige según el rol
+      setUser({
+        id: decodedToken.id,
+        email: decodedToken.email,
+        role: decodedToken.role,
+      });
+      setIsLogged(true);
       switch (decodedToken.role) {
         case 'admin':
           router.push('/users');
@@ -38,10 +44,10 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
           router.push('/home');
           break;
         default:
-          router.push('/'); // Redirige a una ruta de inicio si el rol no coincide
+          router.push('/'); 
       }
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, setIsLogged, setUser]);
 
   return <div>Loading...</div>;
 }
