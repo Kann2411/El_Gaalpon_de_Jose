@@ -1,32 +1,47 @@
-/* import React from 'react'
+'use client'
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { jwtDecode } from "jwt-decode";
 
-export default function BotonPrueba() {
-
-    const createPreference = async () => {
-        try {
-            console.log("Creating preference");
-    
-            const response = await fetch("http://localhost:3000/mercadopago/create_subscription", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(suscripcionData)
-            });
-    
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-            }
-    
-            const data = await response.json();
-            return data.redirectUrl;
-        } catch (error) {
-            console.error("Error creating preference:", error);
-            return null; 
-    };
-    
-  return (
-    <div>BotonPrueba</div>
-  )
+interface DecodedToken {
+  role: string;
 }
- */
+
+interface BotonPruebaProps {
+  searchParams: {
+    token?: string;
+  };
+}
+
+export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = searchParams?.token;
+
+    if (token) {
+      // Almacena el token en localStorage
+      localStorage.setItem('token', token);
+
+      // Decodifica el token para obtener el rol del usuario
+      const decodedToken: DecodedToken = jwtDecode(token);
+
+      // Redirige según el rol
+      switch (decodedToken.role) {
+        case 'admin':
+          router.push('/users');
+          break;
+        case 'coach':
+          router.push('/training-management');
+          break;
+        case 'user':
+          router.push('/home');
+          break;
+        default:
+          router.push('/'); // Redirige a una ruta de inicio si el rol no coincide
+      }
+    }
+  }, [searchParams, router]);
+
+  return <div>Loading...</div>;
+}
