@@ -233,7 +233,7 @@ const HomeView: React.FC = () => {
       </div>
 
       {/* Class Grid */}
-      <div className="container mx-auto p-4 grid grid-cols-4 gap-8">
+      <div className="container mx-auto p-4 grid grid-cols-3 gap-8">
         {classesData.length > 0 ? (
           classesData.map((classInfo) => (
             <div

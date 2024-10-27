@@ -30,7 +30,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("🚀 ~ UserProvider ~ status:", status);
     console.log("🚀 ~ UserProvider ~ session:", session);
 
-    useEffect(() => {
+   /*  useEffect(() => {
         if (status === "authenticated" && session?.user) {
             const { name, email, image, role, id } = session.user as IUser;
 
@@ -48,7 +48,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                 router.push("/");
             }
         }
-    }, [session, router, isLogged]);
+    }, [session, router, isLogged]); */
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
