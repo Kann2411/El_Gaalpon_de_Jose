@@ -90,4 +90,7 @@ export class CreateUserDto {
   })
   @IsOptional()
   registrationMethod?: RegistrationMethod;
+  
+  @IsOptional()
+  imgUrl?: string;
 }

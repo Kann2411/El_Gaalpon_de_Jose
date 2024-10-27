@@ -18,6 +18,7 @@ const NavBarComponent = () => {
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
 
+
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };

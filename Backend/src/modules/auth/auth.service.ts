@@ -39,6 +39,9 @@ export class AuthService {
       `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` ||
       'Sin Nombre';
 
+      const imgUrl = profile?._json?.picture;
+
+
     let user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
@@ -50,6 +53,7 @@ export class AuthService {
         phone: '',
         registrationMethod: RegistrationMethod.Google,
         role: Role.User,
+        imgUrl,
         confirmPassword: '',
       });
     }

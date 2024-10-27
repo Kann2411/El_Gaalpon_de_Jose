@@ -3,7 +3,9 @@ import AppointmentsView from '@/views/AppointmentsView/AppointmentsView'
 
 const Appointments = () => {
   return (
+    <div className='bg-black'>
     <AppointmentsView />
+    </div>
   )
 }
 

@@ -1,17 +1,5 @@
 [
   {
-    "name": "Yoga",
-    "capacity": 20,
-    "intensity": "Low",
-    "status": "ACTIVE",
-    "duration": "1 hour",
-    "image": "https://www.hola.com/horizon/landscape/5ebfb61babb7-yoga-2t-t.jpg",
-    "description": "Yoga is a mind-body practice that combines physical postures, breathing exercises, and meditation to promote relaxation and improve flexibility.",
-    "day": "MONDAY",
-    "startTime": "06:00:00",
-    "endTime": "07:00:00"
-  },
-  {
     "name": "Spinning",
     "capacity": 15,
     "intensity": "High",
@@ -22,30 +10,6 @@
     "day": "MONDAY",
     "startTime": "08:00:00",
     "endTime": "08:45:00"
-  },
-  {
-    "name": "Functional Training",
-    "capacity": 25,
-    "intensity": "Medium",
-    "status": "ACTIVE",
-    "duration": "1 hour",
-    "image": "https://www.ciafitness.com.pe/wp-content/uploads/2019/11/BLOG-CIA-FITNESS-FUNCTIONAL-IMG.jpg",
-    "description": "Functional training focuses on exercises that mimic everyday movements, helping to improve strength, balance, and coordination.",
-    "day": "TUESDAY",
-    "startTime": "06:00:00",
-    "endTime": "07:00:00"
-  },
-  {
-    "name": "Zumba",
-    "capacity": 30,
-    "intensity": "Medium",
-    "status": "ACTIVE",
-    "duration": "1 hour",
-    "image": "https://img.freepik.com/foto-gratis/gente-sonriente-divirtiendose-clase-zumba_23-2149074876.jpg",
-    "description": "Zumba is a high-energy dance fitness program that combines Latin and international music with fun dance moves.",
-    "day": "TUESDAY",
-    "startTime": "08:00:00",
-    "endTime": "09:00:00"
   },
   {
     "name": "Pilates",
@@ -106,18 +70,6 @@
     "day": "FRIDAY",
     "startTime": "06:00:00",
     "endTime": "07:00:00"
-  },
-  {
-    "name": "Spinning",
-    "capacity": 15,
-    "intensity": "High",
-    "status": "ACTIVE",
-    "duration": "45 minutes",
-    "image": "https://i.blogs.es/f7460a/1/1366_2000.jpg",
-    "description": "Spinning is a high-intensity indoor cycling workout that improves cardiovascular health and strengthens lower body muscles.",
-    "day": "FRIDAY",
-    "startTime": "08:00:00",
-    "endTime": "08:45:00"
   },
   {
     "name": "Functional Training",

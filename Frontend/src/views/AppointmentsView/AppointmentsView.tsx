@@ -1,45 +1,88 @@
-import React from 'react';
+'use client'
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '@/context/user';
+import { getClassRegistration } from '@/lib/server/fetchClasses';
 
 const AppointmentsView: React.FC = () => {
-  // Sample data for appointments
-  const appointments = [
-    { id: 1, date: '2024-10-21', time: '02:00 PM', description: 'Yoga Class', status: 'Reserved' },
-    { id: 2, date: '2024-10-22', time: '03:00 PM', description: 'Zumba Class', status: 'Reserved' },
-  ];
+  const { user } = useContext(UserContext);
+  const userId = user?.id;
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center p-6">
-      {/* Title for appointments */}
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-extrabold">
-          My <span className="text-red-600">Appointments</span>
-        </h1>
-      </div>
-
-      {/* Container for appointments */}
-      <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
-        {appointments.length > 0 ? (
-          appointments.map((appointment) => (
-            <div key={appointment.id} className="bg-zinc-900 p-4 rounded-lg shadow-md mb-4">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-semibold">{appointment.description}</h2>
-                <div className="flex space-x-8">
-                  <p className="text-gray-400">Date: {appointment.date}</p>
-                  <p className="text-gray-400">Time: {appointment.time}</p>
-                  <p className="text-gray-400">Status: {appointment.status}</p>
-                </div>
-                <button className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition">
-                  Cancel Appointment
-                </button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>You have no appointments scheduled.</p>
-        )}
-      </div>
+    <div className="p-4">
+      {userId ? (
+        <ReservedClasses userId={userId} />
+      ) : (
+        <p className="text-white">No se ha encontrado el ID del usuario.</p>
+      )}
     </div>
   );
 };
 
 export default AppointmentsView;
+
+interface ClassItem {
+  id: string;
+  name: string;
+  intensity: string;
+  capacity: number;
+  status: string;
+  image: string;
+  description: string;
+  duration: string;
+  day: string;
+  starttime: string;
+  endtime: string;
+}
+
+interface ReservedClassesProps {
+  userId: string;
+}
+
+const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
+  const [classes, setClasses] = useState<ClassItem[]>([]);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      const data = await getClassRegistration(userId);
+      if (data) {
+        setClasses(data);
+      }
+    };
+
+    fetchClasses();
+  }, [userId]);
+
+  return (
+    <div className="bg-black p-6 rounded-lg shadow-lg">
+      <h2 className="text-white text-2xl font-bold mb-4">Clases Reservadas</h2>
+      {classes.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {classes.map((classItem) => (
+            <div key={classItem.id} className="bg-zinc-900 p-3 rounded-lg shadow-md relative">
+              <img
+                src={classItem.image}
+                alt={classItem.name}
+                className="w-full h-28 object-cover rounded-t-lg"
+              />
+              <div className="p-2">
+                <h3 className="text-lg font-semibold text-red-400">{classItem.name}</h3>
+                <div className="text-white mt-1">
+                  <span className="text-sm">Day: {classItem.day}</span>
+                  <br />
+                  <span className="text-sm">Duration: {classItem.duration}</span>
+                  <br />
+                  <span className="text-sm">Time: Start: {classItem.starttime} - End: {classItem.endtime}</span>
+                </div>
+              </div>
+              <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                {classItem.status}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-white">There's no reservated classes</p>
+      )}
+    </div>
+  );
+};

@@ -29,19 +29,24 @@ export class ClassRepository {
 
   async classesSeeder() {
     for (const classItem of clases) {
-      const nuevaClase = new Class();
-      nuevaClase.name = classItem.name;
-      nuevaClase.capacity = classItem.capacity;
-      nuevaClase.intensity = classItem.intensity;
-      nuevaClase.duration = classItem.duration;
-      nuevaClase.image = classItem.image;
-      nuevaClase.description = classItem.description;
-      nuevaClase.status = EstadoClase[classItem.status as keyof EstadoClase];
-      nuevaClase.day = classItem.day.toLowerCase();
-      nuevaClase.starttime = classItem.startTime;
-      nuevaClase.endtime = classItem.endTime;
+      // Verifica si la clase ya existe por su nombre o algún otro campo único
+      const existingClass = await this.classesRepository.findOneBy({ name: classItem.name });
 
-      await this.classesRepository.save(nuevaClase);
+      if (!existingClass) {
+        const nuevaClase = new Class();
+        nuevaClase.name = classItem.name;
+        nuevaClase.capacity = classItem.capacity;
+        nuevaClase.intensity = classItem.intensity;
+        nuevaClase.duration = classItem.duration;
+        nuevaClase.image = classItem.image;
+        nuevaClase.description = classItem.description;
+        nuevaClase.status = EstadoClase[classItem.status as keyof EstadoClase];
+        nuevaClase.day = classItem.day.toLowerCase();
+        nuevaClase.starttime = classItem.startTime;
+        nuevaClase.endtime = classItem.endTime;
+
+        await this.classesRepository.save(nuevaClase);
+      }
     }
 
     return { message: 'Clases creadas con éxito' };
