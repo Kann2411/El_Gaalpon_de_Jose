@@ -8,13 +8,15 @@ import logo from "@/public/images/image-login.png";
 import { UserContext } from '@/context/user';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
 export default function LoginView() {
   const { signIn: contextSignIn } = useContext(UserContext);
+  const router = useRouter()
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signIn('google', {
+      /* const result = await signIn('google', {
         callbackUrl: '/api/auth/callback/google',
         redirect: false,
         prompt: 'select_account',
@@ -24,7 +26,8 @@ export default function LoginView() {
         console.error('Error en el inicio de sesión con Google:', result.error);
       } else if (result?.url) {
         window.location.href = result.url;
-      }
+      } */
+     router.push('http://localhost:3000/auth/google')
     } catch (error) {
       console.error('Error inesperado durante el inicio de sesión con Google:', error);
     }
