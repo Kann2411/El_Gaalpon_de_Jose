@@ -40,7 +40,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             setIsLogged(true);
             setImgUrl(image || null);
 
-            // Redirigir basado en el rol
             if (role === "admin") {
                 router.push("/users");
             } else if (role === "coach") {
@@ -56,7 +55,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             let data: IUserResponse | null;
 
             if ('provider' in credentials) {
-                // La autenticación de Google ya está manejada por NextAuth
                 return true;
             } else {
                 const userResponse = await postSignIn(credentials);
@@ -122,9 +120,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const logOut = async () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
-
-        await signOut({ redirect: false });
-
         Swal.fire({
             title: 'Come back soon!',
             text: "You are logged out!",
@@ -137,11 +132,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             },
             buttonsStyling: false,
         });
-
         setUser(null);
         setIsLogged(false);
     };
-
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         const token = localStorage.getItem("token");
@@ -160,7 +153,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                         role: role,
                         id: decodedToken.id,
                     });
-                    setImgUrl(storedImgUrl || ''); // Establecer imgUrl desde el localStorage
+                    setImgUrl(storedImgUrl || '');
                     setIsLogged(true);
                 } catch (error) {
                     console.warn("Error al decodificar el token:", error);
