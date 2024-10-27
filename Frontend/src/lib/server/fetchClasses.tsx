@@ -64,7 +64,7 @@ export const reserveClass = async (claseId: string, userId: string) => {
   }
 };
 
-async function getClassRegistration(userId: string) {
+export async function getClassRegistration(userId: string) {
   try {
       const response = await fetch(`http://localhost:3000/classRegistration/user/${userId}`);
       

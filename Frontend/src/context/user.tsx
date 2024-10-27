@@ -138,31 +138,26 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        const storedImgUrl = localStorage.getItem("imgUrl"); 
-
+        
         if (storedUser && token) {
             const parsedUser = JSON.parse(storedUser);
-
-            if (token) {
-                try {
-                    const decodedToken: DecodedToken = jwtDecode(token);
-                    const role = decodedToken.roles;
-
-                    setUser({
-                        ...parsedUser,
-                        role: role,
-                        id: decodedToken.id,
-                    });
-                    setImgUrl(storedImgUrl || '');
-                    setIsLogged(true);
-                } catch (error) {
-                    console.warn("Error al decodificar el token:", error);
-                }
-            } else {
-                console.warn("Token no encontrado o inválido");
+            try {
+                const decodedToken: DecodedToken = jwtDecode(token);
+                const role = decodedToken.roles;
+    
+                setUser({
+                    ...parsedUser,
+                    role: role,
+                    id: decodedToken.id,
+                });
+                setImgUrl(parsedUser.imgUrl || null);
+                setIsLogged(true);
+            } catch (error) {
+                console.warn("Error al decodificar el token:", error);
             }
         }
     }, []);
+    
 
     return (
         <UserContext.Provider

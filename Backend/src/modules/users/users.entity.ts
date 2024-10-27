@@ -29,7 +29,7 @@ export class User {
     type: 'string',
     maxLength: 10,
   })
-  @Column({ type: 'varchar', length: 10, unique: true })
+  @Column({ type: 'varchar', length: 10 })
   dni: string;
 
   @ApiProperty({
@@ -54,7 +54,7 @@ export class User {
     type: 'string',
     nullable: true,
   })
-  @Column({ type: 'varchar', nullable: true, unique: true })
+  @Column({ type: 'varchar', nullable: true})
   phone: string;
 
   @ApiProperty({
