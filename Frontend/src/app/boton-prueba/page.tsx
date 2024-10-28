@@ -1,8 +1,10 @@
+// BotonPrueba.tsx
 'use client';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/user';
 import { jwtDecode } from "jwt-decode";
+import Loading from '@/components/Loading/Loading';
 
 interface DecodedToken {
   role: string;
@@ -19,20 +21,23 @@ interface BotonPruebaProps {
 export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
   const router = useRouter();
   const { setIsLogged, setUser } = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = searchParams?.token;
 
     if (token) {
       localStorage.setItem('token', token);
-
       const decodedToken: DecodedToken = jwtDecode(token);
-      setUser({
+      const userInfo = {
         id: decodedToken.id,
         email: decodedToken.email,
         role: decodedToken.role,
-      });
+      };
+      setUser(userInfo);
       setIsLogged(true);
+      setLoading(false);
+
       switch (decodedToken.role) {
         case 'admin':
           router.push('/users');
@@ -44,10 +49,17 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
           router.push('/home');
           break;
         default:
-          router.push('/'); 
+          router.push('/');
       }
+    } else {
+      setLoading(false); 
     }
   }, [searchParams, router, setIsLogged, setUser]);
 
-  return <div>Loading...</div>;
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return <div>Redirecting...</div>; 
 }

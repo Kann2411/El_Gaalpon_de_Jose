@@ -77,22 +77,20 @@ export async function uploadImage(id: string, file: File) {
 // api/trainingApi.ts
 export const deleteTrainingPlan = async (id: string) => {
     try {
-        const token = localStorage.getItem('token'); // Obtener el token del almacenamiento local
+        const token = localStorage.getItem('token'); 
         const response = await fetch(`http://localhost:3000/training-plans/${id}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${token}`, // Agregar el encabezado de autorización
+                'Authorization': `Bearer ${token}`,
             },
         });
 
         if (!response.ok) {
-            const errorText = await response.text(); // Obtener el texto de error
+            const errorText = await response.text(); 
             throw new Error(`Error: ${response.status} ${response.statusText}, Details: ${errorText}`);
         }
 
-        // No se espera un JSON en la respuesta de un DELETE
-        alert('Plan de entrenamiento eliminado con éxito');
-        return true; // Retornar true si la eliminación fue exitosa
+        return true; 
     } catch (error) {
         console.error('Error al eliminar el plan de entrenamiento:', error);
         alert('Error al eliminar el plan de entrenamiento');

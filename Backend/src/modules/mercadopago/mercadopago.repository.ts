@@ -65,12 +65,14 @@ export class MercadoPagoRepository {
           id: bodySuscription.id,
           title: bodySuscription.title,
           quantity: Number(bodySuscription.quantity),
-          // unit_price: Number(bodySuscription.unit_price),
-          unit_price: 1,
-          currency_id: 'USD',
+          unit_price: Number(bodySuscription.unit_price),
+          //unit_price: 1,
+          currency_id: 'ARS',
         },
       ],
-      notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}`
+      payer: {
+        email: 'test_user_1072648989@testuser.com',
+      },
     };
     try {
       const preference = await new Preference(client).create({ body });

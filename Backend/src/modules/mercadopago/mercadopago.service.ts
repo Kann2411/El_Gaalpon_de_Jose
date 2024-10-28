@@ -12,4 +12,5 @@ export class MercadoPagoService {
   async createPreference(bodySuscription) {
     return this.mercadoPagoRepository.createPreference(bodySuscription);
   }
+  
 }

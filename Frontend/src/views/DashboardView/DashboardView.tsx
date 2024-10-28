@@ -45,7 +45,7 @@ export default function DashboardView() {
       {/* Título de perfil */}
       <div className="text-center mb-6">
         <h1 className="text-3xl font-extrabold">
-          Mi <span className="text-red-600">Perfil</span>
+          My <span className="text-red-600">Profile</span>
         </h1>
       </div>
 
@@ -64,7 +64,7 @@ export default function DashboardView() {
             onClick={() => document.getElementById("fileInput")?.click()}
             className="mt-2 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
           >
-            Cambiar foto de perfil
+           Change profile picture
           </button>
           <input
             type="file"
@@ -73,19 +73,19 @@ export default function DashboardView() {
             accept="image/*"
             onChange={handleFileChange}
           />
-          <h1 className="text-2xl font-bold mb-4 text-center">
-            Bienvenido, {user?.name}
+          <h1 className="text-2xl font-bold mb-4 text-center py-2">
+            Welcome, {user?.name}
           </h1>
           <p className="text-gray-400 text-center mb-2">Email: {user?.email}</p>
           <p className="text-gray-400 text-center mb-2">
-            Teléfono: {user?.phone}
+            Phone: {user?.phone}
           </p>
-          <p className="text-gray-400 text-center mb-4">Dirección:</p>
+          <p className="text-gray-400 text-center mb-4">Address: </p>
           <button
             onClick={handleLogout}
             className="mt-2 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
           >
-            Cerrar sesión
+            Log Out
           </button>
         </div>
       </div>

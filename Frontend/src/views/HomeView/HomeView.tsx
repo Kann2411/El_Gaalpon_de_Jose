@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Clock, Zap, X } from "lucide-react";
 import { getClassData } from "@/lib/server/fetchClasses";
 import { UserContext } from "@/context/user";
 import Button from "@/components/Button/Button";
+import Swal from "sweetalert2";
 
 interface ClassInfo {
   id: number;
@@ -98,17 +99,47 @@ const HomeView: React.FC = () => {
       }
 
       const data = await response.json();
-      alert("Class reserved successfully!");
+      Swal.fire({
+        title: 'Yey!',
+        text: 'Class reserved successfully!',
+        icon: 'success',
+        customClass: {
+          popup: 'bg-[#222222] text-white',
+          title: 'text-[#B0E9FF]',
+          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+        },
+        buttonsStyling: false,
+      });
       console.log("Class reserved successfully:", data);
     } catch (error: unknown) {
       // Aquí hacemos una afirmación de tipo
       if (error instanceof Error) {
         // Puedes descomponer el mensaje o añadir información adicional
         const detailedMessage = `Error reserving the class: ${error.message}\nStack trace: ${error.stack}`;
-        alert(detailedMessage);
+        Swal.fire({
+          title: 'Ups!',
+          text: 'Error reserving the class',
+          icon: 'error',
+          customClass: {
+            popup: 'bg-[#222222] text-white',
+            title: 'text-[#B0E9FF]',
+            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+          },
+          buttonsStyling: false,
+        });
         console.error("Error reserving the class:", detailedMessage);
       } else if (typeof error === 'string') {
-        alert(`Error reserving the class: ${error}`);
+        Swal.fire({
+          title: 'Ups!',
+          text: 'Error reserving the class',
+          icon: 'error',
+          customClass: {
+            popup: 'bg-[#222222] text-white',
+            title: 'text-[#B0E9FF]',
+            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+          },
+          buttonsStyling: false,
+        });
         console.error("Error reserving the class:", error);
       } else {
         alert("An unknown error occurred.");

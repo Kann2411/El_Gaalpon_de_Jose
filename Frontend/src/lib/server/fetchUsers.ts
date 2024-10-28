@@ -1,4 +1,6 @@
+import { UserContext } from "@/context/user";
 import { ILogin, IRegister, IUser, IUserResponse } from "@/interfaces/interfaces";
+import { useContext } from "react";
 
 // Asegúrate de que el tipo devuelto sea IUserResponse en lugar de IUser
 export async function postSignIn(credential: ILogin): Promise<IUserResponse | null> {
@@ -109,3 +111,34 @@ export const changeUserRole = async (userId: string, newRole: 'user' | 'admin' |
   return await response.json();
 };
 
+// fetchUserData.ts
+export interface UserDataResponse {
+  imgUrl: string;
+  id: string;
+  name: string;
+  dni: string;
+  email: string;
+  phone: string;
+  registrationMethod: string;
+}
+
+export const fetchUserData = async (userId: string, token: string): Promise<UserDataResponse | null> => {
+  try {
+    const response = await fetch(`http://localhost:3000/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data: UserDataResponse = await response.json();
+      return data; // Devuelve los datos en lugar de establecerlos en el contexto
+    } else {
+      console.error("Error fetching user data:", response.statusText);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
+  }
+};

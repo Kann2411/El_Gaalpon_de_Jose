@@ -1,11 +1,15 @@
 "use client";
-import React from "react";
+import React, { useState } from "react"; // Importar useState
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { GymClass } from "@/interfaces/interfaces";
 import { createGymClass } from "@/lib/server/fetchClasses";
+import Loading from "@/components/Loading/Loading"; // Asegúrate de que la ruta sea correcta
+import Swal from 'sweetalert2'
 
 const CreateGymClassForm: React.FC = () => {
+  const [loading, setLoading] = useState(false); // Estado de carga
+
   const formik = useFormik<GymClass>({
     initialValues: {
       name: "",
@@ -37,16 +41,43 @@ const CreateGymClassForm: React.FC = () => {
     }),
 
     onSubmit: async (values) => {
+      setLoading(true); // Activar el estado de carga
       try {
         const response = await createGymClass(values);
-        alert("Class created successfully: " + response.id);
+        Swal.fire({
+          title: 'Yey!',
+          text: 'Class created successfully!',
+          icon: 'success',
+          customClass: {
+            popup: 'bg-[#222222] text-white',
+            title: 'text-[#B0E9FF]',
+            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+          },
+          buttonsStyling: false,
+        });
         formik.resetForm();
       } catch (error) {
         const errorMessage = (error as Error).message || "Unknown error";
-        alert("Error when creating the class: " + errorMessage);
+        Swal.fire({
+          title: 'Ups!',
+          text: 'Error when creating the class',
+          icon: 'error',
+          customClass: {
+            popup: 'bg-[#222222] text-white',
+            title: 'text-[#B0E9FF]',
+            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+          },
+          buttonsStyling: false,
+        });
+      } finally {
+        setLoading(false); // Desactivar el estado de carga
       }
     },
   });
+
+  if (loading) {
+    return <Loading />; // Mostrar el componente de carga
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
@@ -226,15 +257,12 @@ const CreateGymClassForm: React.FC = () => {
               )}
             </div>
           </div>
-          {/* Botón de envío */}
-          <div className="flex justify-center mt-6">
-            <button
-              type="submit"
-              className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
-            >
-              Create Class
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="mt-6 bg-red-700 hover:bg-red-600 text-white p-2 rounded"
+          >
+            Create Class
+          </button>
         </form>
       </div>
     </div>
