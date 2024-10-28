@@ -73,7 +73,7 @@ export default function RegisterForm() {
               htmlFor="name"
               className="peer-focus:font-medium absolute text-sm text-[#f5f5f5] duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-[#ffffff] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Name
+              Full Name
             </label>
             <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
           </div>

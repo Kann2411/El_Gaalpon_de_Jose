@@ -29,6 +29,7 @@ const PlansView: React.FC = () => {
   useEffect(() => {
     getMembresia()
     .then((data) => {
+      console.log(data);
       const formattedPlans = data.map((plan: any) => ({
         planId: plan.id,
         plan: plan.plan,

@@ -9,15 +9,13 @@ import ModalProfilePhoto from "../ModalProfilePhoto/ModalProfilePhoto";
 import Swal from "sweetalert2";
 
 const NavBarComponent = () => {
-  const { user, logOut, isLogged, setUser, imgUrl, setImgUrl } =
-    useContext(UserContext);
+  const { user, logOut, isLogged, imgUrl, setImgUrl } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -32,7 +30,7 @@ const NavBarComponent = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
-      setShowModal(true); 
+      setShowModal(true);
     }
   };
 
@@ -43,13 +41,11 @@ const NavBarComponent = () => {
 
   const handleUpload = async () => {
     if (!file || !user) return;
-    console.log(user.id);
-    console.log("user:" + user.imgUrl);
 
     const formData = new FormData();
     formData.append("file", file);
 
-    setShowModal(false); // Cerrar el modal después de subir la foto
+    setShowModal(false);
     setFile(null);
 
     try {
@@ -64,19 +60,23 @@ const NavBarComponent = () => {
       if (response.ok) {
         const data = await response.json();
         setImgUrl(() => data.imgUrl);
-        localStorage.setItem("imgUrl", data.imgUrl);
+
+        // Actualiza el localStorage con la nueva imagen
+        const userId = user.id;
+        localStorage.setItem(`imgUrl_${userId}`, data.imgUrl);
+
         Swal.fire({
-            title: 'Super!',
-            text: 'Profile photo updated successfully!',
-            icon: 'success',
-            customClass: {
-              popup: 'bg-black text-white', 
-              title: 'text-red-600',
-              confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
-            },
-            buttonsStyling: false, 
-          })
-       
+          title: "Super!",
+          text: "Profile photo updated successfully!",
+          icon: "success",
+          customClass: {
+            popup: "bg-black text-white",
+            title: "text-red-600",
+            confirmButton:
+              "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md",
+          },
+          buttonsStyling: false,
+        });
         setIsMenuOpen(false);
       } else {
         const errorData = await response.json();
@@ -139,52 +139,59 @@ const NavBarComponent = () => {
 
       {/* Menús basados en el rol del usuario */}
       {user?.role === "user" ? (
-  <nav className="flex-1 flex items-center justify-center">
-    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Classes", "Plans", "Contact Us", "Appointments", "Training Plans"].map((item, index) => {
-        const lowerCaseItem = item.toLowerCase();
-        const route =
-          lowerCaseItem === "classes"
-            ? "/home"
-            : lowerCaseItem === "plans"
-            ? "/plans"
-            : lowerCaseItem === "contact us"
-            ? "/contact"
-            : lowerCaseItem === "appointments"
-            ? "/appointments"
-            : "/training-plans"
+        <nav className="flex-1 flex items-center justify-center">
+          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+            {[
+              "Classes",
+              "Plans",
+              "Contact Us",
+              "Appointments",
+              "Training Plans",
+            ].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase();
+              const route =
+                lowerCaseItem === "classes"
+                  ? "/home"
+                  : lowerCaseItem === "plans"
+                  ? "/plans"
+                  : lowerCaseItem === "contact us"
+                  ? "/contact"
+                  : lowerCaseItem === "appointments"
+                  ? "/appointments"
+                  : "/training-plans";
 
-        return (
-          <li key={index} className="relative group">
-            <Link
-              href={route}
-              className="text-white text-sm sm:text-base font-medium px-3 py-2"
-            >
-              {item}
-            </Link>
-            <span
-              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"}`}
-            />
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-) : user?.role === "admin" ? (
-  <nav className="flex-1 flex items-center justify-center">
-    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Users", "Coaches", "Admins", "Classes"].map((item, index) => {
-        const lowerCaseItem = item.toLowerCase();
-        const route =
-          lowerCaseItem === "users"
-            ? "/users"
-            : lowerCaseItem === "coaches"
-            ? "/coaches"
-             : lowerCaseItem === "admins"
-            ? "/admins"
-            : "/classes"
+              return (
+                <li key={index} className="relative group">
+                  <Link
+                    href={route}
+                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                  >
+                    {item}
+                  </Link>
+                  <span
+                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                      pathname === route ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      ) : user?.role === "admin" ? (
+        <nav className="flex-1 flex items-center justify-center">
+          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+            {["Users", "Coaches", "Admins", "Classes"].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase();
+              const route =
+                lowerCaseItem === "users"
+                  ? "/users"
+                  : lowerCaseItem === "coaches"
+                  ? "/coaches"
+                  : lowerCaseItem === "admins"
+                  ? "/admins"
+                  : "/classes";
 
               return (
                 <li key={index} className="relative group">
@@ -295,13 +302,14 @@ const NavBarComponent = () => {
               <>
                 <div className="px-4 py-2 text-black">
                   <p className="font-medium">{user?.name}</p>
+                  <p className="font-light">{user?.email}</p>
                 </div>
-                <button
+            {/*     <button
                   onClick={() => router.push("/dashboard")}
                   className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
                 >
                   Dashboard
-                </button>
+                </button> */}
 
                 <button
                   onClick={handleLogout}
