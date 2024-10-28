@@ -7,6 +7,14 @@ interface FormValues {
     description: string;
     file: File | null;
 }
+interface TrainingPlan{
+    id: string;
+    description: string;
+    file: string;
+}
+interface CreateTrainingPlanProps {
+    setTrainingPlans: React.Dispatch<React.SetStateAction<TrainingPlan[]>>;
+  }
 
 const CreateTrainingPlan: React.FC = () => {
     const validationSchema = Yup.object().shape({
