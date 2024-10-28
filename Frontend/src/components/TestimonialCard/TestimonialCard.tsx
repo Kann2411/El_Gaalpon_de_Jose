@@ -1,4 +1,8 @@
 import React from 'react';
+import hombre1 from '../../public/icons/hombre1.png';
+import mujer2 from '../../public/icons/mujer2.png';  
+import niño3 from '../../public/icons/nino3.png';
+import Image from 'next/image';
 
 const TestimonialCard: React.FC = () => {
   return (
@@ -8,8 +12,8 @@ const TestimonialCard: React.FC = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto px-6">
         <div className="rounded-lg shadow-md p-6 text-center bg-zinc-900">
-          <img
-            src="/images/lorenzo.jpg"
+          <Image
+            src={hombre1}
             alt="Lorenzo Peralta"
             className="mx-auto rounded-full w-24 h-24 mb-4"
           />
@@ -20,8 +24,8 @@ const TestimonialCard: React.FC = () => {
         </div>
         
         <div className="rounded-lg shadow-md p-6 text-center bg-zinc-900">
-          <img
-            src="/images/maria.jpg"
+          <Image
+            src={mujer2}
             alt="María Pérez"
             className="mx-auto rounded-full w-24 h-24 mb-4"
           />
@@ -32,12 +36,12 @@ const TestimonialCard: React.FC = () => {
         </div>
         
         <div className="rounded-lg shadow-md p-6 text-center bg-zinc-900">
-          <img
-            src="/images/carlos.jpg"
-            alt="Carlos Gómez"
+          <Image
+            src={niño3}
+            alt="Juan Gómez"
             className="mx-auto rounded-full w-24 h-24 mb-4"
           />
-          <h3 className="text-lg font-semibold">Carlos Gómez</h3>
+          <h3 className="text-lg font-semibold">Juan Gómez</h3>
           <p className="text-sm text-gray-500">Gymnast</p>
           <p className="text-xl mt-4 mb-2">⭐⭐⭐⭐⭐</p>
           <blockquote className="text-gray-300 italic">"GymPro helped me maintain my fitness routine. Although I had to wait a bit, the quality of the facilities and the coaching was excellent."</blockquote>
