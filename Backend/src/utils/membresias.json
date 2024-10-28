@@ -2,8 +2,8 @@
   "memberships": [
     {
       "plan": "Basic Membership",
-      "price": 49,
-      "currency":  "USD",
+      "price": 1,
+      "currency":  "ARS",
       "description": "Access to basic facilities (gym, weights, cardio machines).",
       "benefits": [
         "Affordable price",
@@ -15,8 +15,8 @@
     {
       "plan": "Premium Membership",
       "description": "Includes full access to all gym areas.",
-      "price": 99,
-      "currency": "USD",
+      "price": 2,
+      "currency": "ARS",
       "benefits": [
         "Unlimited access to all machines and weights without time restrictions",
         "Includes access to functional training rooms, group classes like yoga, spinning, or pilates",
@@ -26,8 +26,8 @@
     },
     {
       "plan": "Executive Class Membership",
-      "price": 149,
-      "currency":"USD",
+      "price": 3,
+      "currency":"ARS",
       "description": "Full access with additional comfort and services.",
       "benefits": [
         "Access to all areas and classes",
@@ -41,8 +41,8 @@
     {
       "plan": "Family Membership",
       "description": "Shared access for a family group.",
-      "price": 199,
-      "currency": "USD",
+      "price": 4,
+      "currency": "ARS",
       "benefits": [
         "Discounts on monthly fees when adding multiple family members",
         "Specific activities for all ages, including kids' classes, youth and adult training",
@@ -54,8 +54,8 @@
     {
       "plan": "Personalized Training Membership",
       "description": "Includes regular personal trainer sessions.",
-      "price": 249,
-      "currency": "USD",
+      "price": 5,
+      "currency": "ARS",
       "benefits": [
         "Regular personal training sessions",
         "Fitness assessments, personalized nutrition plans, and progress tracking",
@@ -67,8 +67,8 @@
     {
       "plan": "Digital Access Membership",
       "description": "Virtual training programs for working out from home.",
-      "price": 19,
-      "currency": "USD",
+      "price": 6,
+      "currency": "ARS",
       "benefits": [
         "Access to an online platform with live and recorded classes",
         "Monthly training plans and challenges",
