@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { MercadoPagoRepository } from './mercadopago.repository';
-import { UUID } from 'crypto';
 
 @Injectable()
 export class MercadoPagoService {

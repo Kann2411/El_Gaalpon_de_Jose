@@ -1,11 +1,9 @@
 import { Injectable, Redirect } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import MercadoPagoConfig, { Payment, Preference } from 'mercadopago';
-import { MercadoPagoService } from './mercadopago.service';
 import { config as dotenvConfig } from 'dotenv';
 import { Pago } from './pago.entity';
 import { DataSource, Repository } from 'typeorm';
-import { UUID } from 'crypto';
 import { EstadoPago } from 'src/enums/estadoPago.enum';
 import { MetodoPago } from 'src/enums/metodoPago.enum';
 

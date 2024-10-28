@@ -7,8 +7,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { MercadoPagoService } from './mercadopago.service';
-import { UUID } from 'crypto';
-import { get } from 'http';
 
 @Controller('mercadopago')
 export class MercadoPagoController {
