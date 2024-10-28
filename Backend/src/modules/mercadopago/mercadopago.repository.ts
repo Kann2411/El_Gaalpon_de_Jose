@@ -39,11 +39,14 @@ export class MercadoPagoRepository {
           id: '123',
           title: bodySuscription.title,
           quantity: Number(bodySuscription.quantity),
-          // unit_price: Number(bodySuscription.unit_price),
-          unit_price: 1000,
-          currency_id: 'COL',
+          unit_price: Number(bodySuscription.unit_price),
+          //unit_price: 1,
+          currency_id: 'ARS',
         },
       ],
+      payer: {
+        email: 'test_user_1072648989@testuser.com',
+      },
     };
     try {
       const preference = await new Preference(client).create({ body });

@@ -33,7 +33,7 @@ const PlansView: React.FC = () => {
         planId: plan.id,
         plan: plan.plan,
         price: plan.price,
-        currency: plan.currency || "$",  
+        currency: plan.currency || "ARS",  
         description: plan.description,
         benefits: plan.benefits,
         idealFor: plan.idealFor

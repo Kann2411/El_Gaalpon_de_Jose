@@ -38,4 +38,25 @@ export class Pago {
     default: EstadoPago.PENDIENTE,
   })
   estado: EstadoPago;
+
+  @ApiProperty({
+    description: 'ID del usuario que realizó el pago',
+    type: 'string',
+    format: 'uuid',
+  })
+  @Column({
+    type: 'uuid', 
+    nullable: false,
+  })
+  usuarioId: string;
+
+  @ApiProperty({
+    description: 'ID de la preferencia de Mercado Pago',
+    type: 'string',
+  })
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  preferenceId: string;
 }
