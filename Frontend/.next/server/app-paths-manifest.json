@@ -1,20 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/auth/forgot-password/page": "app/auth/forgot-password/page.js",
-  "/admins/page": "app/admins/page.js",
-  "/appointments/page": "app/appointments/page.js",
-  "/coaches/page": "app/coaches/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/classes/page": "app/classes/page.js",
-  "/boton-prueba/page": "app/boton-prueba/page.js",
   "/home/page": "app/home/page.js",
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/auth/reset-password/page": "app/auth/reset-password/page.js",
   "/login/page": "app/login/page.js",
-  "/plans/page": "app/plans/page.js",
-  "/register/page": "app/register/page.js",
-  "/training-plans/page": "app/training-plans/page.js",
-  "/users/page": "app/users/page.js",
-  "/training-management/page": "app/training-management/page.js"
+  "/page": "app/page.js",
+  "/training-management/page": "app/training-management/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }

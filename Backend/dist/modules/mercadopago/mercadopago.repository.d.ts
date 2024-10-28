@@ -1,9 +1,9 @@
 import { Pago } from './pago.entity';
-import { Repository } from 'typeorm';
-import { UUID } from 'crypto';
+import { DataSource, Repository } from 'typeorm';
 export declare class MercadoPagoRepository {
     private readonly mercadoPagoRepository;
-    constructor(mercadoPagoRepository: Repository<Pago>);
-    getPaymentStatus(preferenceId: UUID): Promise<any>;
+    private readonly dataSource;
+    constructor(mercadoPagoRepository: Repository<Pago>, dataSource: DataSource);
+    getPaymentStatus(id: any, userId: any): Promise<any>;
     createPreference(bodySuscription: any): Promise<any>;
 }

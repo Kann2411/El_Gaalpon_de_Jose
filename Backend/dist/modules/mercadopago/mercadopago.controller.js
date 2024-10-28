@@ -20,8 +20,20 @@ let MercadoPagoController = class MercadoPagoController {
     constructor(mercadoPagoService) {
         this.mercadoPagoService = mercadoPagoService;
     }
-    async getPaymentStatus(id) {
-        return this.mercadoPagoService.getPaymentStatus(id);
+    async successPayment(id) {
+        console.log("Pago exitoso");
+        return { message: 'Pago exitoso' };
+    }
+    async failurePayment(id) {
+        console.log("Pago fallido");
+        return { message: 'Pago fallido' };
+    }
+    async pendingPayment(id) {
+        console.log("Pago pendiente");
+        return { message: 'Pago pendiente' };
+    }
+    async getPaymentStatus(id, userId) {
+        return this.mercadoPagoService.getPaymentStatus(id, userId);
     }
     async createPreference(bodySuscription) {
         return this.mercadoPagoService.createPreference(bodySuscription);
@@ -29,11 +41,36 @@ let MercadoPagoController = class MercadoPagoController {
 };
 exports.MercadoPagoController = MercadoPagoController;
 __decorate([
-    (0, common_1.Get)('status'),
-    openapi.ApiResponse({ status: 200, type: Object }),
+    (0, common_1.Post)('success'),
+    openapi.ApiResponse({ status: 201 }),
     __param(0, (0, common_1.Query)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MercadoPagoController.prototype, "successPayment", null);
+__decorate([
+    (0, common_1.Get)('failure'),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Query)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MercadoPagoController.prototype, "failurePayment", null);
+__decorate([
+    (0, common_1.Post)('pending'),
+    openapi.ApiResponse({ status: 201 }),
+    __param(0, (0, common_1.Query)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], MercadoPagoController.prototype, "pendingPayment", null);
+__decorate([
+    (0, common_1.Post)('payment'),
+    openapi.ApiResponse({ status: 201, type: Object }),
+    __param(0, (0, common_1.Query)('id')),
+    __param(1, (0, common_1.Query)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], MercadoPagoController.prototype, "getPaymentStatus", null);
 __decorate([

@@ -1,4 +1,4 @@
-// File: C:\Users\nieva\OneDrive\Desktop\Proyecto-Gym\El_Gaalpon_de_Jose\Frontend\src\app\training-management\page.tsx
+// File: C:\Users\Usuario\Desktop\El_Gaalpon_de_Jose\Frontend\src\app\training-management\page.tsx
 import * as entry from '../../../../src/app/training-management/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

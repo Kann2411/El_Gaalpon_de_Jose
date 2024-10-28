@@ -16,8 +16,8 @@ let MercadoPagoService = class MercadoPagoService {
     constructor(mercadoPagoRepository) {
         this.mercadoPagoRepository = mercadoPagoRepository;
     }
-    async getPaymentStatus(id) {
-        return this.mercadoPagoRepository.getPaymentStatus(id);
+    async getPaymentStatus(id, userId) {
+        return this.mercadoPagoRepository.getPaymentStatus(id, userId);
     }
     async createPreference(bodySuscription) {
         return this.mercadoPagoRepository.createPreference(bodySuscription);

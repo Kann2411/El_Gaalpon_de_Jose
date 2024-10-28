@@ -7,7 +7,6 @@ declare const _default: (() => {
     username: string;
     password: string;
     autoLoadEntities: boolean;
-    dropSchema: boolean;
     synchronize: boolean;
     entities: string[];
     migrations: string[];
@@ -19,7 +18,6 @@ declare const _default: (() => {
     username: string;
     password: string;
     autoLoadEntities: boolean;
-    dropSchema: boolean;
     synchronize: boolean;
     entities: string[];
     migrations: string[];
