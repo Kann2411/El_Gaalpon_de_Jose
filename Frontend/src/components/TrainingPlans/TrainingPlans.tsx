@@ -94,7 +94,7 @@ const TrainingPlans: React.FC = () => {
         </h1>
       </div>
 
-      <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
+      <div className="text-center container mx-auto p-8 bg-zinc-950 shadow-lg">
         {trainingPlans.length === 0 ? (
           <p>No training plans available</p>
         ) : (

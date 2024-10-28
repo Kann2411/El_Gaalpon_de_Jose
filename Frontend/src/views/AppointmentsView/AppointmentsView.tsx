@@ -87,9 +87,13 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
           ))}
         </div>
       ) : (
+<<<<<<< HEAD
         <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
           <p className="text-white">There's no reservated classes</p>
         </div>
+=======
+        <p className="text-white text-center container mx-auto p-8 bg-zinc-950 shadow-lg">There's no reservated classes</p>
+>>>>>>> 77232453563292c2113fa19dc897d6f01d201992
       )}
     </div>
   );
