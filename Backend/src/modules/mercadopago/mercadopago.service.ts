@@ -6,8 +6,8 @@ import { UUID } from 'crypto';
 export class MercadoPagoService {
   constructor(private readonly mercadoPagoRepository: MercadoPagoRepository) {}
 
-  async getPaymentStatus(id) {
-    return this.mercadoPagoRepository.getPaymentStatus(id);
+  async getPaymentStatus(id, userId) {
+    return this.mercadoPagoRepository.getPaymentStatus(id, userId);
   }
 
   async createPreference(bodySuscription) {
