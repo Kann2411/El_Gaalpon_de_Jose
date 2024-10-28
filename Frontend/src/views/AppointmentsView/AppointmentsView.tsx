@@ -54,7 +54,7 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
 
   return (
     <div className="bg-black p-6 rounded-lg shadow-lg">
-      <h2 className="text-white text-2xl font-bold mb-4">Clases Reservadas</h2>
+      <h2 className="text-white text-2xl font-bold mb-4">Reserved Classes</h2>
       {classes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {classes.map((classItem) => (
@@ -81,7 +81,7 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
           ))}
         </div>
       ) : (
-        <p className="text-white">There's no reservated classes</p>
+        <p className="text-white text-center container mx-auto p-8 bg-zinc-950 shadow-lg">There's no reservated classes</p>
       )}
     </div>
   );
