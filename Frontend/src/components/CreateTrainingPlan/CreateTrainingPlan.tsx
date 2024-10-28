@@ -2,11 +2,19 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { createPlan, uploadImage } from '@/lib/server/fetchCoaches';
-
+import Swal from 'sweetalert2'
 interface FormValues {
     description: string;
     file: File | null;
 }
+interface TrainingPlan{
+    id: string;
+    description: string;
+    file: string;
+}
+interface CreateTrainingPlanProps {
+    setTrainingPlans: React.Dispatch<React.SetStateAction<TrainingPlan[]>>;
+  }
 
 const CreateTrainingPlan: React.FC = () => {
     const validationSchema = Yup.object().shape({
@@ -36,12 +44,32 @@ const CreateTrainingPlan: React.FC = () => {
                 if (planResponse) {
                     const uploadResponse = await uploadImage(planResponse.id, values.file!);
                     if (uploadResponse) {
-                        alert('Plan created successfully');
+                        Swal.fire({
+                            title: 'Yey!',
+                            text: 'Plan created successfully!',
+                            icon: 'success',
+                            customClass: {
+                              popup: 'bg-[#222222] text-white',
+                              title: 'text-[#B0E9FF]',
+                              confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+                            },
+                            buttonsStyling: false,
+                          });
                         resetForm();
                     }
                 }
             } catch (error: any) {
-                alert(error.message);
+                Swal.fire({
+                    title: 'Ups!',
+                    text: 'Error when creating the plan',
+                    icon: 'error',
+                    customClass: {
+                      popup: 'bg-[#222222] text-white',
+                      title: 'text-[#B0E9FF]',
+                      confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+                    },
+                    buttonsStyling: false,
+                  });
             }
         },
     });

@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
             <a href="/plans" className="text-sm font-semibold text-gray-900 uppercase dark:text-white">
               Plans
             </a>
-            <a href="/contact" className="text-sm font-semibold text-gray-900 uppercase dark:text-white">
+            <a href="#" className="text-sm font-semibold text-gray-900 uppercase dark:text-white">
               Contact Us
             </a>
           </div>

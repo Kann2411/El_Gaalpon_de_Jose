@@ -1,7 +1,7 @@
 "use client";
 
 import { DecodedToken, IUser, IUserContext, IUserResponse, SignInCredential } from "@/interfaces/interfaces";
-import { postSignIn, postSignUp } from "@/lib/server/fetchUsers";
+import { fetchUserData, postSignIn, postSignUp } from "@/lib/server/fetchUsers";
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
@@ -30,70 +30,64 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("🚀 ~ UserProvider ~ status:", status);
     console.log("🚀 ~ UserProvider ~ session:", session);
 
-   /*  useEffect(() => {
-        if (status === "authenticated" && session?.user) {
-            const { name, email, image, role, id } = session.user as IUser;
-
-            if (isLogged) return;
-
-            setUser({ name, email, imgUrl: image, role, id });
-            setIsLogged(true);
-            setImgUrl(image || null);
-
-            if (role === "admin") {
-                router.push("/users");
-            } else if (role === "coach") {
-                router.push("/training-management");
-            } else {
-                router.push("/");
-            }
-        }
-    }, [session, router, isLogged]); */
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
-            let data: IUserResponse | null;
-
-            if ('provider' in credentials) {
-                return true;
+          let data: IUserResponse | null;
+      
+          if ('provider' in credentials) {
+            return true;
+          } else {
+            const userResponse = await postSignIn(credentials);
+            if (userResponse) {
+              data = { user: userResponse.user, token: userResponse.token };
             } else {
-                const userResponse = await postSignIn(credentials);
-                if (userResponse) {
-                    data = { user: userResponse.user, token: userResponse.token };
-                } else {
-                    data = null;
-                }
+              data = null;
             }
-
-            if (data && data.token) {
-                const decodedToken: DecodedToken = jwtDecode(data.token);
-                const role = decodedToken.roles;
-
-                const userWithRole = {
-                    ...data.user,
-                    role: role,
-                    id: decodedToken.id,
-                    token: data.token,
-                };
-
-                setUser(userWithRole);
-                localStorage.setItem('user', JSON.stringify(userWithRole));
-                localStorage.setItem('token', data.token);
-                setIsLogged(true);
-                return true;
+          }
+      
+          if (data && data.token) {
+            const decodedToken: DecodedToken = jwtDecode(data.token);
+            const role = decodedToken.roles;
+            const userId = decodedToken.id;
+      
+            const userWithRole = {
+              ...data.user,
+              role: role,
+              id: userId,
+              token: data.token,
+            };
+      
+            // Llamar a fetchUserData y obtener imgUrl y otros datos
+            const fetchedUserData = await fetchUserData(userId, data.token);
+            
+            if (fetchedUserData) {
+              setUser({ ...userWithRole, ...fetchedUserData });
+              setImgUrl(fetchedUserData.imgUrl || null);
+              localStorage.setItem(`imgUrl_${userId}`, fetchedUserData.imgUrl || '');
             }
-
-            console.warn("No se pudo iniciar sesión, datos no válidos:", data);
-            return false;
+      
+            localStorage.setItem('user', JSON.stringify(userWithRole));
+            localStorage.setItem('token', data.token);
+      
+            setIsLogged(true);
+            return true;
+          }
+      
+          console.warn("No se pudo iniciar sesión, datos no válidos:", data);
+          return false;
         } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error durante el login:', error.message);
-            } else {
-                console.error('Error inesperado durante el login:', error);
-            }
-            return false;
+          if (error instanceof Error) {
+            console.error('Error durante el login:', error.message);
+          } else {
+            console.error('Error inesperado durante el login:', error);
+          }
+          return false;
         }
-    };
+      };
+      
+    
+    
 
     const signUp = async (user: Omit<IUser, "id">): Promise<{ success: boolean; errorMessage?: string }> => {
         try {
@@ -118,6 +112,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logOut = async () => {
+        const userId = user?.id; // Obtén el id del usuario actual
+        if (userId) {
+            localStorage.removeItem(`imgUrl_${userId}`);
+        }
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         Swal.fire({
@@ -134,29 +132,36 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         });
         setUser(null);
         setIsLogged(false);
+        setImgUrl(null);
     };
+    
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        
+    
         if (storedUser && token) {
             const parsedUser = JSON.parse(storedUser);
             try {
                 const decodedToken: DecodedToken = jwtDecode(token);
                 const role = decodedToken.roles;
+                const userId = parsedUser.id;
     
+                // Recupera la imagen de perfil específica para este usuario
+                const savedImgUrl = localStorage.getItem(`imgUrl_${userId}`);
                 setUser({
                     ...parsedUser,
                     role: role,
                     id: decodedToken.id,
                 });
-                setImgUrl(parsedUser.imgUrl || null);
+                setImgUrl(savedImgUrl || null);
                 setIsLogged(true);
             } catch (error) {
                 console.warn("Error al decodificar el token:", error);
             }
         }
     }, []);
+    
+    
     
 
     return (

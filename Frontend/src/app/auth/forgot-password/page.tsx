@@ -3,9 +3,11 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
+import LoadingSpinner from "@/components/Loading/Loading";
 
 const ForgotPasswordView = () => {
   const [emailSent, setEmailSent] = useState(false);
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   const formik = useFormik({
     initialValues: { email: "" },
@@ -13,6 +15,7 @@ const ForgotPasswordView = () => {
       email: Yup.string().email("Invalid email").required("Required"),
     }),
     onSubmit: async (values) => {
+      setLoading(true); // Cambiar el estado a cargando al enviar el formulario
       try {
         const response = await fetch("http://localhost:3000/auth/forgot-password", {
           method: "POST",
@@ -45,6 +48,8 @@ const ForgotPasswordView = () => {
           },
           buttonsStyling: false,
         });
+      } finally {
+        setLoading(false); // Cambiar el estado de carga a false después de la solicitud
       }
     },
   });
@@ -92,9 +97,9 @@ const ForgotPasswordView = () => {
             <button
               type="submit"
               className="w-full bg-red-600 text-[#FFFFFF] py-3 rounded-md hover:bg-red-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!formik.isValid || formik.isSubmitting}
+              disabled={!formik.isValid || formik.isSubmitting || loading} // Deshabilitar el botón si está cargando
             >
-              Send Reset Link
+              {loading ? <LoadingSpinner /> : "Send Reset Link"} {/* Mostrar el spinner si está cargando */}
             </button>
           </form>
         )}

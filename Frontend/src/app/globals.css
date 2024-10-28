@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import "flowbite";
+
+body {
+    background: black;
+}
