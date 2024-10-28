@@ -1,0 +1,81 @@
+{
+  "memberships": [
+    {
+      "plan": "Basic Membership",
+      "price": 1,
+      "currency":  "ARS",
+      "description": "Access to basic facilities (gym, weights, cardio machines).",
+      "benefits": [
+        "Affordable price",
+        "Limited access to machines and weights during specific hours (e.g., no peak hours)",
+        "Ideal for people looking for a flexible, low-cost option"
+      ],
+      "idealFor": "People seeking an economical and flexible option"
+    },
+    {
+      "plan": "Premium Membership",
+      "description": "Includes full access to all gym areas.",
+      "price": 2,
+      "currency": "ARS",
+      "benefits": [
+        "Unlimited access to all machines and weights without time restrictions",
+        "Includes access to functional training rooms, group classes like yoga, spinning, or pilates",
+        "Ideal for regular clients seeking more flexibility and access to additional services"
+      ],
+      "idealFor": "Regular customers looking for more flexibility and services"
+    },
+    {
+      "plan": "Executive Class Membership",
+      "price": 3,
+      "currency":"ARS",
+      "description": "Full access with additional comfort and services.",
+      "benefits": [
+        "Access to all areas and classes",
+        "Exclusive use of areas such as saunas, steam baths, jacuzzis, and relaxation zones",
+        "Complimentary towels, premium hygiene products, and private lockers",
+        "High-intensity group classes with specialized trainers",
+        "Ideal for clients who value comfort and exclusivity"
+      ],
+      "idealFor": "Clients who value comfort and exclusivity"
+    },
+    {
+      "plan": "Family Membership",
+      "description": "Shared access for a family group.",
+      "price": 4,
+      "currency": "ARS",
+      "benefits": [
+        "Discounts on monthly fees when adding multiple family members",
+        "Specific activities for all ages, including kids' classes, youth and adult training",
+        "Safe, supervised areas for children while parents train",
+        "Ideal for families wanting to work out together and seeking safe options for kids"
+      ],
+      "idealFor": "Families wanting to work out together and seeking safe options for kids"
+    },
+    {
+      "plan": "Personalized Training Membership",
+      "description": "Includes regular personal trainer sessions.",
+      "price": 5,
+      "currency": "ARS",
+      "benefits": [
+        "Regular personal training sessions",
+        "Fitness assessments, personalized nutrition plans, and progress tracking",
+        "Priority access to certain gym areas and high-end equipment",
+        "Ideal for people seeking specific results or a supervised training plan"
+      ],
+      "idealFor": "People looking for specific results with professional supervision"
+    },
+    {
+      "plan": "Digital Access Membership",
+      "description": "Virtual training programs for working out from home.",
+      "price": 6,
+      "currency": "ARS",
+      "benefits": [
+        "Access to an online platform with live and recorded classes",
+        "Monthly training plans and challenges",
+        "Virtual consultations with trainers for guidance and workout plans",
+        "Ideal for people who prefer or need to work out from home with online flexibility"
+      ],
+      "idealFor": "People who prefer or need to train from home with online workouts"
+    }
+  ]
+}

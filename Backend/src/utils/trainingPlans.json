@@ -1,0 +1,27 @@
+[
+    {
+      "description": "Plan de entrenamiento para fu erza y resistencia",
+      "file": "plan_fuerza_resistencia.pdf",
+      "coach": {
+        "name": "Carlos Pérez",
+        "email": "carlos.perez@gym.com"
+      }
+    },
+    {
+      "description": "Plan de entrenamiento para principiantes",
+      "file": "plan_principiantes.pdf",
+      "coach": {
+        "name": "Ana García",
+        "email": "ana.garcia@gym.com"
+      }
+    },
+    {
+      "description": "Plan avanzado de crossfit",
+      "file": "plan_crossfit_avanzado.pdf",
+      "coach": {
+        "name": "Juan López",
+        "email": "juan.lopez@gym.com"
+      }
+    }
+  ]
+  
