@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { getUsers, changeUserRole } from '@/lib/server/fetchUsers';
 import { IUser } from '@/interfaces/interfaces';
 import Loading from '@/components/Loading/Loading';
+import Swal from 'sweetalert2';
 
 export default function Admins() {
     const router = useRouter();
@@ -28,11 +29,31 @@ export default function Admins() {
         try {
             await changeUserRole(id, newRole);
             setUsers(users.filter(u => u.id !== id));
-            alert('Rol cambiado exitosamente');
+            Swal.fire({
+                title: 'Super!',
+                text: 'Role changed successfully',
+                icon: 'success',
+                customClass: {
+                  popup: 'bg-[#222222] text-white',
+                  title: 'text-[#B0E9FF]',
+                  confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+                },
+                buttonsStyling: false,
+              });
         } catch (error) {
             if (error instanceof Error) {
                 console.error('Error changing admin role:', error.message);
-                alert(`Error al cambiar el rol: ${error.message}`);
+                Swal.fire({
+                    title: 'Ups!',
+                    text: 'Error when changing role',
+                    icon: 'error',
+                    customClass: {
+                      popup: 'bg-[#222222] text-white',
+                      title: 'text-[#B0E9FF]',
+                      confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+                    },
+                    buttonsStyling: false,
+                  });
             } else {
                 console.error('Error changing admin role:', error);
                 alert('Error desconocido al cambiar el rol');

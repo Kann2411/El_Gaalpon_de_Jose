@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { getMembresia } from "@/lib/server/fetchMembresias";
 import { UserContext } from "@/context/user";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 
 interface ISuscriptionData {
@@ -84,10 +86,21 @@ const PlansView: React.FC = () => {
 
 const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description, benefits, idealFor, planId }) => {
   const { user } = useContext(UserContext);
-
+const router = useRouter()
   const createPreference = async () => {
     if (!user) {
-      alert("You have to be logged in to make a purchase.");
+      Swal.fire({
+        title: 'Hey!',
+        text: 'You have to be logged in to make a purchase.',
+        icon: 'warning',
+        customClass: {
+          popup: 'bg-[#222222] text-white',
+          title: 'text-[#B0E9FF]',
+          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+        },
+        buttonsStyling: false,
+      });
+      router.push('/login')
 
       return;
     }

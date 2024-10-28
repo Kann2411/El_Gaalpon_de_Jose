@@ -144,7 +144,6 @@ const NavBarComponent = () => {
             {[
               "Classes",
               "Plans",
-              "Contact Us",
               "Appointments",
               "Training Plans",
             ].map((item, index) => {
@@ -154,8 +153,6 @@ const NavBarComponent = () => {
                   ? "/home"
                   : lowerCaseItem === "plans"
                   ? "/plans"
-                  : lowerCaseItem === "contact us"
-                  ? "/contact"
                   : lowerCaseItem === "appointments"
                   ? "/appointments"
                   : "/training-plans";
@@ -244,14 +241,12 @@ const NavBarComponent = () => {
       ) : !isLogged ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Home", "Plans", "Contact Us"].map((item, index) => {
+            {["Classes", "Plans"].map((item, index) => {
               const lowerCaseItem = item.toLowerCase();
               const route =
-                lowerCaseItem === "home"
+                lowerCaseItem === "classes"
                   ? "/home"
-                  : lowerCaseItem === "plans"
-                  ? "/plans"
-                  : "/contact";
+                  : "/plans"
 
               return (
                 <li key={index} className="relative group">
