@@ -7,26 +7,17 @@ import { useContext } from 'react';
 import { UserContext } from '@/context/user';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
 
 export default function RegisterView() {
   const { signIn: contextSignIn } = useContext(UserContext);
-
+  const router = useRouter();
   const handleGoogleSignUp = async () => {
     try {
-      const result = await signIn('google', {
-        callbackUrl: '/auth/callback/google',
-        redirect: false,
-        prompt: 'select_account',
-      });
-
-      if (result?.error) {
-        console.error('Error en el registro con Google:', result.error);
-      } else if (result?.url) {
-        window.location.href = result.url;
-      }
-    } catch (error) {
-      console.error('Error inesperado durante el registro con Google:', error);
-    }
+      router.push('http://localhost:3000/auth/google')
+     } catch (error) {
+       console.error('Error inesperado durante el inicio de sesión con Google:', error);
+     }
   };
 
   return (

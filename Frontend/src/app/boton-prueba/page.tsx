@@ -1,32 +1,53 @@
-/* import React from 'react'
+'use client';
+import React, { useEffect, useContext } from 'react';
+import { useRouter } from 'next/navigation';
+import { UserContext } from '@/context/user';
+import { jwtDecode } from "jwt-decode";
 
-export default function BotonPrueba() {
-
-    const createPreference = async () => {
-        try {
-            console.log("Creating preference");
-    
-            const response = await fetch("http://localhost:3000/mercadopago/create_subscription", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(suscripcionData)
-            });
-    
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-            }
-    
-            const data = await response.json();
-            return data.redirectUrl;
-        } catch (error) {
-            console.error("Error creating preference:", error);
-            return null; 
-    };
-    
-  return (
-    <div>BotonPrueba</div>
-  )
+interface DecodedToken {
+  role: string;
+  id: string;
+  email: string;
 }
- */
+
+interface BotonPruebaProps {
+  searchParams: {
+    token?: string;
+  };
+}
+
+export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
+  const router = useRouter();
+  const { setIsLogged, setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    const token = searchParams?.token;
+
+    if (token) {
+      localStorage.setItem('token', token);
+
+      const decodedToken: DecodedToken = jwtDecode(token);
+      setUser({
+        id: decodedToken.id,
+        email: decodedToken.email,
+        role: decodedToken.role,
+      });
+      setIsLogged(true);
+      switch (decodedToken.role) {
+        case 'admin':
+          router.push('/users');
+          break;
+        case 'coach':
+          router.push('/training-management');
+          break;
+        case 'user':
+          router.push('/home');
+          break;
+        default:
+          router.push('/'); 
+      }
+    }
+  }, [searchParams, router, setIsLogged, setUser]);
+
+  return <div>Loading...</div>;
+}

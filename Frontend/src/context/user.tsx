@@ -30,7 +30,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("🚀 ~ UserProvider ~ status:", status);
     console.log("🚀 ~ UserProvider ~ session:", session);
 
-    useEffect(() => {
+   /*  useEffect(() => {
         if (status === "authenticated" && session?.user) {
             const { name, email, image, role, id } = session.user as IUser;
 
@@ -40,7 +40,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             setIsLogged(true);
             setImgUrl(image || null);
 
-            // Redirigir basado en el rol
             if (role === "admin") {
                 router.push("/users");
             } else if (role === "coach") {
@@ -49,14 +48,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                 router.push("/");
             }
         }
-    }, [session, router, isLogged]);
+    }, [session, router, isLogged]); */
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
         try {
             let data: IUserResponse | null;
 
             if ('provider' in credentials) {
-                // La autenticación de Google ya está manejada por NextAuth
                 return true;
             } else {
                 const userResponse = await postSignIn(credentials);
@@ -122,9 +120,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const logOut = async () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
-
-        await signOut({ redirect: false });
-
         Swal.fire({
             title: 'Come back soon!',
             text: "You are logged out!",
@@ -137,39 +132,32 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             },
             buttonsStyling: false,
         });
-
         setUser(null);
         setIsLogged(false);
     };
-
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         const token = localStorage.getItem("token");
-        const storedImgUrl = localStorage.getItem("imgUrl"); 
-
+        
         if (storedUser && token) {
             const parsedUser = JSON.parse(storedUser);
-
-            if (token) {
-                try {
-                    const decodedToken: DecodedToken = jwtDecode(token);
-                    const role = decodedToken.roles;
-
-                    setUser({
-                        ...parsedUser,
-                        role: role,
-                        id: decodedToken.id,
-                    });
-                    setImgUrl(storedImgUrl || ''); // Establecer imgUrl desde el localStorage
-                    setIsLogged(true);
-                } catch (error) {
-                    console.warn("Error al decodificar el token:", error);
-                }
-            } else {
-                console.warn("Token no encontrado o inválido");
+            try {
+                const decodedToken: DecodedToken = jwtDecode(token);
+                const role = decodedToken.roles;
+    
+                setUser({
+                    ...parsedUser,
+                    role: role,
+                    id: decodedToken.id,
+                });
+                setImgUrl(parsedUser.imgUrl || null);
+                setIsLogged(true);
+            } catch (error) {
+                console.warn("Error al decodificar el token:", error);
             }
         }
     }, []);
+    
 
     return (
         <UserContext.Provider

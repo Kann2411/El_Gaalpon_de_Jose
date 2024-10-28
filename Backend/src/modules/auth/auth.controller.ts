@@ -32,10 +32,7 @@ export class AuthController {
   @UseGuards(GoogleOauthGuard)
   async googleLoginCallback(@Req() req, @Res() res) {
     const tokenData = await this.authService.validateOAuthLogin(req.user);
-    return res.status(200).json({
-      token: tokenData.token,
-      message: 'Login successful',
-    });
+    return res.redirect(`http://localhost:3001/boton-prueba?token=${tokenData.token}`);
   }
 
   @Post('signup')

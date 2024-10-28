@@ -63,3 +63,20 @@ export const reserveClass = async (claseId: string, userId: string) => {
     throw error;
   }
 };
+
+export async function getClassRegistration(userId: string) {
+  try {
+      const response = await fetch(`http://localhost:3000/classRegistration/user/${userId}`);
+      
+      if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error("Error al obtener el registro de clases:", error);
+      return null;
+  }
+}
+

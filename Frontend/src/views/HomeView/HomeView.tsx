@@ -80,7 +80,7 @@ const HomeView: React.FC = () => {
       const userId = user.id; // Asumiendo que tienes el ID del usuario en el contexto `UserContext`
       console.log("userId" + userId);
       const response = await fetch(
-        `http://localhost:3000/class/${claseId}/register/${userId}`,
+        `http://localhost:3000/classRegistration/${claseId}/register/${userId}`,
         {
           method: "POST",
           headers: {
@@ -103,13 +103,19 @@ const HomeView: React.FC = () => {
     } catch (error: unknown) {
       // Aquí hacemos una afirmación de tipo
       if (error instanceof Error) {
-        alert(`Error reserving the class: ${error.message}`);
+        // Puedes descomponer el mensaje o añadir información adicional
+        const detailedMessage = `Error reserving the class: ${error.message}\nStack trace: ${error.stack}`;
+        alert(detailedMessage);
+        console.error("Error reserving the class:", detailedMessage);
+      } else if (typeof error === 'string') {
+        alert(`Error reserving the class: ${error}`);
         console.error("Error reserving the class:", error);
       } else {
         alert("An unknown error occurred.");
         console.error("Unknown error:", error);
       }
     }
+    
   };
 
   const fetchClassData = async () => {
@@ -233,7 +239,7 @@ const HomeView: React.FC = () => {
       </div>
 
       {/* Class Grid */}
-      <div className="container mx-auto p-4 grid grid-cols-4 gap-8">
+      <div className="container mx-auto p-4 grid grid-cols-3 gap-8">
         {classesData.length > 0 ? (
           classesData.map((classInfo) => (
             <div

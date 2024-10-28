@@ -69,6 +69,7 @@ export class UsersRepository {
           dni: true,
           email: true,
           phone: true,
+          registrationMethod:true
         },
       });
 

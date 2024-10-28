@@ -18,6 +18,7 @@ const NavBarComponent = () => {
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
 
+
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
@@ -31,13 +32,13 @@ const NavBarComponent = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
-      setShowModal(true); // Mostrar el modal cuando se seleccione un archivo
+      setShowModal(true); 
     }
   };
 
   const handleCancel = () => {
-    setShowModal(false); // Cerrar el modal sin subir
-    setFile(null); // Limpiar el archivo si se cancela
+    setShowModal(false);
+    setFile(null);
   };
 
   const handleUpload = async () => {
