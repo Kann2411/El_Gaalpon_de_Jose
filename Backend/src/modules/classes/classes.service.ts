@@ -12,10 +12,6 @@ export class ClassService {
     return this.classesRepository.getClasses();
   }
 
-  classesSeeder() {
-    return this.classesRepository.classesSeeder();
-  }
-
   getClassById(id: UUID) {
     return this.classesRepository.getClassById(id);
   }

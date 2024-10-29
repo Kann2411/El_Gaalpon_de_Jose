@@ -25,11 +25,6 @@ export class ClassesController {
     return this.classesService.getClasses();
   }
 
-  @Get('seeder')
-  getClassesSeeder() {
-    return this.classesService.classesSeeder();
-  }
-
   @Get(':id')
   getClassById(@Param(ParseUUIDPipe) id: UUID) {
     return this.classesService.getClassById(id);
