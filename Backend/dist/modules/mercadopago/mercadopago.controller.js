@@ -21,15 +21,15 @@ let MercadoPagoController = class MercadoPagoController {
         this.mercadoPagoService = mercadoPagoService;
     }
     async successPayment(id) {
-        console.log("Pago exitoso");
+        console.log('Pago exitoso');
         return { message: 'Pago exitoso' };
     }
     async failurePayment(id) {
-        console.log("Pago fallido");
+        console.log('Pago fallido');
         return { message: 'Pago fallido' };
     }
     async pendingPayment(id) {
-        console.log("Pago pendiente");
+        console.log('Pago pendiente');
         return { message: 'Pago pendiente' };
     }
     async getPaymentStatus(id, userId) {

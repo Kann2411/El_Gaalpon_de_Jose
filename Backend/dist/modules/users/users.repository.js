@@ -66,7 +66,7 @@ let UsersRepository = class UsersRepository {
                     dni: true,
                     email: true,
                     phone: true,
-                    registrationMethod: true
+                    registrationMethod: true,
                 },
             });
             if (!user) {

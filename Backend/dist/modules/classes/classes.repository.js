@@ -38,7 +38,9 @@ let ClassRepository = class ClassRepository {
     }
     async classesSeeder() {
         for (const classItem of clases) {
-            const existingClass = await this.classesRepository.findOneBy({ name: classItem.name });
+            const existingClass = await this.classesRepository.findOneBy({
+                name: classItem.name,
+            });
             if (!existingClass) {
                 const nuevaClase = new classes_entity_1.Class();
                 nuevaClase.name = classItem.name;

@@ -82,7 +82,7 @@ const NavBarComponent = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/files/profileImages/${user.id}`,
+        `https://el-gaalpon-de-jose.onrender.com/files/profileImages/${user.id}`,
         {
           method: "POST",
           body: formData,

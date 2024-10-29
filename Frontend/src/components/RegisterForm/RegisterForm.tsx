@@ -6,7 +6,7 @@ import { registerValidationSchema } from "@/utils/registerValidationSchema";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -18,36 +18,41 @@ export default function RegisterForm() {
     password: "",
     name: "",
     dni: "",
-    confirmPassword: ""
+    confirmPassword: "",
   };
 
-  const handleSubmit = async (values: IRegister, { resetForm }: { resetForm: () => void }) => {
+  const handleSubmit = async (
+    values: IRegister,
+    { resetForm }: { resetForm: () => void }
+  ) => {
     console.log("Valores enviados:", values);
-    const { success } = await signUp(values); // Asegúrate de que signUp devuelve un objeto que contiene `success`
+    const { success } = await signUp(values);
 
     if (success) {
       Swal.fire({
-        title: 'Success!',
-        text: 'You have registered successfully!',
-        icon: 'success',
+        title: "Success!",
+        text: "You have registered successfully!",
+        icon: "success",
         customClass: {
-          popup: 'bg-black text-white',
-          title: 'text-red-600',
-          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
+          popup: "bg-black text-white",
+          title: "text-red-600",
+          confirmButton:
+            "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md",
         },
         buttonsStyling: false,
       });
-      resetForm(); // Mover resetForm aquí para que se ejecute solo en éxito
-      router.push('/'); // Redirigir después de un registro exitoso
+      resetForm();
+      router.push("/");
     } else {
       Swal.fire({
-        title: 'Ups!',
-        text: 'Something went wrong!',
-        icon: 'error',
+        title: "Ups!",
+        text: "Something went wrong!",
+        icon: "error",
         customClass: {
-          popup: 'bg-black text-white',
-          title: 'text-red-600',
-          confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
+          popup: "bg-black text-white",
+          title: "text-red-600",
+          confirmButton:
+            "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md",
         },
         buttonsStyling: false,
       });
@@ -67,7 +72,7 @@ export default function RegisterForm() {
               type="text"
               name="name"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="name"
@@ -75,14 +80,18 @@ export default function RegisterForm() {
             >
               Full Name
             </label>
-            <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="name"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
           <div className="relative z-0 w-full group">
             <Field
               type="email"
               name="email"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="email"
@@ -90,14 +99,18 @@ export default function RegisterForm() {
             >
               Email
             </label>
-            <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
           <div className="relative z-0 w-full group">
             <Field
               type="password"
               name="password"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="password"
@@ -105,14 +118,18 @@ export default function RegisterForm() {
             >
               Password
             </label>
-            <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
           <div className="relative z-0 w-full group">
             <Field
               type="password"
               name="confirmPassword"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="confirmPassword"
@@ -120,14 +137,18 @@ export default function RegisterForm() {
             >
               Confirm Password
             </label>
-            <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="confirmPassword"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
           <div className="relative z-0 w-full group">
             <Field
               type="text"
               name="dni"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="dni"
@@ -135,15 +156,19 @@ export default function RegisterForm() {
             >
               DNI
             </label>
-            <ErrorMessage name="dni" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="dni"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
-          
+
           <div className="relative z-0 w-full group">
             <Field
               type="text"
               name="phone"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="phone"
@@ -151,7 +176,11 @@ export default function RegisterForm() {
             >
               Phone
             </label>
-            <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="phone"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
           <button
             type="submit"

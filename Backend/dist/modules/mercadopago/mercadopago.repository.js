@@ -34,7 +34,7 @@ let MercadoPagoRepository = class MercadoPagoRepository {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-                }
+                },
             });
             if (response.ok) {
                 const data = await response.json();
@@ -53,7 +53,7 @@ let MercadoPagoRepository = class MercadoPagoRepository {
                 return this.dataSource.manager.transaction(async (manager) => {
                     const pagoData = manager.create(pago_entity_1.Pago, newPago);
                     const result = await manager.save(pago_entity_1.Pago, pago);
-                    return "Pago successfully" + result;
+                    return 'Pago successfully' + result;
                 });
             }
         }
@@ -63,7 +63,7 @@ let MercadoPagoRepository = class MercadoPagoRepository {
         }
     }
     async createPreference(bodySuscription) {
-        bodySuscription.userId = "userId";
+        bodySuscription.userId = 'userId';
         console.log(bodySuscription);
         const body = {
             items: [
@@ -78,6 +78,7 @@ let MercadoPagoRepository = class MercadoPagoRepository {
             payer: {
                 email: 'test_user_1072648989@testuser.com',
             },
+            notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}`,
         };
         try {
             const preference = await new mercadopago_1.Preference(client).create({ body });

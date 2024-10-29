@@ -30,7 +30,9 @@ export class ClassRepository {
   async classesSeeder() {
     for (const classItem of clases) {
       // Verifica si la clase ya existe por su nombre o algún otro campo único
-      const existingClass = await this.classesRepository.findOneBy({ name: classItem.name });
+      const existingClass = await this.classesRepository.findOneBy({
+        name: classItem.name,
+      });
 
       if (!existingClass) {
         const nuevaClase = new Class();

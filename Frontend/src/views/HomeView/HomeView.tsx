@@ -78,11 +78,9 @@ const HomeView: React.FC = () => {
 
     try {
       const claseId = selectedClass.id;
-      console.log("classId" + claseId);
-      const userId = user.id; // Asumiendo que tienes el ID del usuario en el contexto `UserContext`
-      console.log("userId" + userId);
+      const userId = user.id;
       const response = await fetch(
-        `http://localhost:3000/classRegistration/${claseId}/register/${userId}`,
+        `https://el-gaalpon-de-jose.onrender.com/classRegistration/${claseId}/register/${userId}`,
         {
           method: "POST",
           headers: {
@@ -92,7 +90,6 @@ const HomeView: React.FC = () => {
       );
 
       if (!response.ok) {
-        // Intenta obtener el mensaje de error del cuerpo de la respuesta
         const errorData = await response.json();
         throw new Error(
           errorData.message || "Failed to reserve the class. Please try again."
@@ -100,64 +97,29 @@ const HomeView: React.FC = () => {
       }
 
       const data = await response.json();
-      Swal.fire({
-        title: 'Yey!',
-        text: 'Class reserved successfully!',
-        icon: 'success',
-        customClass: {
-          popup: 'bg-[#222222] text-white',
-          title: 'text-[#B0E9FF]',
-          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-        },
-        buttonsStyling: false,
-      });
+      alert("Class reserved successfully!");
       console.log("Class reserved successfully:", data);
     } catch (error: unknown) {
-      // Aquí hacemos una afirmación de tipo
       if (error instanceof Error) {
-        // Puedes descomponer el mensaje o añadir información adicional
         const detailedMessage = `Error reserving the class: ${error.message}\nStack trace: ${error.stack}`;
-        Swal.fire({
-          title: 'Ups!',
-          text: 'Error reserving the class',
-          icon: 'error',
-          customClass: {
-            popup: 'bg-[#222222] text-white',
-            title: 'text-[#B0E9FF]',
-            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-          },
-          buttonsStyling: false,
-        });
+        alert(detailedMessage);
         console.error("Error reserving the class:", detailedMessage);
-      } else if (typeof error === 'string') {
-        Swal.fire({
-          title: 'Ups!',
-          text: 'Error reserving the class',
-          icon: 'error',
-          customClass: {
-            popup: 'bg-[#222222] text-white',
-            title: 'text-[#B0E9FF]',
-            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-          },
-          buttonsStyling: false,
-        });
+      } else if (typeof error === "string") {
+        alert(`Error reserving the class: ${error}`);
         console.error("Error reserving the class:", error);
       } else {
         alert("An unknown error occurred.");
         console.error("Unknown error:", error);
       }
     }
-    
   };
 
   const fetchClassData = async () => {
     try {
       const data = await getClassData();
-      // Asegúrate de que data es un array
       setClassesData(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching class data:", error);
-      // Si ocurre un error, también podrías establecer un array vacío
       setClassesData([]);
     }
   };
@@ -174,33 +136,15 @@ const HomeView: React.FC = () => {
     setSelectedClass(null);
   };
 
-  const nextImage = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
+  useEffect(() => {
+    const interval = setInterval(() => {
       setCurrentImageIndex(
         (prevIndex) => (prevIndex + 1) % carouselImages.length
       );
-    }
-  };
+    }, 3000);
 
-  const prevImage = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentImageIndex(
-        (prevIndex) =>
-          (prevIndex - 1 + carouselImages.length) % carouselImages.length
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (isAnimating) {
-      const timer = setTimeout(() => {
-        setIsAnimating(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isAnimating]);
+    return () => clearInterval(interval);
+  }, []);
 
   const getVisibleImages = () => {
     const images = [];
@@ -312,7 +256,7 @@ const HomeView: React.FC = () => {
               <h2 className="text-2xl font-bold">{selectedClass.name}</h2>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-500 hover:text-gray-300"
               >
                 <X size={24} />
               </button>
@@ -338,8 +282,8 @@ const HomeView: React.FC = () => {
                 <span>{selectedClass.intensity}</span>
               </div>
             </div>
-            {user?.role === "user" && (
-              <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-4">
+              {user?.role === "user" ? (
                 <Button content="Schedule" onClick={onClick} />
               </div>
             )}
