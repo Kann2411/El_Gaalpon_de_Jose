@@ -17,7 +17,7 @@ export default function LoginView() {
   const handleGoogleSignIn = async () => {
     try {
      
-     router.push('http://localhost:3000/auth/google')
+     router.push('https://el-gaalpon-de-jose.onrender.com/auth/google')
     } catch (error) {
       console.error('Error inesperado durante el inicio de sesión con Google:', error);
     }
