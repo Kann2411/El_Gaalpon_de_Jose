@@ -1,9 +1,20 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import { Clock, Zap, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Zap,
+  X,
+  Search,
+  Filter,
+} from "lucide-react";
 import { getClassData } from "@/lib/server/fetchClasses";
 import { UserContext } from "@/context/user";
 import Button from "@/components/Button/Button";
+import Swal from "sweetalert2";
+import { useSearch } from "@/context/SearchContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ClassInfo {
   id: number;
@@ -18,7 +29,6 @@ interface ClassInfo {
   starttime: string;
   endtime: string;
 }
-
 interface CarouselImage {
   id: number;
   src: string;
@@ -58,6 +68,13 @@ const HomeView: React.FC = () => {
   const [classesData, setClassesData] = useState<ClassInfo[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const { searchQuery } = useSearch();
+  const [filters, setFilters] = useState({
+    intensity: "",
+    duration: "",
+    day: "",
+  });
 
   const onClick = async () => {
     if (!selectedClass || !user) {
@@ -126,6 +143,25 @@ const HomeView: React.FC = () => {
     setSelectedClass(null);
   };
 
+  const nextImage = () => {
+    if (!isAnimating) {
+      setIsAnimating(true);
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % carouselImages.length
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (!isAnimating) {
+      setIsAnimating(true);
+      setCurrentImageIndex(
+        (prevIndex) =>
+          (prevIndex - 1 + carouselImages.length) % carouselImages.length
+      );
+    }
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex(
@@ -146,99 +182,103 @@ const HomeView: React.FC = () => {
     return images;
   };
 
+  // Filtra las clases basándose en la consulta de búsqueda
+  const filteredClasses = classesData.filter((classInfo) => {
+    const matchesSearch = classInfo.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesIntensity =
+      filters.intensity === "" || classInfo.intensity === filters.intensity;
+    const matchesDuration =
+      filters.duration === "" || classInfo.duration === filters.duration;
+    const matchesDay = filters.day === "" || classInfo.day === filters.day;
+    return matchesSearch && matchesIntensity && matchesDuration && matchesDay;
+  });
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
-      {/* Image Carousel */}
-      <div className="w-full max-w-4xl mb-12">
-        <h2 className="text-3xl font-bold text-center mb-4">
-          Experience <span className="text-red-600">FitZone</span>
-        </h2>
-        <p className="text-center text-gray-400 mb-6">
-          Top-notch technology and facilities
-        </p>
-        <div className="relative overflow-hidden">
-          <div className="flex justify-center items-center">
-            {getVisibleImages().map((image, index) => (
-              <div
-                key={image.id}
-                className={`w-1/3 flex-shrink-0 px-2 transition-all duration-300 ease-in-out ${
-                  index === 1
-                    ? "scale-100 opacity-100"
-                    : "scale-75 opacity-50 blur-sm"
-                }`}
-              >
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-64 object-cover rounded-lg"
-                />
-                {index === 1 && (
-                  <p className="text-center mt-2 font-semibold">{image.alt}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Class Title */}
+      {/* Título de la sección de clases */}
       <div className="text-center mb-12">
-        <h1 className="text-3xl font-extrabold">
+        <h2 className="text-3xl font-bold text-center mb-4"></h2>
+        <h1 className="text-xl font-extrabold">
           Discover our <span className="text-red-600">exclusive classes</span>
         </h1>
       </div>
 
-      {/* Class Grid */}
-      <div className="container mx-auto p-4 grid grid-cols-3 gap-8">
-        {classesData.length > 0 ? (
-          classesData.map((classInfo) => (
-            <div
-              key={classInfo.id}
-              className="bg-zinc-900 max-w-md w-full mx-auto pt-1 pb-6 rounded-lg overflow-hidden shadow-lg"
-            >
-              <img
-                src={classInfo.image}
-                alt={classInfo.name}
-                className="w-full h-72 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-4 text-center bg-red-600 py-2 text-white rounded-md">
-                  {classInfo.name}
-                </h3>
-                <div className="flex justify-between items-center mb-2">
-                  <div className="flex items-center">
-                    <Clock className="w-5 h-5 mr-2 text-red-600" />
-                    <span className="text-sm">DURATION</span>
-                  </div>
-                  <span className="text-sm">{classInfo.duration}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Zap className="w-5 h-5 mr-2 text-red-600" />
-                    <span className="text-sm">INTENSITY</span>
-                  </div>
-                  <span className="text-sm">{classInfo.intensity}</span>
-                </div>
-              </div>
-              <button
-                className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition mx-auto block"
+      {/* Grid de Clases */}
+      <h2 className="text-3xl font-bold text-center mb-4">
+        Experience <span className="text-red-600">FitZone</span>
+      </h2>
+      <h1 className="text-xl font-extrabold">
+        Discover our <span className="text-red-600">exclusive classes</span>
+      </h1>
+
+      <div className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <AnimatePresence>
+          {filteredClasses.length > 0 ? (
+            filteredClasses.map((classInfo) => (
+              <motion.div
+                key={classInfo.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                className="bg-zinc-900 max-w-md w-full mx-auto pt-1 pb-6 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105"
                 onClick={() => openModal(classInfo)}
               >
-                View More
-              </button>
-            </div>
-          ))
-        ) : (
-          <div className="col-span-1 text-center text-gray-400">
-            <p>No hay clases disponibles en este momento.</p>
-          </div>
-        )}
+                <img
+                  src={classInfo.image}
+                  alt={classInfo.name}
+                  className="w-full h-72 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-4 text-center bg-red-600 py-2 text-white rounded-md">
+                    {classInfo.name}
+                  </h3>
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center">
+                      <Clock className="w-5 h-5 mr-2 text-red-600" />
+                      <span className="text-sm">DURATION</span>
+                    </div>
+                    <span className="text-sm">{classInfo.duration}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <Zap className="w-5 h-5 mr-2 text-red-600" />
+                      <span className="text-sm">INTENSITY</span>
+                    </div>
+                    <span className="text-sm">{classInfo.intensity}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="col-span-full text-center text-gray-400"
+            >
+              <p>There are no available classes that match your search</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Selected Class Modal */}
       {selectedClass && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-zinc-900 rounded-lg p-6 max-w-md w-full">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="bg-zinc-900 rounded-lg p-6 max-w-md w-full"
+          >
             <div className="flex justify-between items-start mb-4">
               <h2 className="text-2xl font-bold">{selectedClass.name}</h2>
               <button
@@ -270,20 +310,60 @@ const HomeView: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-center mt-4">
-              {user?.role === "user" ? (
+              {user?.role === "user" && (
                 <Button content="Schedule" onClick={onClick} />
-              ) : (
-                <button
-                  className="px-5 py-2 font-bold tracking-wide rounded-md bg-gray-600 text-sm text-white opacity-50 cursor-not-allowed"
-                  disabled
-                >
-                  Schedule
-                </button>
               )}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+
+      {/* Image Carousel */}
+      <div className="w-full max-w-4xl mb-12">
+        <h1 className="text-3xl text-center py-6 font-extrabold">
+          Quality <span className="text-red-600">equipment</span>
+        </h1>
+        <p className="text-center text-gray-400 mb-6">
+          Top-notch technology and facilities
+        </p>
+        <div className="relative overflow-hidden">
+          <div className="flex justify-center items-center">
+            {getVisibleImages().map((image, index) => (
+              <div
+                key={image.id}
+                className={`w-1/3 flex-shrink-0 px-2 transition-all duration-300 ease-in-out ${
+                  index === 1
+                    ? "scale-100 opacity-100"
+                    : "scale-75 opacity-50 blur-sm"
+                }`}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+                {index === 1 && (
+                  <p className="text-center mt-2 font-semibold">{image.alt}</p>
+                )}
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={prevImage}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
+            disabled={isAnimating}
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <button
+            onClick={nextImage}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
+            disabled={isAnimating}
+          >
+            <ChevronRight size={24} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

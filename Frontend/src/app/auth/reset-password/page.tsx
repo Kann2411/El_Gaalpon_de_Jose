@@ -1,9 +1,10 @@
-'use client';
+"use client";
 import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { UserContext } from "@/context/user";
 import { useRouter } from 'next/navigation';
+import Swal from "sweetalert2";
 import Loading from '@/components/Loading/Loading';
 
 const ResetPasswordView = () => {
@@ -49,14 +50,44 @@ const ResetPasswordView = () => {
         });
 
         if (response.ok) {
-          alert('Password successfully changed');
+          Swal.fire({
+            title: "¡Éxito!",
+            text: "Contraseña cambiada exitosamente.",
+            icon: "success",
+            customClass: {
+              popup: "bg-[#222222] text-white",
+              title: "text-[#B0E9FF]",
+              confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            },
+            buttonsStyling: false,
+          });
           router.push('/login');
         } else {
-          alert('Error when changing password');
+          Swal.fire({
+            title: "Error",
+            text: "Hubo un error al cambiar la contraseña.",
+            icon: "error",
+            customClass: {
+              popup: "bg-[#222222] text-white",
+              title: "text-[#B0E9FF]",
+              confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            },
+            buttonsStyling: false,
+          });
         }
       } catch (error) {
         console.error(error);
-        alert('Error when changing password');
+        Swal.fire({
+          title: "Error",
+          text: "Hubo un error al cambiar la contraseña.",
+          icon: "error",
+          customClass: {
+            popup: "bg-[#222222] text-white",
+            title: "text-[#B0E9FF]",
+            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+          },
+          buttonsStyling: false,
+        });
       } finally {
         setLoading(false);
       }

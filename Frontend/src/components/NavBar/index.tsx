@@ -7,6 +7,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { UserContext } from "@/context/user";
 import ModalProfilePhoto from "../ModalProfilePhoto/ModalProfilePhoto";
 import Swal from "sweetalert2";
+import { Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSearch } from "@/context/SearchContext";
 
 const NavBarComponent = () => {
   const { user, logOut, isLogged, imgUrl, setImgUrl } = useContext(UserContext);
@@ -16,6 +19,35 @@ const NavBarComponent = () => {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } = useSearch();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (!isSearchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 100);
+    }
+  };
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSearchOpen(false);
+  };
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+      setIsSearchOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -131,7 +163,7 @@ const NavBarComponent = () => {
   }, []);
 
   return (
-    <header className="flex items-center justify-between p-4 bg-black text-white shadow-md">
+    <header className="fixed top-0 left-0  right-0 flex items-center justify-between p-4 bg-black text-white shadow-md z-50">
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={60} height={60} />
         <div className="ml-4 text-2xl font-bold">FitZone</div>
@@ -268,6 +300,41 @@ const NavBarComponent = () => {
           </ul>
         </nav>
       ) : null}
+
+      {/* Icono de búsqueda solo en /home */}
+      {pathname === "/home" && (
+        <div className="relative ml-auto mr-5" ref={searchContainerRef}>
+          <button
+            onClick={toggleSearch}
+            className="p-2 text-white hover:text-red-600 transition-colors duration-200"
+          >
+            <Search />
+          </button>
+          <AnimatePresence>
+            {isSearchOpen && (
+              <motion.form
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                className="absolute right-0 top-full mt-2"
+                onSubmit={handleSearchSubmit}
+              >
+                <input
+                  type="text"
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="p-2 bg-gray-800 text-white rounded-md"
+                  placeholder="Search..."
+                />
+                <button type="submit" className="hidden">
+                  Search
+                </button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       {isLogged ? (
         <div className="relative" ref={menuRef}>
