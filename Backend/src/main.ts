@@ -10,6 +10,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3001',
+      'https://el-gaalpon-de-jose.vercel.app',
       'https://el-gaalpon-de-jose.onrender.com',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
