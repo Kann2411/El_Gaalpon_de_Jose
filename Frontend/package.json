@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.3",
     "el-galpon-de-jose": "file:",
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
