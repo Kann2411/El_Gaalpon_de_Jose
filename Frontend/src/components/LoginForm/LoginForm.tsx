@@ -1,49 +1,54 @@
 "use client";
 
-import { Field, Form, Formik, ErrorMessage } from 'formik';
-import { loginValidationSchema } from '@/utils/loginValidationSchema';
-import { useRouter } from 'next/navigation';
-import { ILogin } from '@/interfaces/interfaces';
-import { useContext, useState } from 'react';
-import { UserContext } from '@/context/user';
-import Swal from 'sweetalert2';
+import { Field, Form, Formik, ErrorMessage } from "formik";
+import { loginValidationSchema } from "@/utils/loginValidationSchema";
+import { useRouter } from "next/navigation";
+import { ILogin } from "@/interfaces/interfaces";
+import { useContext, useState } from "react";
+import { UserContext } from "@/context/user";
+import Swal from "sweetalert2";
 
 export default function LoginForm() {
   const router = useRouter();
   const { signIn } = useContext(UserContext);
-  const [focusedField, setFocusedField] = useState('');
+  const [focusedField, setFocusedField] = useState("");
 
   const initialValues = {
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   };
 
-  const handleSubmit = async (values: ILogin, { resetForm }: { resetForm: () => void }) => {
+  const handleSubmit = async (
+    values: ILogin,
+    { resetForm }: { resetForm: () => void }
+  ) => {
     const res = await signIn(values);
 
     if (res) {
       Swal.fire({
-        title: 'Success!',
-        text: 'You are logged in!',
-        icon: 'success',
+        title: "Success!",
+        text: "You are logged in!",
+        icon: "success",
         customClass: {
-          popup: 'bg-[#222222] text-white',
-          title: 'text-[#B0E9FF]',
-          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+          popup: "bg-[#222222] text-white",
+          title: "text-[#B0E9FF]",
+          confirmButton:
+            "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
         },
         buttonsStyling: false,
       });
-      
+
       router.push("/home");
     } else {
       Swal.fire({
-        title: 'Ups!',
-        text: 'Email or password incorrect!',
-        icon: 'error',
+        title: "Ups!",
+        text: "Email or password incorrect!",
+        icon: "error",
         customClass: {
-          popup: 'bg-[#222222] text-white',
-          title: 'text-[#B0E9FF]',
-          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+          popup: "bg-[#222222] text-white",
+          title: "text-[#B0E9FF]",
+          confirmButton:
+            "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
         },
         buttonsStyling: false,
       });
@@ -64,7 +69,7 @@ export default function LoginForm() {
               type="email"
               name="email"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="email"
@@ -72,14 +77,18 @@ export default function LoginForm() {
             >
               Email
             </label>
-            <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
           <div className="relative z-0 w-full mb-5 group">
             <Field
               type="password"
               name="password"
               placeholder=" "
-              className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+              className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
             />
             <label
               htmlFor="password"
@@ -87,7 +96,11 @@ export default function LoginForm() {
             >
               Password
             </label>
-            <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className="text-red-500 text-sm mt-1"
+            />
           </div>
           <button
             type="submit"

@@ -7,7 +7,7 @@ import LoadingSpinner from "@/components/Loading/Loading";
 
 const ForgotPasswordView = () => {
   const [emailSent, setEmailSent] = useState(false);
-  const [loading, setLoading] = useState(false); // Estado de carga
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: { email: "" },
@@ -15,13 +15,16 @@ const ForgotPasswordView = () => {
       email: Yup.string().email("Invalid email").required("Required"),
     }),
     onSubmit: async (values) => {
-      setLoading(true); // Cambiar el estado a cargando al enviar el formulario
+      setLoading(true);
       try {
-        const response = await fetch("http://localhost:3000/auth/forgot-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: values.email }),
-        });
+        const response = await fetch(
+          "http://localhost:3000/auth/forgot-password",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: values.email }),
+          }
+        );
         if (!response.ok) throw new Error("Error sending email");
 
         setEmailSent(true);
@@ -49,7 +52,7 @@ const ForgotPasswordView = () => {
           buttonsStyling: false,
         });
       } finally {
-        setLoading(false); // Cambiar el estado de carga a false después de la solicitud
+        setLoading(false);
       }
     },
   });
@@ -66,7 +69,9 @@ const ForgotPasswordView = () => {
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
       <div className="w-full max-w-md bg-black bg-opacity-50 p-8 rounded shadow-lg relative z-10">
-        <h2 className="text-2xl font-bold mb-6 text-center text-white">Forgot Password</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-white">
+          Forgot Password
+        </h2>
         {emailSent ? (
           <p className="text-center text-white">
             An email has been sent with instructions to reset your password.
@@ -79,7 +84,7 @@ const ForgotPasswordView = () => {
                 name="email"
                 type="email"
                 placeholder=" "
-                className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
+                className="block py-2.5 pl-1 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-[#B0E9FF] peer"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
@@ -91,15 +96,17 @@ const ForgotPasswordView = () => {
                 Email Address
               </label>
               {formik.touched.email && formik.errors.email ? (
-                <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
+                <div className="text-red-500 text-sm mt-1">
+                  {formik.errors.email}
+                </div>
               ) : null}
             </div>
             <button
               type="submit"
               className="w-full bg-red-600 text-[#FFFFFF] py-3 rounded-md hover:bg-red-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!formik.isValid || formik.isSubmitting || loading} // Deshabilitar el botón si está cargando
+              disabled={!formik.isValid || formik.isSubmitting || loading}
             >
-              {loading ? <LoadingSpinner /> : "Send Reset Link"} {/* Mostrar el spinner si está cargando */}
+              {loading ? <LoadingSpinner /> : "Send Reset Link"}
             </button>
           </form>
         )}

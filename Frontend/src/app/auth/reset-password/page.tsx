@@ -10,7 +10,7 @@ const ResetPasswordView = () => {
   const { user } = useContext(UserContext);
   const router = useRouter();
   const [token, setToken] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false); // Estado para el loading
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -35,7 +35,7 @@ const ResetPasswordView = () => {
         .oneOf([Yup.ref('newPassword')], 'Las contraseñas deben coincidir'),
     }),
     onSubmit: async (values) => {
-      setLoading(true); // Activar el loading
+      setLoading(true);
       try {
         const response = await fetch(`http://localhost:3000/auth/reset-password?token=${token}`, {
           method: 'PUT',
@@ -58,13 +58,13 @@ const ResetPasswordView = () => {
         console.error(error);
         alert('Error when changing password');
       } finally {
-        setLoading(false); // Desactivar el loading
+        setLoading(false);
       }
     },
   });
 
   if (loading) {
-    return <Loading />; // Mostrar el componente de loading
+    return <Loading />;
   }
 
   return (
@@ -78,7 +78,7 @@ const ResetPasswordView = () => {
           placeholder="New Password"
           onChange={formik.handleChange}
           value={formik.values.newPassword}
-          className="mb-4 p-2 w-full bg-black border-2 border-red-600 text-white placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
+          className="mb-4 p-2 pl-1 w-full bg-black border-2 border-red-600 text-white placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
         />
         {formik.touched.newPassword && formik.errors.newPassword ? (
           <div className="text-red-600">{formik.errors.newPassword}</div>
@@ -91,7 +91,7 @@ const ResetPasswordView = () => {
           placeholder="Confirm Password"
           onChange={formik.handleChange}
           value={formik.values.confirmPassword}
-          className="mb-4 p-2 w-full bg-black border-2 border-red-600 text-white placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
+          className="mb-4 p-2 pl-1 w-full bg-black border-2 border-red-600 text-white placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600"
         />
         {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
           <div className="text-red-600">{formik.errors.confirmPassword}</div>
