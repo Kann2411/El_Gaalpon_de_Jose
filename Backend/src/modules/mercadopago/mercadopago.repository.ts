@@ -21,14 +21,17 @@ export class MercadoPagoRepository {
 
   async getPaymentStatus(id, userId) {
     try {
-      const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-        }
-      })
+      const response = await fetch(
+        `https://api.mercadopago.com/v1/payments/${id}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+          },
+        },
+      );
 
-      if(response.ok){
+      if (response.ok) {
         const data = await response.json();
 
         const pago = await this.mercadoPagoRepository.findOne({
@@ -43,11 +46,11 @@ export class MercadoPagoRepository {
           userId: userId,
           moneda: data.currency_id,
           monto: data.transaction_details.total_paid_amount,
-        }
+        };
         return this.dataSource.manager.transaction(async (manager) => {
-            const pagoData = manager.create(Pago, newPago)
-            const result = await manager.save(Pago, pago);
-            return "Pago successfully"+result
+          const pagoData = manager.create(Pago, newPago);
+          const result = await manager.save(Pago, pago);
+          return 'Pago successfully' + result;
         });
       }
     } catch (error) {
@@ -57,7 +60,7 @@ export class MercadoPagoRepository {
   }
 
   async createPreference(bodySuscription) {
-    bodySuscription.userId = "userId";
+    bodySuscription.userId = 'userId';
     console.log(bodySuscription);
     const body = {
       items: [
@@ -76,7 +79,7 @@ export class MercadoPagoRepository {
     };
     try {
       const preference = await new Preference(client).create({ body });
-      
+
       const pago = this.mercadoPagoRepository.create({
         preferenceId: preference.id,
         userId: bodySuscription.userId,

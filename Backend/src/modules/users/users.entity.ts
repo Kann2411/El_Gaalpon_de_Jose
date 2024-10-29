@@ -54,7 +54,7 @@ export class User {
     type: 'string',
     nullable: true,
   })
-  @Column({ type: 'varchar', nullable: true})
+  @Column({ type: 'varchar', nullable: true })
   phone: string;
 
   @ApiProperty({
@@ -64,7 +64,8 @@ export class User {
     default: 'default-image-url',
   })
   @Column({ type: 'varchar', nullable: true })
-  imgUrl: string = 'https://res.cloudinary.com/dgg9abj0i/image/upload/v1730043484/znl4jfzwva8qnueryxet.png';
+  imgUrl: string =
+    'https://res.cloudinary.com/dgg9abj0i/image/upload/v1730043484/znl4jfzwva8qnueryxet.png';
 
   @ApiProperty({
     description: 'Rol del usuario en el sistema',
