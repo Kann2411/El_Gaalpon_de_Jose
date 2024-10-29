@@ -1,13 +1,20 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import { ChevronLeft, ChevronRight, Clock, Zap, X, Search, Filter } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Zap,
+  X,
+  Search,
+  Filter,
+} from "lucide-react";
 import { getClassData } from "@/lib/server/fetchClasses";
 import { UserContext } from "@/context/user";
 import Button from "@/components/Button/Button";
 import Swal from "sweetalert2";
 import { useSearch } from "@/context/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
-
 
 interface ClassInfo {
   id: number;
@@ -62,7 +69,7 @@ const HomeView: React.FC = () => {
   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const { searchQuery,} = useSearch();
+  const { searchQuery } = useSearch();
   const [filters, setFilters] = useState({
     intensity: "",
     duration: "",
@@ -136,6 +143,25 @@ const HomeView: React.FC = () => {
     setSelectedClass(null);
   };
 
+  const nextImage = () => {
+    if (!isAnimating) {
+      setIsAnimating(true);
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % carouselImages.length
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (!isAnimating) {
+      setIsAnimating(true);
+      setCurrentImageIndex(
+        (prevIndex) =>
+          (prevIndex - 1 + carouselImages.length) % carouselImages.length
+      );
+    }
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex(
@@ -158,33 +184,34 @@ const HomeView: React.FC = () => {
 
   // Filtra las clases basándose en la consulta de búsqueda
   const filteredClasses = classesData.filter((classInfo) => {
-    const matchesSearch = classInfo.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesIntensity = filters.intensity === "" || classInfo.intensity === filters.intensity;
-    const matchesDuration = filters.duration === "" || classInfo.duration === filters.duration;
+    const matchesSearch = classInfo.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesIntensity =
+      filters.intensity === "" || classInfo.intensity === filters.intensity;
+    const matchesDuration =
+      filters.duration === "" || classInfo.duration === filters.duration;
     const matchesDay = filters.day === "" || classInfo.day === filters.day;
     return matchesSearch && matchesIntensity && matchesDuration && matchesDay;
   });
-  
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
-      
-       {/* Título de la sección de clases */}
-       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-center mb-4">
-        </h2>
+      {/* Título de la sección de clases */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold text-center mb-4"></h2>
         <h1 className="text-xl font-extrabold">
           Discover our <span className="text-red-600">exclusive classes</span>
         </h1>
       </div>
-      
+
       {/* Grid de Clases */}
       <h2 className="text-3xl font-bold text-center mb-4">
-          Experience <span className="text-red-600">FitZone</span>
-        </h2>
-        <h1 className="text-xl font-extrabold">
-          Discover our <span className="text-red-600">exclusive classes</span>
-        </h1>
+        Experience <span className="text-red-600">FitZone</span>
+      </h2>
+      <h1 className="text-xl font-extrabold">
+        Discover our <span className="text-red-600">exclusive classes</span>
+      </h1>
 
       <div className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <AnimatePresence>
@@ -227,19 +254,19 @@ const HomeView: React.FC = () => {
             ))
           ) : (
             <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="col-span-full text-center text-gray-400"
-          >
-            <p>There are no available classes that match your search</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="col-span-full text-center text-gray-400"
+            >
+              <p>There are no available classes that match your search</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
-     {/* Selected Class Modal */}
-     {selectedClass && (
+      {/* Selected Class Modal */}
+      {selectedClass && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -283,10 +310,10 @@ const HomeView: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-center mt-4">
-              {user?.role === "user" ? (
+              {user?.role === "user" && (
                 <Button content="Schedule" onClick={onClick} />
-              </div>
-            )}
+              )}
+            </div>
           </motion.div>
         </motion.div>
       )}
@@ -337,7 +364,6 @@ const HomeView: React.FC = () => {
           </button>
         </div>
       </div>
-
     </div>
   );
 };
