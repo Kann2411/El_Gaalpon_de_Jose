@@ -8,13 +8,16 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassService } from './classes.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
+import { OmitPasswordInterceptor } from 'src/interceptors/omitPasswordClassData.interceptor';
 
+UseInterceptors(OmitPasswordInterceptor);
 @ApiTags('Class')
 @Controller('class')
 export class ClassesController {
