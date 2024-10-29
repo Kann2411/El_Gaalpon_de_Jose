@@ -1,17 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Class } from './classes.entity';
 import { UUID } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import * as clases from '../../utils/clases.json';
-import { EstadoClase } from 'src/enums/estadoClase.enum';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
+import { User } from '../users/users.entity';
 
 @Injectable()
 export class ClassRepository {
   constructor(
     @InjectRepository(Class)
     private readonly classesRepository: Repository<Class>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     @InjectDataSource() private dataSource: DataSource,
   ) {}
 
@@ -27,33 +28,6 @@ export class ClassRepository {
     }
   }
 
-  async classesSeeder() {
-    for (const classItem of clases) {
-      // Verifica si la clase ya existe por su nombre o algún otro campo único
-      const existingClass = await this.classesRepository.findOneBy({
-        name: classItem.name,
-      });
-
-      if (!existingClass) {
-        const nuevaClase = new Class();
-        nuevaClase.name = classItem.name;
-        nuevaClase.capacity = classItem.capacity;
-        nuevaClase.intensity = classItem.intensity;
-        nuevaClase.duration = classItem.duration;
-        nuevaClase.image = classItem.image;
-        nuevaClase.description = classItem.description;
-        nuevaClase.status = EstadoClase[classItem.status as keyof EstadoClase];
-        nuevaClase.day = classItem.day.toLowerCase();
-        nuevaClase.starttime = classItem.startTime;
-        nuevaClase.endtime = classItem.endTime;
-
-        await this.classesRepository.save(nuevaClase);
-      }
-    }
-
-    return { message: 'Clases creadas con éxito' };
-  }
-
   async getClassById(id: UUID) {
     try {
       const classData = await this.classesRepository.findOneBy({ id });
@@ -67,17 +41,37 @@ export class ClassRepository {
   }
 
   async createClass(classData: CreateClassDto) {
+    const {
+      name,
+      capacity,
+      status,
+      image,
+      description,
+      duration,
+      intensity,
+      day,
+      starttime,
+      endtime,
+      coach,
+    } = classData;
+
+    const coachUser = await this.userRepository.findOneBy({ id: coach.id });
+    if (!coachUser) {
+      throw new BadRequestException(`coach con id ${coachUser} not found`);
+    }
+
     const nuevaClase = new Class();
-    nuevaClase.name = classData.name;
-    nuevaClase.capacity = classData.capacity;
-    nuevaClase.status = classData.status;
-    nuevaClase.image = classData.image;
-    nuevaClase.description = classData.description;
-    nuevaClase.duration = classData.duration;
-    nuevaClase.intensity = classData.intensity;
-    nuevaClase.day = classData.day;
-    nuevaClase.starttime = classData.starttime;
-    nuevaClase.endtime = classData.endtime;
+    nuevaClase.name = name;
+    nuevaClase.capacity = capacity;
+    nuevaClase.status = status;
+    nuevaClase.image = image;
+    nuevaClase.description = description;
+    nuevaClase.duration = duration;
+    nuevaClase.intensity = intensity;
+    nuevaClase.day = day;
+    nuevaClase.starttime = starttime;
+    nuevaClase.endtime = endtime;
+    nuevaClase.coach = coachUser;
 
     await this.classesRepository.save(nuevaClase);
 

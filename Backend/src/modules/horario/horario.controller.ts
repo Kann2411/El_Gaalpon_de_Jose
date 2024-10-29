@@ -23,11 +23,6 @@ export class HorarioController {
     return this.horarioService.getHorarios();
   }
 
-  @Get('seeder')
-  horariosSeeder() {
-    return this.horarioService.horariosSeeder();
-  }
-
   @Get(':id')
   getHorarioById(@Param(ParseUUIDPipe) id: UUID) {
     return this.horarioService.getHorarioById(id);

@@ -8,8 +8,10 @@ import {
   Max,
   Min,
   Matches,
+  IsEmpty,
 } from 'class-validator';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
+import { User } from 'src/modules/users/users.entity';
 
 export class CreateClassDto {
   @ApiProperty({ description: 'Nombre de la clase', example: 'Yoga' })
@@ -77,4 +79,7 @@ export class CreateClassDto {
   @Matches(/^\d{2}:\d{2}$/, { message: 'endtime must be in HH:mm format' })
   @IsNotEmpty()
   endtime: string;
+
+  @IsEmpty()
+  coach: User;
 }
