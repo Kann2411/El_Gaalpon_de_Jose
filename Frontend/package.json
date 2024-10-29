@@ -12,7 +12,7 @@
     "el-galpon-de-jose": "file:",
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
-    "framer-motion": "^11.11.9",
+    "framer-motion": "^11.11.10",
     "i": "^0.3.7",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.453.0",
