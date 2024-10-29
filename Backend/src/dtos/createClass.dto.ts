@@ -81,5 +81,5 @@ export class CreateClassDto {
   endtime: string;
 
   @IsEmpty()
-  coach: User;
+  coach: Partial<User>;
 }
