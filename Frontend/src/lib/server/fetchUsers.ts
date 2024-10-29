@@ -10,7 +10,7 @@ export async function postSignIn(credential: ILogin): Promise<IUserResponse | nu
           return null;
       }
 
-      const response = await fetch("http://localhost:3000/auth/signin", {
+      const response = await fetch("https://el-gaalpon-de-jose.onrender.com/auth/signin", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"
@@ -40,7 +40,7 @@ export async function postSignIn(credential: ILogin): Promise<IUserResponse | nu
 export async function postSignUp(user: Omit<IUser, "id">) {
   try {
     console.log("Iniciando la solicitud de registro al backend");
-    const response = await fetch("http://localhost:3000/auth/signup", {
+    const response = await fetch("https://el-gaalpon-de-jose.onrender.com/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const getUsers = async (): Promise<IUser[]> => {
   // Suponiendo que guardas el token en localStorage después del inicio de sesión
   const token = localStorage.getItem('token'); 
 
-  const response = await fetch('http://localhost:3000/users', {
+  const response = await fetch('https://el-gaalpon-de-jose.onrender.com/users', {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export const changeUserRole = async (userId: string, newRole: 'user' | 'admin' |
       throw new Error('Token no encontrado');
   }
 
-  const response = await fetch(`http://localhost:3000/users/changeRole/${userId}?role=${newRole}`, {
+  const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/users/changeRole/${userId}?role=${newRole}`, {
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ export interface UserDataResponse {
 
 export const fetchUserData = async (userId: string, token: string): Promise<UserDataResponse | null> => {
   try {
-    const response = await fetch(`http://localhost:3000/users/${userId}`, {
+    const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
