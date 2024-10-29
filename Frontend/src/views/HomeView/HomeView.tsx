@@ -1,10 +1,9 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import { ChevronLeft, ChevronRight, Clock, Zap, X } from "lucide-react";
+import { Clock, Zap, X } from "lucide-react";
 import { getClassData } from "@/lib/server/fetchClasses";
 import { UserContext } from "@/context/user";
 import Button from "@/components/Button/Button";
-import Swal from "sweetalert2";
 
 interface ClassInfo {
   id: number;
@@ -15,13 +14,6 @@ interface ClassInfo {
   image: string;
   description: string;
   duration: string;
-  day: string;
-  starttime: string;
-  endtime: string;
-}
-
-interface ISchedule {
-  id: string;
   day: string;
   starttime: string;
   endtime: string;
@@ -66,7 +58,6 @@ const HomeView: React.FC = () => {
   const [classesData, setClassesData] = useState<ClassInfo[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   const onClick = async () => {
     if (!selectedClass || !user) {
@@ -77,9 +68,7 @@ const HomeView: React.FC = () => {
 
     try {
       const claseId = selectedClass.id;
-      console.log("classId" + claseId);
-      const userId = user.id; // Asumiendo que tienes el ID del usuario en el contexto `UserContext`
-      console.log("userId" + userId);
+      const userId = user.id;
       const response = await fetch(
         `http://localhost:3000/classRegistration/${claseId}/register/${userId}`,
         {
@@ -91,7 +80,6 @@ const HomeView: React.FC = () => {
       );
 
       if (!response.ok) {
-        // Intenta obtener el mensaje de error del cuerpo de la respuesta
         const errorData = await response.json();
         throw new Error(
           errorData.message || "Failed to reserve the class. Please try again."
@@ -99,64 +87,29 @@ const HomeView: React.FC = () => {
       }
 
       const data = await response.json();
-      Swal.fire({
-        title: 'Yey!',
-        text: 'Class reserved successfully!',
-        icon: 'success',
-        customClass: {
-          popup: 'bg-[#222222] text-white',
-          title: 'text-[#B0E9FF]',
-          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-        },
-        buttonsStyling: false,
-      });
+      alert("Class reserved successfully!");
       console.log("Class reserved successfully:", data);
     } catch (error: unknown) {
-      // Aquí hacemos una afirmación de tipo
       if (error instanceof Error) {
-        // Puedes descomponer el mensaje o añadir información adicional
         const detailedMessage = `Error reserving the class: ${error.message}\nStack trace: ${error.stack}`;
-        Swal.fire({
-          title: 'Ups!',
-          text: 'Error reserving the class',
-          icon: 'error',
-          customClass: {
-            popup: 'bg-[#222222] text-white',
-            title: 'text-[#B0E9FF]',
-            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-          },
-          buttonsStyling: false,
-        });
+        alert(detailedMessage);
         console.error("Error reserving the class:", detailedMessage);
-      } else if (typeof error === 'string') {
-        Swal.fire({
-          title: 'Ups!',
-          text: 'Error reserving the class',
-          icon: 'error',
-          customClass: {
-            popup: 'bg-[#222222] text-white',
-            title: 'text-[#B0E9FF]',
-            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-          },
-          buttonsStyling: false,
-        });
+      } else if (typeof error === "string") {
+        alert(`Error reserving the class: ${error}`);
         console.error("Error reserving the class:", error);
       } else {
         alert("An unknown error occurred.");
         console.error("Unknown error:", error);
       }
     }
-    
   };
 
   const fetchClassData = async () => {
     try {
       const data = await getClassData();
-      // Asegúrate de que data es un array
       setClassesData(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching class data:", error);
-      // Si ocurre un error, también podrías establecer un array vacío
       setClassesData([]);
     }
   };
@@ -173,33 +126,15 @@ const HomeView: React.FC = () => {
     setSelectedClass(null);
   };
 
-  const nextImage = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
+  useEffect(() => {
+    const interval = setInterval(() => {
       setCurrentImageIndex(
         (prevIndex) => (prevIndex + 1) % carouselImages.length
       );
-    }
-  };
+    }, 3000);
 
-  const prevImage = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentImageIndex(
-        (prevIndex) =>
-          (prevIndex - 1 + carouselImages.length) % carouselImages.length
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (isAnimating) {
-      const timer = setTimeout(() => {
-        setIsAnimating(false);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isAnimating]);
+    return () => clearInterval(interval);
+  }, []);
 
   const getVisibleImages = () => {
     const images = [];
@@ -243,27 +178,11 @@ const HomeView: React.FC = () => {
               </div>
             ))}
           </div>
-          <button
-            onClick={prevImage}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-            disabled={isAnimating}
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <button
-            onClick={nextImage}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-            disabled={isAnimating}
-          >
-            <ChevronRight size={24} />
-          </button>
         </div>
       </div>
 
       {/* Class Title */}
       <div className="text-center mb-12">
-        {" "}
-        {/* Increased margin for separation */}
         <h1 className="text-3xl font-extrabold">
           Discover our <span className="text-red-600">exclusive classes</span>
         </h1>
@@ -275,8 +194,7 @@ const HomeView: React.FC = () => {
           classesData.map((classInfo) => (
             <div
               key={classInfo.id}
-              className="bg-zinc-900 max-w-md w-full mx-auto pt-1 pb-6 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105"
-              onClick={() => openModal(classInfo)}
+              className="bg-zinc-900 max-w-md w-full mx-auto pt-1 pb-6 rounded-lg overflow-hidden shadow-lg"
             >
               <img
                 src={classInfo.image}
@@ -302,6 +220,12 @@ const HomeView: React.FC = () => {
                   <span className="text-sm">{classInfo.intensity}</span>
                 </div>
               </div>
+              <button
+                className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition mx-auto block"
+                onClick={() => openModal(classInfo)}
+              >
+                View More
+              </button>
             </div>
           ))
         ) : (
@@ -319,7 +243,7 @@ const HomeView: React.FC = () => {
               <h2 className="text-2xl font-bold">{selectedClass.name}</h2>
               <button
                 onClick={closeModal}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-500 hover:text-gray-300"
               >
                 <X size={24} />
               </button>
@@ -345,11 +269,18 @@ const HomeView: React.FC = () => {
                 <span>{selectedClass.intensity}</span>
               </div>
             </div>
-            {user?.role === "user" && (
-              <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-4">
+              {user?.role === "user" ? (
                 <Button content="Schedule" onClick={onClick} />
-              </div>
-            )}
+              ) : (
+                <button
+                  className="px-5 py-2 font-bold tracking-wide rounded-md bg-gray-600 text-sm text-white opacity-50 cursor-not-allowed"
+                  disabled
+                >
+                  Schedule
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
