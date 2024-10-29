@@ -4,6 +4,7 @@ import { UserContext } from '@/context/user';
 import { useRouter } from 'next/navigation';
 import { getUsers, changeUserRole } from '@/lib/server/fetchUsers';
 import { IUser } from '@/interfaces/interfaces';
+import Swal from 'sweetalert2';
 
 export default function Users() {
     const router = useRouter();
@@ -27,11 +28,31 @@ export default function Users() {
         try {
             await changeUserRole(id, newRole);
             setUsers(users.filter(user => user.id !== id));
-            alert('Rol cambiado exitosamente');
+            Swal.fire({
+                title: 'Yey!',
+                text: 'Role changed successfully',
+                icon: 'success',
+                customClass: {
+                  popup: 'bg-[#222222] text-white',
+                  title: 'text-[#B0E9FF]',
+                  confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+                },
+                buttonsStyling: false,
+              });
         } catch (error) {
             if (error instanceof Error) {
                 console.error('Error changing user role:', error.message);
-                alert(`Error al cambiar el rol: ${error.message}`);
+                Swal.fire({
+                    title: 'Ups!',
+                    text: 'Error when changing role',
+                    icon: 'error',
+                    customClass: {
+                      popup: 'bg-[#222222] text-white',
+                      title: 'text-[#B0E9FF]',
+                      confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+                    },
+                    buttonsStyling: false,
+                  });
             } else {
                 console.error('Error changing user role:', error);
                 alert('Error desconocido al cambiar el rol');
@@ -47,7 +68,7 @@ export default function Users() {
         }
     }, [user, router]);
 
-    if (loading) return <p className="text-white">Cargando usuarios...</p>;
+    if (loading) return <p className="text-white">Loading users...</p>;
 
     return (
         <div className="bg-black text-white min-h-screen p-8">
@@ -61,13 +82,13 @@ export default function Users() {
                                 onClick={() => handleChangeRole(u.id, 'coach')}
                                 className="bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300 hover:bg-red-500"
                             >
-                                Cambiar a Coach
+                                Change to Coach
                             </button>
                             <button
                                 onClick={() => handleChangeRole(u.id, 'admin')}
                                 className="bg-red-600 text-white px-4 py-2 rounded-lg transition duration-300 hover:bg-red-500"
                             >
-                                Cambiar a Admin
+                                Change to Admin
                             </button>
                         </div>
                     </li>

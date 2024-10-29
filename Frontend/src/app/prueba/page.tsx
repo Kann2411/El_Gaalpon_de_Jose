@@ -1,11 +1,12 @@
-
-
 // "use client";
 // import React, { useState, useEffect, useContext } from "react";
 // import { ChevronLeft, ChevronRight, Clock, Zap, X } from "lucide-react";
 // import { getClassData } from "@/lib/server/fetchClasses";
 // import { UserContext } from "@/context/user";
 // import Button from "@/components/Button/Button";
+// import Swal from "sweetalert2";
+// import { useSearch } from "@/context/SearchContext";
+
 
 // interface ClassInfo {
 //   id: number;
@@ -68,6 +69,8 @@
 //   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
 //   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 //   const [isAnimating, setIsAnimating] = useState(false);
+  
+//   const { searchQuery } = useSearch();
 
 //   const onClick = async () => {
 //     if (!selectedClass || !user) {
@@ -82,7 +85,7 @@
 //       const userId = user.id; // Asumiendo que tienes el ID del usuario en el contexto `UserContext`
 //       console.log("userId" + userId);
 //       const response = await fetch(
-//         `http://localhost:3000/class/${claseId}/register/${userId}`,
+//         `http://localhost:3000/classRegistration/${claseId}/register/${userId}`,
 //         {
 //           method: "POST",
 //           headers: {
@@ -100,18 +103,54 @@
 //       }
 
 //       const data = await response.json();
-//       alert("Class reserved successfully!");
+//       Swal.fire({
+//         title: 'Yey!',
+//         text: 'Class reserved successfully!',
+//         icon: 'success',
+//         customClass: {
+//           popup: 'bg-[#222222] text-white',
+//           title: 'text-[#B0E9FF]',
+//           confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+//         },
+//         buttonsStyling: false,
+//       });
 //       console.log("Class reserved successfully:", data);
 //     } catch (error: unknown) {
 //       // Aquí hacemos una afirmación de tipo
 //       if (error instanceof Error) {
-//         alert(`Error reserving the class: ${error.message}`);
+//         // Puedes descomponer el mensaje o añadir información adicional
+//         const detailedMessage = `Error reserving the class: ${error.message}\nStack trace: ${error.stack}`;
+//         Swal.fire({
+//           title: 'Ups!',
+//           text: 'Error reserving the class',
+//           icon: 'error',
+//           customClass: {
+//             popup: 'bg-[#222222] text-white',
+//             title: 'text-[#B0E9FF]',
+//             confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+//           },
+//           buttonsStyling: false,
+//         });
+//         console.error("Error reserving the class:", detailedMessage);
+//       } else if (typeof error === 'string') {
+//         Swal.fire({
+//           title: 'Ups!',
+//           text: 'Error reserving the class',
+//           icon: 'error',
+//           customClass: {
+//             popup: 'bg-[#222222] text-white',
+//             title: 'text-[#B0E9FF]',
+//             confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+//           },
+//           buttonsStyling: false,
+//         });
 //         console.error("Error reserving the class:", error);
 //       } else {
 //         alert("An unknown error occurred.");
 //         console.error("Unknown error:", error);
 //       }
 //     }
+    
 //   };
 
 //   const fetchClassData = async () => {
@@ -120,7 +159,7 @@
 //       // Asegúrate de que data es un array
 //       setClassesData(Array.isArray(data) ? data : []);
 //     } catch (error) {
-//       console.error('Error fetching class data:', error);
+//       console.error("Error fetching class data:", error);
 //       // Si ocurre un error, también podrías establecer un array vacío
 //       setClassesData([]);
 //     }
@@ -175,6 +214,11 @@
 //     }
 //     return images;
 //   };
+
+//   // Filtra las clases basándose en la consulta de búsqueda
+//   const filteredClasses = classesData.filter((classInfo) =>
+//     classInfo.name.toLowerCase().includes(searchQuery.toLowerCase())
+//   );
 
 //   return (
 //     <div className="min-h-screen bg-black text-white flex flex-col items-center">
@@ -236,8 +280,8 @@
 
 //       {/* Class Grid */}
 //       <div className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-//         {classesData.length > 0 ? (
-//           classesData.map((classInfo) => (
+//         {filteredClasses.length > 0 ? (
+//           filteredClasses.map((classInfo) => (
 //             <div
 //               key={classInfo.id}
 //               className="bg-zinc-900 max-w-md w-full mx-auto pt-1 pb-6 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105"

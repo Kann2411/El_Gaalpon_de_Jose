@@ -26,37 +26,72 @@ export class Pago {
   })
   monto: number;
 
+  @ApiProperty({
+    description: 'ID de la preferencia de pago en MercadoPago',
+    type: 'string',
+  })
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  preferenceId: string;
+
+  @ApiProperty({
+    description: 'ID del usuario que realiza el pago',
+    type: 'string',
+    format: 'uuid',
+  })
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  userId: string;
+
+  @ApiProperty({
+    description: 'Método de pago utilizado',
+    enum: MetodoPago,
+  })
   @Column({
     default: MetodoPago.MERCADOPAGO,
   })
   metodoPago: MetodoPago;
 
-  @Column()
+  @ApiProperty({
+    description: 'Fecha en que se realizó el pago',
+    type: 'date',
+  })
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   fecha: Date;
 
+  @ApiProperty({
+    description: 'Estado actual del pago',
+    enum: EstadoPago,
+  })
   @Column({
     default: EstadoPago.PENDIENTE,
   })
   estado: EstadoPago;
 
   @ApiProperty({
-    description: 'ID del usuario que realizó el pago',
-    type: 'string',
-    format: 'uuid',
-  })
-  @Column({
-    type: 'uuid', 
-    nullable: false,
-  })
-  usuarioId: string;
-
-  @ApiProperty({
-    description: 'ID de la preferencia de Mercado Pago',
+    description: 'Moneda utilizada para el pago',
     type: 'string',
   })
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  preferenceId: string;
+  moneda: string;
+
+  // @ApiProperty({
+  //   description: 'URL de redirección para confirmar el pago en MercadoPago',
+  //   type: 'string',
+  // })
+  // @Column({
+  //   type: 'varchar',
+  //   nullable: true,
+  // })
+  // redirectUrl: string;
 }

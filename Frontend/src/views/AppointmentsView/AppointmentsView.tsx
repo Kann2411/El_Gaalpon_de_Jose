@@ -1,7 +1,8 @@
-'use client'
+'use client';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@/context/user';
 import { getClassRegistration } from '@/lib/server/fetchClasses';
+import Loading from '@/components/Loading/Loading'; // Asegúrate de que la ruta sea correcta
 
 const AppointmentsView: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -12,7 +13,7 @@ const AppointmentsView: React.FC = () => {
       {userId ? (
         <ReservedClasses userId={userId} />
       ) : (
-        <p className="text-white">No se ha encontrado el ID del usuario.</p>
+        <p className="text-white">User id not found</p>
       )}
     </div>
   );
@@ -40,6 +41,7 @@ interface ReservedClassesProps {
 
 const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
+  const [loading, setLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -47,10 +49,14 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
       if (data) {
         setClasses(data);
       }
+      setLoading(false); // Cambiar el estado de carga a false después de obtener los datos
     };
 
     fetchClasses();
   }, [userId]);
+
+  // Mostrar el componente de carga si está en estado de carga
+  if (loading) return <Loading />;
 
   return (
     <div className="bg-black p-6 rounded-lg shadow-lg">
@@ -81,7 +87,9 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
           ))}
         </div>
       ) : (
-        <p className="text-white text-center container mx-auto p-8 bg-zinc-950 shadow-lg">There's no reservated classes</p>
+        <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
+          <p className="text-white">There's no reservated classes</p>
+        </div>
       )}
     </div>
   );

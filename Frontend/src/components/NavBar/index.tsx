@@ -7,16 +7,46 @@ import { usePathname, useRouter } from "next/navigation";
 import { UserContext } from "@/context/user";
 import ModalProfilePhoto from "../ModalProfilePhoto/ModalProfilePhoto";
 import Swal from "sweetalert2";
+import { Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useSearch } from "@/context/SearchContext";
 
 const NavBarComponent = () => {
-  const { user, logOut, isLogged, setUser, imgUrl, setImgUrl } =
-    useContext(UserContext);
+  const { user, logOut, isLogged, imgUrl, setImgUrl } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } = useSearch();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (!isSearchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 100);
+    }
+  };
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSearchOpen(false);
+  };
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+      setIsSearchOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
 
   const toggleMenu = () => {
@@ -32,7 +62,7 @@ const NavBarComponent = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
-      setShowModal(true); 
+      setShowModal(true);
     }
   };
 
@@ -43,13 +73,11 @@ const NavBarComponent = () => {
 
   const handleUpload = async () => {
     if (!file || !user) return;
-    console.log(user.id);
-    console.log("user:" + user.imgUrl);
 
     const formData = new FormData();
     formData.append("file", file);
 
-    setShowModal(false); // Cerrar el modal después de subir la foto
+    setShowModal(false);
     setFile(null);
 
     try {
@@ -64,19 +92,23 @@ const NavBarComponent = () => {
       if (response.ok) {
         const data = await response.json();
         setImgUrl(() => data.imgUrl);
-        localStorage.setItem("imgUrl", data.imgUrl);
+
+        // Actualiza el localStorage con la nueva imagen
+        const userId = user.id;
+        localStorage.setItem(`imgUrl_${userId}`, data.imgUrl);
+
         Swal.fire({
-            title: 'Super!',
-            text: 'Profile photo updated successfully!',
-            icon: 'success',
-            customClass: {
-              popup: 'bg-black text-white', 
-              title: 'text-red-600',
-              confirmButton: 'bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md',
-            },
-            buttonsStyling: false, 
-          })
-       
+          title: "Super!",
+          text: "Profile photo updated successfully!",
+          icon: "success",
+          customClass: {
+            popup: "bg-black text-white",
+            title: "text-red-600",
+            confirmButton:
+              "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md",
+          },
+          buttonsStyling: false,
+        });
         setIsMenuOpen(false);
       } else {
         const errorData = await response.json();
@@ -131,7 +163,7 @@ const NavBarComponent = () => {
   }, []);
 
   return (
-    <header className="flex items-center justify-between p-4 bg-black text-white shadow-md">
+    <header className="fixed top-0 left-0  right-0 flex items-center justify-between p-4 bg-black text-white shadow-md z-50">
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={60} height={60} />
         <div className="ml-4 text-2xl font-bold">FitZone</div>
@@ -139,52 +171,56 @@ const NavBarComponent = () => {
 
       {/* Menús basados en el rol del usuario */}
       {user?.role === "user" ? (
-  <nav className="flex-1 flex items-center justify-center">
-    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Classes", "Plans", "Contact Us", "Appointments", "Training Plans"].map((item, index) => {
-        const lowerCaseItem = item.toLowerCase();
-        const route =
-          lowerCaseItem === "classes"
-            ? "/home"
-            : lowerCaseItem === "plans"
-            ? "/plans"
-            : lowerCaseItem === "contact us"
-            ? "/contact"
-            : lowerCaseItem === "appointments"
-            ? "/appointments"
-            : "/training-plans"
+        <nav className="flex-1 flex items-center justify-center">
+          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+            {[
+              "Classes",
+              "Plans",
+              "Appointments",
+              "Training Plans",
+            ].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase();
+              const route =
+                lowerCaseItem === "classes"
+                  ? "/home"
+                  : lowerCaseItem === "plans"
+                  ? "/plans"
+                  : lowerCaseItem === "appointments"
+                  ? "/appointments"
+                  : "/training-plans";
 
-        return (
-          <li key={index} className="relative group">
-            <Link
-              href={route}
-              className="text-white text-sm sm:text-base font-medium px-3 py-2"
-            >
-              {item}
-            </Link>
-            <span
-              className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                pathname === route ? "scale-x-100" : "scale-x-0"}`}
-            />
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-) : user?.role === "admin" ? (
-  <nav className="flex-1 flex items-center justify-center">
-    <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-      {["Users", "Coaches", "Admins", "Classes"].map((item, index) => {
-        const lowerCaseItem = item.toLowerCase();
-        const route =
-          lowerCaseItem === "users"
-            ? "/users"
-            : lowerCaseItem === "coaches"
-            ? "/coaches"
-             : lowerCaseItem === "admins"
-            ? "/admins"
-            : "/classes"
+              return (
+                <li key={index} className="relative group">
+                  <Link
+                    href={route}
+                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                  >
+                    {item}
+                  </Link>
+                  <span
+                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                      pathname === route ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      ) : user?.role === "admin" ? (
+        <nav className="flex-1 flex items-center justify-center">
+          <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
+            {["Users", "Coaches", "Admins", "Classes"].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase();
+              const route =
+                lowerCaseItem === "users"
+                  ? "/users"
+                  : lowerCaseItem === "coaches"
+                  ? "/coaches"
+                  : lowerCaseItem === "admins"
+                  ? "/admins"
+                  : "/classes";
 
               return (
                 <li key={index} className="relative group">
@@ -237,14 +273,12 @@ const NavBarComponent = () => {
       ) : !isLogged ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Home", "Plans", "Contact Us"].map((item, index) => {
+            {["Classes", "Plans"].map((item, index) => {
               const lowerCaseItem = item.toLowerCase();
               const route =
-                lowerCaseItem === "home"
+                lowerCaseItem === "classes"
                   ? "/home"
-                  : lowerCaseItem === "plans"
-                  ? "/plans"
-                  : "/contact";
+                  : "/plans"
 
               return (
                 <li key={index} className="relative group">
@@ -266,6 +300,41 @@ const NavBarComponent = () => {
           </ul>
         </nav>
       ) : null}
+
+      {/* Icono de búsqueda solo en /home */}
+      {pathname === "/home" && (
+        <div className="relative ml-auto mr-5" ref={searchContainerRef}>
+          <button
+            onClick={toggleSearch}
+            className="p-2 text-white hover:text-red-600 transition-colors duration-200"
+          >
+            <Search />
+          </button>
+          <AnimatePresence>
+            {isSearchOpen && (
+              <motion.form
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                className="absolute right-0 top-full mt-2"
+                onSubmit={handleSearchSubmit}
+              >
+                <input
+                  type="text"
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="p-2 bg-gray-800 text-white rounded-md"
+                  placeholder="Search..."
+                />
+                <button type="submit" className="hidden">
+                  Search
+                </button>
+              </motion.form>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       {isLogged ? (
         <div className="relative" ref={menuRef}>
@@ -295,13 +364,14 @@ const NavBarComponent = () => {
               <>
                 <div className="px-4 py-2 text-black">
                   <p className="font-medium">{user?.name}</p>
+                  <p className="font-light">{user?.email}</p>
                 </div>
-                <button
+            {/*     <button
                   onClick={() => router.push("/dashboard")}
                   className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
                 >
                   Dashboard
-                </button>
+                </button> */}
 
                 <button
                   onClick={handleLogout}
