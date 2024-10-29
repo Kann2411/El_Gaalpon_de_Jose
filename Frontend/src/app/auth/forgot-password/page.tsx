@@ -17,14 +17,11 @@ const ForgotPasswordView = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch(
-          "http://localhost:3000/auth/forgot-password",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: values.email }),
-          }
-        );
+        const response = await fetch("https://el-gaalpon-de-jose.onrender.com/auth/forgot-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: values.email }),
+        });
         if (!response.ok) throw new Error("Error sending email");
 
         setEmailSent(true);

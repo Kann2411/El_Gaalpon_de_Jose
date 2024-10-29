@@ -1,6 +1,6 @@
 export async function getMembresia() {
     try {
-      const response = await fetch('http://localhost:3000/membresia');
+      const response = await fetch('https://el-gaalpon-de-jose.onrender.com/membresia');
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

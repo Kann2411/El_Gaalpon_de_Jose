@@ -119,7 +119,7 @@ const router = useRouter()
     console.log(suscripcionData)
   
     try {
-      const response = await fetch("http://localhost:3000/mercadopago/create_preference", {
+      const response = await fetch("https://el-gaalpon-de-jose.onrender.com/mercadopago/create_preference", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
