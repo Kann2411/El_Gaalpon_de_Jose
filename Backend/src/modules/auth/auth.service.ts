@@ -39,8 +39,7 @@ export class AuthService {
       `${profile?.name?.givenName || ''} ${profile?.name?.familyName || ''}` ||
       'Sin Nombre';
 
-      const imgUrl = profile?._json?.picture;
-
+    const imgUrl = profile?._json?.picture;
 
     let user = await this.usersRepository.findByEmail(email);
 

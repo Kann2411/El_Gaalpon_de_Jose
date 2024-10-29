@@ -1,8 +1,4 @@
 import React from 'react';
-import hombre1 from '../../public/icons/hombre1.png';
-import mujer2 from '../../public/icons/mujer2.png';  
-import niño3 from '../../public/icons/nino3.png';
-import Image from 'next/image';
 
 const TestimonialCard: React.FC = () => {
   return (
