@@ -90,12 +90,13 @@ export interface FormValues {
     intensity: string;
     capacity: number;
     status: string;
-    file: File | null; //cambio
+    image: File | null;
     description: string;
     duration: string;
     day: string;
     starttime: string;
     endtime: string;
+    coach: Partial<IUser>;
   }
   
 

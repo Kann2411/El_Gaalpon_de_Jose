@@ -1,15 +1,17 @@
 "use client";
-import React, { useState } from "react"; // Importar useState
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { GymClass } from "@/interfaces/interfaces";
+import { GymClass, IUser } from "@/interfaces/interfaces"; // Asegúrate de importar IUser
 import { createGymClass } from "@/lib/server/fetchClasses";
 import { uploadImage } from "@/lib/server/fetchCoaches";
+import { getUsers } from "@/lib/server/fetchUsers"; // Asegúrate de importar la función para obtener usuarios
 import Loading from "@/components/Loading/Loading"; // Asegúrate de que la ruta sea correcta
 import Swal from "sweetalert2";
 
 const CreateGymClassForm: React.FC = () => {
   const [loading, setLoading] = useState(false); // Estado de carga
+  const [coaches, setCoaches] = useState<IUser[]>([]); // Cambiado el tipo a IUser[]
 
   const formik = useFormik<GymClass>({
     initialValues: {
@@ -17,12 +19,17 @@ const CreateGymClassForm: React.FC = () => {
       intensity: "",
       capacity: 0,
       status: "Active",
-      file: null, //cambio
+      image: null,
       description: "",
       duration: "",
       day: "",
       starttime: "",
       endtime: "",
+      coach: {
+        id: "",
+        name: "",
+        email: "",
+      },
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
@@ -31,7 +38,7 @@ const CreateGymClassForm: React.FC = () => {
         .required("Capacity is required")
         .min(1, "Capacity must be at least 1"),
       status: Yup.string().required("Status is required"),
-      file: Yup.mixed() //cambio
+      image: Yup.mixed()
         .required("A file is required")
         .test("fileSize", "The file must be smaller than 200KB", (value) => {
           return value && value instanceof File && value.size <= 200 * 1024;
@@ -48,7 +55,7 @@ const CreateGymClassForm: React.FC = () => {
               )
             );
           }
-        ), //cambio
+        ),
       description: Yup.string().required("Description is required"),
       duration: Yup.string().required("Duration is required"),
       day: Yup.string().required("Day is required"),
@@ -56,14 +63,17 @@ const CreateGymClassForm: React.FC = () => {
       endtime: Yup.string().required("End time is required"),
     }),
 
-    onSubmit: async (values, { resetForm }) => { //cambio
+    onSubmit: async (values, { resetForm }) => {
       setLoading(true);
+
+      console.log("Submitting values de class:", values);
+
       try {
         const gymClassResponse = await createGymClass(values);
-        if (values.file) {
+        if (values.image) {
           const uploadResponse = await uploadImage(
             gymClassResponse.id,
-            values.file!
+            values.image!
           );
           if (uploadResponse) {
             Swal.fire({
@@ -98,7 +108,27 @@ const CreateGymClassForm: React.FC = () => {
         setLoading(false); // Desactivar el estado de carga
       }
     },
-  }); //cambio
+  });
+
+  // useEffect para obtener los coaches
+  useEffect(() => {
+    const fetchCoaches = async () => {
+      try {
+        const users = await getUsers(); // Asegúrate de que esta función devuelva una lista de usuarios
+        const filteredCoaches = users.filter((user) => user.role === "coach"); // Filtrar por rol "coach"
+        setCoaches(filteredCoaches); // Actualizar el estado de coaches
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchCoaches(); // Llamar a la función para obtener los coaches
+  }, []);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0]; // Obtener el primer archivo
+    formik.setFieldValue("image", file); // Establecer el valor del archivo en Formik
+  };
 
   if (loading) {
     return <Loading />; // Mostrar el componente de carga
@@ -248,21 +278,18 @@ const CreateGymClassForm: React.FC = () => {
               )}
             </div>
             {/* Image cambio*/}
-            <div className="flex flex-col mb-4">
-              <label htmlFor="file">Image</label>
+            <div>
+              <label htmlFor="image">Image</label>
               <input
-                id="file"
-                name="file"
+                id="image"
+                name="image"
                 type="file"
-                className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2"
-                onChange={(event) => {
-                  formik.setFieldValue("file", event.currentTarget.files![0]);
-                }}
-                onBlur={formik.handleBlur}
+                onChange={handleFileChange} // Manejar el cambio de archivo
+                className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2 w-full"
               />
-              {formik.touched.file && formik.errors.file ? (
-                <div className="text-red-500 text-sm">{formik.errors.file}</div>
-              ) : null}
+              {formik.errors.image && formik.touched.image && (
+                <div className="text-red-500">{formik.errors.image}</div>
+              )}
             </div>
             {/* Description */}
             <div className="flex flex-col col-span-2">
@@ -280,6 +307,24 @@ const CreateGymClassForm: React.FC = () => {
                   {formik.errors.description}
                 </div>
               )}
+            </div>
+            {/* Campo para seleccionar el coach */}
+            <div>
+              <label htmlFor="coach.id">Coach</label>
+              <select
+                id="coach.id"
+                name="coach.id"
+                onChange={formik.handleChange}
+                value={formik.values.coach.id}
+                className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2 w-full"
+              >
+                <option value="">Select a coach</option>
+                {coaches.map((coach) => (
+                  <option key={coach.id} value={coach.id}>
+                    {coach.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <button
