@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEnum,
   IsInt,
@@ -35,13 +36,14 @@ export class CreateClassDto {
   status: EstadoClase;
 
   @ApiProperty({
-    description: 'Imagen de la clase',
-    example: 'yogaClass.jpg',
-    default: 'defaultImage.webp',
+    description: 'Imagen de la clase como archivo',
+    type: 'string',
+    format: 'binary',
+    required: false,
   })
-  @IsString()
   @IsOptional()
-  image: string = 'defaultImage.webp';
+  @Type(() => Object)
+  image?: Express.Multer.File;
 
   @ApiProperty({
     description: 'Descripción de la clase',

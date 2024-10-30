@@ -5,6 +5,7 @@ import { DataSource, Repository } from 'typeorm';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
 import { User } from '../users/users.entity';
+import { FileRepository } from '../file-upload/file-upload.repository';
 
 @Injectable()
 export class ClassRepository {
@@ -14,6 +15,7 @@ export class ClassRepository {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectDataSource() private dataSource: DataSource,
+    private readonly fileRepository: FileRepository,
   ) {}
 
   async getClasses() {
@@ -40,12 +42,11 @@ export class ClassRepository {
     }
   }
 
-  async createClass(classData: CreateClassDto) {
+  async createClass(classData: CreateClassDto, file: Express.Multer.File) {
     const {
       name,
       capacity,
       status,
-      image,
       description,
       duration,
       intensity,
@@ -60,11 +61,16 @@ export class ClassRepository {
       throw new BadRequestException(`coach con id ${coachUser} not found`);
     }
 
+    const uploadResult = await this.fileRepository.uploadImage(file);
+    if (!uploadResult) {
+      throw new BadRequestException('Error al subir la imagen');
+    }
+
     const nuevaClase = new Class();
     nuevaClase.name = name;
-    nuevaClase.capacity = capacity;
+    nuevaClase.capacity = Number(capacity);
     nuevaClase.status = status;
-    nuevaClase.image = image;
+    nuevaClase.image = uploadResult.secure_url;
     nuevaClase.description = description;
     nuevaClase.duration = duration;
     nuevaClase.intensity = intensity;
