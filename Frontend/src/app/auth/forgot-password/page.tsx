@@ -18,6 +18,7 @@ const ForgotPasswordView = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
+
         const response = await fetch(`${fitZoneApi}/auth/forgot-password`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -33,7 +34,8 @@ const ForgotPasswordView = () => {
           customClass: {
             popup: "bg-[#222222] text-white",
             title: "text-[#B0E9FF]",
-            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });
@@ -45,7 +47,8 @@ const ForgotPasswordView = () => {
           customClass: {
             popup: "bg-[#222222] text-white",
             title: "text-[#B0E9FF]",
-            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });

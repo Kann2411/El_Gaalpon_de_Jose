@@ -64,9 +64,7 @@ export default function Admins() {
     useEffect(() => {
         if (user?.role === 'admin') {
             fetchAdmins();
-        } else {
-            router.push('/');
-        }
+        } 
     }, [user, router]);
 
     // Mostrar el componente de carga si está en estado de carga

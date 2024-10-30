@@ -1,6 +1,7 @@
 import { fitZoneApi } from "@/api/rutaApi";
 
 export async function getMembresia() {
+
     try {
       const response = await fetch(`${fitZoneApi}/membresia`);
       
@@ -14,6 +15,5 @@ export async function getMembresia() {
     } catch (error) {
       console.error('Error fetching membresia:', error);
     }
-  }
-  
-  
+
+}

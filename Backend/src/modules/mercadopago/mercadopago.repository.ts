@@ -77,7 +77,7 @@ export class MercadoPagoRepository {
         email: 'test_user_1072648989@testuser.com',
       },
       // Url de la aplicación deployada o un url de un tunnel
-      notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}`,
+      notification_url: `http://localhost:3000/mercadopago/payment?userId=${bodySuscription.userId}`,
     };
     try {
       const preference = await new Preference(client).create({ body });
