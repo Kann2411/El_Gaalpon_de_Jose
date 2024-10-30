@@ -1,6 +1,8 @@
+import { fitZoneApi } from "@/api/rutaApi";
+
 export async function getMembresia() {
     try {
-      const response = await fetch('https://el-gaalpon-de-jose.onrender.com/membresia');
+      const response = await fetch(`${fitZoneApi}/membresia`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -1,3 +1,5 @@
+import { fitZoneApi } from "@/api/rutaApi";
+
 export async function createPlan(description: string) {
     try {
         const token = localStorage.getItem('token');
@@ -10,7 +12,7 @@ export async function createPlan(description: string) {
             description: description
         };
       
-        const response = await fetch("https://el-gaalpon-de-jose.onrender.com/training-plans", {
+        const response = await fetch(`${fitZoneApi}/training-plans`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +53,7 @@ export async function uploadImage(id: string, file: File) {
         const formData = new FormData();
         formData.append('file', file); 
 
-        const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/files/uploadImage/${id}`, {
+        const response = await fetch(`${fitZoneApi}/files/uploadImage/${id}`, {
             method: "PATCH",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -78,7 +80,7 @@ export async function uploadImage(id: string, file: File) {
 export const deleteTrainingPlan = async (id: string) => {
     try {
         const token = localStorage.getItem('token'); 
-        const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/training-plans/${id}`, {
+        const response = await fetch(`${fitZoneApi}/training-plans/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -101,7 +103,7 @@ export const deleteTrainingPlan = async (id: string) => {
 export const getTrainingPlans = async () => {
     try {
         const token = localStorage.getItem('token'); 
-        const response = await fetch('https://el-gaalpon-de-jose.onrender.com/training-plans', {
+        const response = await fetch(`${fitZoneApi}/training-plans`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,

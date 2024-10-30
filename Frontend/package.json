@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.3",
+    "dotenv": "^16.4.5",
     "el-galpon-de-jose": "file:",
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
