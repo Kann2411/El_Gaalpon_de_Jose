@@ -25,12 +25,12 @@ export interface IUser {
     phone: string; 
     dni: string;
     imgUrl?: string;
-    image?: string;
     registrationMethod?: string; 
     password: string;
     confirmPassword: string;
     role?: string | 'admin' | 'user' | 'coach'; 
     token?: string;
+    isBanned?: boolean
 
   }
 
@@ -90,7 +90,7 @@ export interface FormValues {
     intensity: string;
     capacity: number;
     status: string;
-    image: string;
+    file: File | null; //cambio
     description: string;
     duration: string;
     day: string;
@@ -103,3 +103,24 @@ export interface FormValues {
     description: string;
     file: File | null;
 }
+
+export interface IRegistration {
+    id: string;
+    user: IUser
+}
+
+export interface IClassInfo {
+    id: string;
+    name: string;
+    intensity: string;
+    capacity: string;
+    status: string;
+    image: string;
+    description: string;
+    duration: string;
+    day: string;
+    starttime: string;
+    endtime: string;
+    registrations: IRegistration[]
+}
+

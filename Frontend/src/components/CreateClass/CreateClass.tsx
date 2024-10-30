@@ -4,8 +4,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { GymClass } from "@/interfaces/interfaces";
 import { createGymClass } from "@/lib/server/fetchClasses";
+import { uploadImage } from "@/lib/server/fetchCoaches";
 import Loading from "@/components/Loading/Loading"; // Asegúrate de que la ruta sea correcta
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const CreateGymClassForm: React.FC = () => {
   const [loading, setLoading] = useState(false); // Estado de carga
@@ -16,7 +17,7 @@ const CreateGymClassForm: React.FC = () => {
       intensity: "",
       capacity: 0,
       status: "Active",
-      image: "",
+      file: null, //cambio
       description: "",
       duration: "",
       day: "",
@@ -30,9 +31,24 @@ const CreateGymClassForm: React.FC = () => {
         .required("Capacity is required")
         .min(1, "Capacity must be at least 1"),
       status: Yup.string().required("Status is required"),
-      image: Yup.string()
-        .url("Must be a valid URL")
-        .required("Image is required"),
+      file: Yup.mixed() //cambio
+        .required("A file is required")
+        .test("fileSize", "The file must be smaller than 200KB", (value) => {
+          return value && value instanceof File && value.size <= 200 * 1024;
+        })
+        .test(
+          "fileType",
+          "Only JPG, JPEG, PNG, or WEBP files are allowed",
+          (value) => {
+            return (
+              value &&
+              value instanceof File &&
+              ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+                value.type
+              )
+            );
+          }
+        ), //cambio
       description: Yup.string().required("Description is required"),
       duration: Yup.string().required("Duration is required"),
       day: Yup.string().required("Day is required"),
@@ -40,32 +56,41 @@ const CreateGymClassForm: React.FC = () => {
       endtime: Yup.string().required("End time is required"),
     }),
 
-    onSubmit: async (values) => {
-      setLoading(true); // Activar el estado de carga
+    onSubmit: async (values, { resetForm }) => { //cambio
+      setLoading(true);
       try {
-        const response = await createGymClass(values);
+        const gymClassResponse = await createGymClass(values);
+        if (values.file) {
+          const uploadResponse = await uploadImage(
+            gymClassResponse.id,
+            values.file!
+          );
+          if (uploadResponse) {
+            Swal.fire({
+              title: "Yey!",
+              text: "Class created successfully!",
+              icon: "success",
+              customClass: {
+                popup: "bg-[#222222] text-white",
+                title: "text-[#B0E9FF]",
+                confirmButton:
+                  "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+              },
+              buttonsStyling: false,
+            });
+            resetForm();
+          }
+        }
+      } catch (error: any) {
         Swal.fire({
-          title: 'Yey!',
-          text: 'Class created successfully!',
-          icon: 'success',
+          title: "Ups!",
+          text: "Error when creating the plan",
+          icon: "error",
           customClass: {
-            popup: 'bg-[#222222] text-white',
-            title: 'text-[#B0E9FF]',
-            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-          },
-          buttonsStyling: false,
-        });
-        formik.resetForm();
-      } catch (error) {
-        const errorMessage = (error as Error).message || "Unknown error";
-        Swal.fire({
-          title: 'Ups!',
-          text: 'Error when creating the class',
-          icon: 'error',
-          customClass: {
-            popup: 'bg-[#222222] text-white',
-            title: 'text-[#B0E9FF]',
-            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+            popup: "bg-[#222222] text-white",
+            title: "text-[#B0E9FF]",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });
@@ -73,7 +98,7 @@ const CreateGymClassForm: React.FC = () => {
         setLoading(false); // Desactivar el estado de carga
       }
     },
-  });
+  }); //cambio
 
   if (loading) {
     return <Loading />; // Mostrar el componente de carga
@@ -222,22 +247,22 @@ const CreateGymClassForm: React.FC = () => {
                 </div>
               )}
             </div>
-            {/* Image */}
-            <div className="flex flex-col col-span-2">
-              <label htmlFor="image">URL Image</label>
+            {/* Image cambio*/}
+            <div className="flex flex-col mb-4">
+              <label htmlFor="file">Image</label>
               <input
-                id="image"
-                name="image"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.image}
-                className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2 w-full" // Asegura que ocupe todo el ancho
+                id="file"
+                name="file"
+                type="file"
+                className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2"
+                onChange={(event) => {
+                  formik.setFieldValue("file", event.currentTarget.files![0]);
+                }}
+                onBlur={formik.handleBlur}
               />
-              {formik.errors.image && (
-                <div className="text-red-500 text-sm">
-                  {formik.errors.image}
-                </div>
-              )}
+              {formik.touched.file && formik.errors.file ? (
+                <div className="text-red-500 text-sm">{formik.errors.file}</div>
+              ) : null}
             </div>
             {/* Description */}
             <div className="flex flex-col col-span-2">

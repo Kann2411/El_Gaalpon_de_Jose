@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { signIn } = useContext(UserContext);
+  const { signIn, user } = useContext(UserContext);
   const [focusedField, setFocusedField] = useState("");
 
   const initialValues = {
@@ -37,8 +37,14 @@ export default function LoginForm() {
         },
         buttonsStyling: false,
       });
-
-      router.push("/home");
+      if(user?.role === 'admin') {
+        router.push("/users");
+      } else if (user?.role === 'coach') {
+        router.push("/training-management");
+      } else if (user?.role === 'user') {
+        router.push("/home");
+      } 
+     
     } else {
       Swal.fire({
         title: "Ups!",

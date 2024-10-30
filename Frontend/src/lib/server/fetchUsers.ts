@@ -1,16 +1,23 @@
+import { fitZoneApi } from "@/api/rutaApi";
 import { UserContext } from "@/context/user";
-import { ILogin, IRegister, IUser, IUserResponse } from "@/interfaces/interfaces";
+import {
+  ILogin,
+  IRegister,
+  IUser,
+  IUserResponse,
+} from "@/interfaces/interfaces";
 import { useContext } from "react";
 
 // Asegúrate de que el tipo devuelto sea IUserResponse en lugar de IUser
-export async function postSignIn(credential: ILogin): Promise<IUserResponse | null> {
+export async function postSignIn(
+  credential: ILogin
+): Promise<IUserResponse | null> {
   try {
-      if (!credential.email || !credential.password) {
-          console.error("Email y contraseña son obligatorios");
-          return null;
-      }
-
-      const response = await fetch("https://el-gaalpon-de-jose.onrender.com/auth/signin", {
+    if (!credential.email || !credential.password) {
+      console.error("Email y contraseña son obligatorios");
+      return null;
+    }
+      const response = await fetch(`${fitZoneApi}/auth/signin`, {
           method: "POST",
           headers: {
               "Content-Type": "application/json"
@@ -18,29 +25,31 @@ export async function postSignIn(credential: ILogin): Promise<IUserResponse | nu
           body: JSON.stringify(credential)
       });
 
-      if (!response.ok) {
-          const errorData = await response.json();
-          console.error("Error del servidor:", errorData);
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error del servidor:", errorData);
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
 
-      const result: IUserResponse = await response.json(); // Asegúrate de que el resultado cumpla con IUserResponse
-      return result;
-
+    const result: IUserResponse = await response.json(); // Asegúrate de que el resultado cumpla con IUserResponse
+    return result;
   } catch (error) {
-      if (error instanceof Error) {
-          console.error("Error durante la solicitud de inicio de sesión:", error.message);
-      } else {
-          console.error("Error inesperado:", error);
-      }
-      return null;        
+    if (error instanceof Error) {
+      console.error(
+        "Error durante la solicitud de inicio de sesión:",
+        error.message
+      );
+    } else {
+      console.error("Error inesperado:", error);
+    }
+    return null;
   }
 }
 
 export async function postSignUp(user: Omit<IUser, "id">) {
   try {
-    console.log("Iniciando la solicitud de registro al backend");
-    const response = await fetch("https://el-gaalpon-de-jose.onrender.com/auth/signup", {
+   
+    const response = await fetch(`${fitZoneApi}/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +62,6 @@ export async function postSignUp(user: Omit<IUser, "id">) {
       console.error("Error del servidor:", errorData); // Para obtener más detalles
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
-    
 
     const result = await response.json();
     console.log("Respuesta del servidor:", result);
@@ -64,14 +72,13 @@ export async function postSignUp(user: Omit<IUser, "id">) {
   }
 }
 
-
 // src/lib/server/fetchUsers.ts
 
 export const getUsers = async (): Promise<IUser[]> => {
   // Suponiendo que guardas el token en localStorage después del inicio de sesión
-  const token = localStorage.getItem('token'); 
+  const token = localStorage.getItem("token");
 
-  const response = await fetch('https://el-gaalpon-de-jose.onrender.com/users', {
+  const response = await fetch(`${fitZoneApi}/users`, {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -80,8 +87,10 @@ export const getUsers = async (): Promise<IUser[]> => {
   });
 
   if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
+    const errorData = await response.json();
+    throw new Error(
+      `HTTP error! Status: ${response.status}, Message: ${errorData.message}`
+    );
   }
 
   return await response.json();
@@ -89,23 +98,28 @@ export const getUsers = async (): Promise<IUser[]> => {
 
 // src/lib/server/fetchUsers.ts
 
-export const changeUserRole = async (userId: string, newRole: 'user' | 'admin' | 'coach') => {
-  const token = localStorage.getItem('token');
+export const changeUserRole = async (
+  userId: string,
+  newRole: "user" | "admin" | "coach"
+) => {
+  const token = localStorage.getItem("token");
   if (!token) {
-      throw new Error('Token no encontrado');
+    throw new Error("Token no encontrado");
   }
 
-  const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/users/changeRole/${userId}?role=${newRole}`, {
+
+  const response = await fetch(`${fitZoneApi}/users/changeRole/${userId}?role=${newRole}`, {
       method: 'PATCH',
       headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-  });
+    }
+  );
 
   if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Error desconocido al cambiar el rol');
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Error desconocido al cambiar el rol");
   }
 
   return await response.json();
@@ -122,9 +136,13 @@ export interface UserDataResponse {
   registrationMethod: string;
 }
 
-export const fetchUserData = async (userId: string, token: string): Promise<UserDataResponse | null> => {
+export const fetchUserData = async (
+  userId: string,
+  token: string
+): Promise<UserDataResponse | null> => {
   try {
-    const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/users/${userId}`, {
+
+    const response = await fetch(`${fitZoneApi}/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

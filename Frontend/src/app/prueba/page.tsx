@@ -7,7 +7,6 @@
 // import Swal from "sweetalert2";
 // import { useSearch } from "@/context/SearchContext";
 
-
 // interface ClassInfo {
 //   id: number;
 //   name: string;
@@ -69,7 +68,7 @@
 //   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
 //   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 //   const [isAnimating, setIsAnimating] = useState(false);
-  
+
 //   const { searchQuery } = useSearch();
 
 //   const onClick = async () => {
@@ -85,7 +84,7 @@
 //       const userId = user.id; // Asumiendo que tienes el ID del usuario en el contexto `UserContext`
 //       console.log("userId" + userId);
 //       const response = await fetch(
-//         `http://localhost:3000/classRegistration/${claseId}/register/${userId}`,
+//         `http://localhost:3000//classRegistration/${claseId}/register/${userId}`,
 //         {
 //           method: "POST",
 //           headers: {
@@ -150,7 +149,7 @@
 //         console.error("Unknown error:", error);
 //       }
 //     }
-    
+
 //   };
 
 //   const fetchClassData = async () => {

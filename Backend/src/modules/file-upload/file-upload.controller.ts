@@ -38,7 +38,7 @@ export class FileUploadController {
     )
     file: Express.Multer.File,
   ) {
-    return this.fileService.updateClassImage(trainingId, file);
+    return this.fileService.updateTrainingPlanImage(trainingId, file);
   }
 
   @Post('profileImages/:id')
