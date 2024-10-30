@@ -5,7 +5,8 @@ import * as Yup from "yup";
 import { UserContext } from "@/context/user";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import Loading from "@/components/Loading/Loading";
+import Loading from '@/components/Loading/Loading';
+import { fitZoneApi } from "@/api/rutaApi";
 
 const ResetPasswordView = () => {
   const { user } = useContext(UserContext);
@@ -38,19 +39,17 @@ const ResetPasswordView = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch(
-          `http://localhost:3000/auth/reset-password?token=${token}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              newPassword: values.newPassword,
-              confirmPassword: values.confirmPassword,
-            }),
-          }
-        );
+
+        const response = await fetch(`${fitZoneApi}/auth/reset-password?token=${token}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            newPassword: values.newPassword,
+            confirmPassword: values.confirmPassword,
+          }),
+        });
 
         if (response.ok) {
           Swal.fire({

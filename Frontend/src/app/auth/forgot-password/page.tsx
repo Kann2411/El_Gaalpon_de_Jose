@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import LoadingSpinner from "@/components/Loading/Loading";
+import { fitZoneApi } from "@/api/rutaApi";
 
 const ForgotPasswordView = () => {
   const [emailSent, setEmailSent] = useState(false);
@@ -17,14 +18,12 @@ const ForgotPasswordView = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch(
-          "http://localhost:3000/auth/forgot-password",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: values.email }),
-          }
-        );
+
+        const response = await fetch(`${fitZoneApi}/auth/forgot-password`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: values.email }),
+        });
         if (!response.ok) throw new Error("Error sending email");
 
         setEmailSent(true);

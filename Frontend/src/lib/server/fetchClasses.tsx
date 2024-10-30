@@ -1,27 +1,28 @@
+import { fitZoneApi } from "@/api/rutaApi";
 import { GymClass } from "@/interfaces/interfaces";
 
 export const getClassData = async () => {
-  try {
-    const response = await fetch("http://localhost:3000/class", {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    try {
+      const response = await fetch(`${fitZoneApi}/class`, {
+        method: 'GET',
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log('Class data:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching class data:', error);
     }
-
-    const data = await response.json();
-    console.log("Class data:", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching class data:", error);
   }
-};
 
 export const createGymClass = async (gymClass: GymClass) => {
   try {
-    const response = await fetch("http://localhost:3000/class", {
-      method: "POST",
+    const response = await fetch(`${fitZoneApi}/class`, {
+      method: 'POST',
       headers: {
         "Content-Type": "application/json",
       },
@@ -42,15 +43,12 @@ export const createGymClass = async (gymClass: GymClass) => {
 
 export const reserveClass = async (claseId: string, userId: string) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/class/${claseId}/register/${userId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${fitZoneApi}/class/${claseId}/register/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to reserve the class.");
@@ -67,9 +65,11 @@ export const reserveClass = async (claseId: string, userId: string) => {
 
 export async function getClassRegistration(classId: string) {
   try {
-    const response = await fetch(
-      `http://localhost:3000/classRegistration/class/${classId}`
-    );
+      const response = await fetch(`${fitZoneApi}/classRegistration/user/${classId}`);
+      
+      if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+      }
 
     if (!response.ok) {
       throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,13 +9,18 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassService } from './classes.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
+import { OmitPasswordInterceptor } from 'src/interceptors/omitPasswordClassData.interceptor';
+import { FileInterceptor } from '@nestjs/platform-express';
 
+UseInterceptors(OmitPasswordInterceptor);
 @ApiTags('Class')
 @Controller('class')
 export class ClassesController {
@@ -25,19 +31,21 @@ export class ClassesController {
     return this.classesService.getClasses();
   }
 
-  @Get('seeder')
-  getClassesSeeder() {
-    return this.classesService.classesSeeder();
-  }
-
   @Get(':id')
   getClassById(@Param(ParseUUIDPipe) id: UUID) {
     return this.classesService.getClassById(id);
   }
 
   @Post()
-  createClass(@Body() classData: CreateClassDto) {
-    return this.classesService.createClass(classData);
+  @UseInterceptors(FileInterceptor('image'))
+  async createClass(
+    @Body() classData: CreateClassDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new BadRequestException('Image file is required');
+    }
+    return this.classesService.createClass(classData, file);
   }
 
   @Put()

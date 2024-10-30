@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEnum,
   IsInt,
@@ -8,8 +9,10 @@ import {
   Max,
   Min,
   Matches,
+  IsEmpty,
 } from 'class-validator';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
+import { User } from 'src/modules/users/users.entity';
 
 export class CreateClassDto {
   @ApiProperty({ description: 'Nombre de la clase', example: 'Yoga' })
@@ -33,13 +36,14 @@ export class CreateClassDto {
   status: EstadoClase;
 
   @ApiProperty({
-    description: 'Imagen de la clase',
-    example: 'yogaClass.jpg',
-    default: 'defaultImage.webp',
+    description: 'Imagen de la clase como archivo',
+    type: 'string',
+    format: 'binary',
+    required: false,
   })
-  @IsString()
   @IsOptional()
-  image: string = 'defaultImage.webp';
+  @Type(() => Object)
+  image?: Express.Multer.File;
 
   @ApiProperty({
     description: 'Descripción de la clase',
@@ -77,4 +81,7 @@ export class CreateClassDto {
   @Matches(/^\d{2}:\d{2}$/, { message: 'endtime must be in HH:mm format' })
   @IsNotEmpty()
   endtime: string;
+
+  @IsEmpty()
+  coach: Partial<User>;
 }

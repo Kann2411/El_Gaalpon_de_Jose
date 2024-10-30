@@ -5,6 +5,7 @@ import { getMembresia } from "@/lib/server/fetchMembresias";
 import { UserContext } from "@/context/user";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { fitZoneApi } from "@/api/rutaApi";
 
 interface ISuscriptionData {
   title: string;
@@ -126,17 +127,15 @@ const PlanCard: React.FC<PlanCardProps> = ({
     console.log(suscripcionData);
 
     try {
-      const response = await fetch(
-        "http://localhost:3000/mercadopago/create_preference",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(suscripcionData),
-        }
-      );
 
+      const response = await fetch(`${fitZoneApi}/mercadopago/create_preference`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(suscripcionData),
+      });
+  
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }

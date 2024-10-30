@@ -31,7 +31,7 @@ export class FileService {
     return findUser;
   }
 
-  async updateClassImage(trainingId: string, file: Express.Multer.File) {
+  async updateTrainingPlanImage(trainingId: string, file: Express.Multer.File) {
     const training = await this.trainingPlanRepository.findOneBy({
       id: trainingId,
     });

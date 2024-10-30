@@ -5,6 +5,7 @@ import { Training } from '../training/training.entity';
 import { TrainingPlan } from '../training/trainingPlan.entity';
 import { RegistrationMethod } from 'src/enums/registrationMethod';
 import { ClassRegistration } from '../classes/classesRegistration.entity';
+import { Class } from '../classes/classes.entity';
 
 @Entity('users')
 export class User {
@@ -114,4 +115,11 @@ export class User {
     (classRegistration) => classRegistration.user,
   )
   registrations: ClassRegistration[];
+
+  @ApiProperty({
+    description: 'Clases en las que el usuario es coach',
+    type: () => [Class],
+  })
+  @OneToMany(() => Class, (classEntity) => classEntity.coach)
+  classesAsCoach: Class[];
 }

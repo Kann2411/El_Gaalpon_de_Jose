@@ -1,3 +1,4 @@
+import { fitZoneApi } from "@/api/rutaApi";
 import { UserContext } from "@/context/user";
 import {
   ILogin,
@@ -16,14 +17,13 @@ export async function postSignIn(
       console.error("Email y contraseña son obligatorios");
       return null;
     }
-
-    const response = await fetch("http://localhost:3000/auth/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credential),
-    });
+      const response = await fetch(`${fitZoneApi}/auth/signin`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(credential)
+      });
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -48,8 +48,8 @@ export async function postSignIn(
 
 export async function postSignUp(user: Omit<IUser, "id">) {
   try {
-    console.log("Iniciando la solicitud de registro al backend");
-    const response = await fetch("http://localhost:3000/auth/signup", {
+   
+    const response = await fetch(`${fitZoneApi}/auth/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,12 +78,12 @@ export const getUsers = async (): Promise<IUser[]> => {
   // Suponiendo que guardas el token en localStorage después del inicio de sesión
   const token = localStorage.getItem("token");
 
-  const response = await fetch("http://localhost:3000/users", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Incluyendo el token en el encabezado
-    },
+  const response = await fetch(`${fitZoneApi}/users`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Incluyendo el token en el encabezado
+      }
   });
 
   if (!response.ok) {
@@ -107,10 +107,9 @@ export const changeUserRole = async (
     throw new Error("Token no encontrado");
   }
 
-  const response = await fetch(
-    `http://localhost:3000/users/changeRole/${userId}?role=${newRole}`,
-    {
-      method: "PATCH",
+
+  const response = await fetch(`${fitZoneApi}/users/changeRole/${userId}?role=${newRole}`, {
+      method: 'PATCH',
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -142,7 +141,8 @@ export const fetchUserData = async (
   token: string
 ): Promise<UserDataResponse | null> => {
   try {
-    const response = await fetch(`http://localhost:3000/users/${userId}`, {
+
+    const response = await fetch(`${fitZoneApi}/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -8,19 +8,18 @@ import { UserContext } from "@/context/user";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { fitZoneApi } from "@/api/rutaApi";
 
 export default function RegisterView() {
   const { signIn: contextSignIn } = useContext(UserContext);
   const router = useRouter();
   const handleGoogleSignUp = async () => {
     try {
-      router.push("http://localhost:3000/auth/google");
-    } catch (error) {
-      console.error(
-        "Error inesperado durante el inicio de sesión con Google:",
-        error
-      );
-    }
+
+      router.push(`${fitZoneApi}/auth/google`)
+     } catch (error) {
+       console.error('Error inesperado durante el inicio de sesión con Google:', error);
+     }
   };
 
   return (

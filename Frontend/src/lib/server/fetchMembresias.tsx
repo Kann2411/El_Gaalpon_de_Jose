@@ -1,15 +1,19 @@
-export async function getMembresia() {
-  try {
-    const response = await fetch("http://localhost:3000/membresia");
+import { fitZoneApi } from "@/api/rutaApi";
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+export async function getMembresia() {
+
+    try {
+      const response = await fetch(`${fitZoneApi}/membresia`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      console.log(data); 
+      return data;
+    } catch (error) {
+      console.error('Error fetching membresia:', error);
     }
 
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching membresia:", error);
-  }
 }
