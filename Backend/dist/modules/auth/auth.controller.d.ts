@@ -9,17 +9,17 @@ export declare class AuthController {
     googleLoginCallback(req: any, res: any): Promise<any>;
     signUp(signUpDto: CreateUserDto): Promise<{
         user: {
-            id: string;
+            trainings: import("../training/training.entity").Training[];
             name: string;
+            id: string;
+            registrations: import("../classes/classesRegistration.entity").ClassRegistration[];
             dni: string;
             email: string;
             phone: string;
             imgUrl: string;
             registrationMethod: import("../../enums/registrationMethod").RegistrationMethod;
             isBanned: boolean;
-            trainings: import("../training/training.entity").Training[];
             trainingPlans: import("../training/trainingPlan.entity").TrainingPlan[];
-            registrations: import("../classes/classesRegistration.entity").ClassRegistration[];
         };
     }>;
     signIn(credentials: LoginUserDto): Promise<{

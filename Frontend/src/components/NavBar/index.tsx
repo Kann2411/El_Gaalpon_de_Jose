@@ -20,7 +20,8 @@ const NavBarComponent = () => {
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } = useSearch();
+  const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } =
+    useSearch();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +37,10 @@ const NavBarComponent = () => {
   };
 
   const handleClickOutside = (e: MouseEvent) => {
-    if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+    if (
+      searchContainerRef.current &&
+      !searchContainerRef.current.contains(e.target as Node)
+    ) {
       setIsSearchOpen(false);
     }
   };
@@ -47,7 +51,6 @@ const NavBarComponent = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -82,7 +85,7 @@ const NavBarComponent = () => {
 
     try {
       const response = await fetch(
-        `https://el-gaalpon-de-jose.onrender.com/files/profileImages/${user.id}`,
+        `http://localhost:3000/files/profileImages/${user.id}`,
         {
           method: "POST",
           body: formData,
@@ -147,7 +150,13 @@ const NavBarComponent = () => {
 
   useEffect(() => {
     if (isLogged) {
-      router.push("/home");
+      if(user?.role === 'admin') {
+        router.push("/users");
+      } else if (user?.role === 'coach') {
+        router.push("/training-management");
+      } else if (user?.role === 'user') {
+        router.push("/home");
+      } 
     }
   }, [isLogged, router]);
 
@@ -173,39 +182,36 @@ const NavBarComponent = () => {
       {user?.role === "user" ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {[
-              "Classes",
-              "Plans",
-              "Appointments",
-              "Training Plans",
-            ].map((item, index) => {
-              const lowerCaseItem = item.toLowerCase();
-              const route =
-                lowerCaseItem === "classes"
-                  ? "/home"
-                  : lowerCaseItem === "plans"
-                  ? "/plans"
-                  : lowerCaseItem === "appointments"
-                  ? "/appointments"
-                  : "/training-plans";
+            {["Classes", "Plans", "Appointments", "Training Plans"].map(
+              (item, index) => {
+                const lowerCaseItem = item.toLowerCase();
+                const route =
+                  lowerCaseItem === "classes"
+                    ? "/home"
+                    : lowerCaseItem === "plans"
+                    ? "/plans"
+                    : lowerCaseItem === "appointments"
+                    ? "/appointments"
+                    : "/training-plans";
 
-              return (
-                <li key={index} className="relative group">
-                  <Link
-                    href={route}
-                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
-                  >
-                    {item}
-                  </Link>
-                  <span
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                      pathname === route ? "scale-x-100" : "scale-x-0"
-                    }`}
-                  />
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-                </li>
-              );
-            })}
+                return (
+                  <li key={index} className="relative group">
+                    <Link
+                      href={route}
+                      className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                    >
+                      {item}
+                    </Link>
+                    <span
+                      className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                        pathname === route ? "scale-x-100" : "scale-x-0"
+                      }`}
+                    />
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+                  </li>
+                );
+              }
+            )}
           </ul>
         </nav>
       ) : user?.role === "admin" ? (
@@ -244,12 +250,12 @@ const NavBarComponent = () => {
       ) : user?.role === "coach" ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Training Management"].map((item, index) => {
+            {["Training Management", "Registrated Classes"].map((item, index) => {
               const lowerCaseItem = item.toLowerCase();
               const route =
                 lowerCaseItem === "training management"
                   ? "/training-management"
-                  : "#";
+                  : "/registrated-classes";
 
               return (
                 <li key={index} className="relative group">
@@ -275,10 +281,7 @@ const NavBarComponent = () => {
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
             {["Classes", "Plans"].map((item, index) => {
               const lowerCaseItem = item.toLowerCase();
-              const route =
-                lowerCaseItem === "classes"
-                  ? "/home"
-                  : "/plans"
+              const route = lowerCaseItem === "classes" ? "/home" : "/plans";
 
               return (
                 <li key={index} className="relative group">
@@ -366,7 +369,7 @@ const NavBarComponent = () => {
                   <p className="font-medium">{user?.name}</p>
                   <p className="font-light">{user?.email}</p>
                 </div>
-            {/*     <button
+                {/*     <button
                   onClick={() => router.push("/dashboard")}
                   className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
                 >

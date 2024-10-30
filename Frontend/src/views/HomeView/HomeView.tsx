@@ -87,7 +87,7 @@ const HomeView: React.FC = () => {
       const claseId = selectedClass.id;
       const userId = user.id;
       const response = await fetch(
-        `https://el-gaalpon-de-jose.onrender.com/classRegistration/${claseId}/register/${userId}`,
+        `http://localhost:3000/classRegistration/${claseId}/register/${userId}`,
         {
           method: "POST",
           headers: {

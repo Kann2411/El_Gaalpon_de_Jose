@@ -78,7 +78,7 @@ let MercadoPagoRepository = class MercadoPagoRepository {
             payer: {
                 email: 'test_user_1072648989@testuser.com',
             },
-            notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}`,
+            notification_url: `http://localhost:3000/mercadopago/payment?userId=${bodySuscription.userId}`,
         };
         try {
             const preference = await new mercadopago_1.Preference(client).create({ body });

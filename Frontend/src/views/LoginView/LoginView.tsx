@@ -3,23 +3,25 @@
 import { FcGoogle } from "react-icons/fc";
 import LoginForm from "@/components/LoginForm/LoginForm";
 import { signIn } from "next-auth/react";
-import { useContext } from 'react';
+import { useContext } from "react";
 import logo from "@/public/images/image-login.png";
-import { UserContext } from '@/context/user';
-import Image from 'next/image';
-import Link from 'next/link';
+import { UserContext } from "@/context/user";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function LoginView() {
   const { signIn: contextSignIn } = useContext(UserContext);
-  const router = useRouter()
+  const router = useRouter();
 
   const handleGoogleSignIn = async () => {
     try {
-     
-     router.push('https://el-gaalpon-de-jose.onrender.com/auth/google')
+      router.push("http://localhost:3000/auth/google");
     } catch (error) {
-      console.error('Error inesperado durante el inicio de sesión con Google:', error);
+      console.error(
+        "Error inesperado durante el inicio de sesión con Google:",
+        error
+      );
     }
   };
 
@@ -61,10 +63,12 @@ export default function LoginView() {
             </Link>
           </p>
           <p className="text-center">
-            <Link className="text-red-500" href="/auth/forgot-password">I forgot my password</Link>
+            <Link className="text-red-500" href="/auth/forgot-password">
+              I forgot my password
+            </Link>
           </p>
         </div>
       </div>
     </div>
   );
-} 
+}

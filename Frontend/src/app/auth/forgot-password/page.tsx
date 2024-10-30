@@ -17,11 +17,14 @@ const ForgotPasswordView = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch("https://el-gaalpon-de-jose.onrender.com/auth/forgot-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: values.email }),
-        });
+        const response = await fetch(
+          "http://localhost:3000/auth/forgot-password",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: values.email }),
+          }
+        );
         if (!response.ok) throw new Error("Error sending email");
 
         setEmailSent(true);
@@ -32,7 +35,8 @@ const ForgotPasswordView = () => {
           customClass: {
             popup: "bg-[#222222] text-white",
             title: "text-[#B0E9FF]",
-            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });
@@ -44,7 +48,8 @@ const ForgotPasswordView = () => {
           customClass: {
             popup: "bg-[#222222] text-white",
             title: "text-[#B0E9FF]",
-            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });

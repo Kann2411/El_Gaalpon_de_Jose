@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { UserContext } from "@/context/user";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import Loading from '@/components/Loading/Loading';
+import Loading from "@/components/Loading/Loading";
 
 const ResetPasswordView = () => {
   const { user } = useContext(UserContext);
@@ -15,7 +15,7 @@ const ResetPasswordView = () => {
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    const tokenFromUrl = url.searchParams.get('token');
+    const tokenFromUrl = url.searchParams.get("token");
 
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
@@ -33,21 +33,24 @@ const ResetPasswordView = () => {
         .min(8, "La contraseña debe tener al menos 8 caracteres"),
       confirmPassword: Yup.string()
         .required("Requerido")
-        .oneOf([Yup.ref('newPassword')], 'Las contraseñas deben coincidir'),
+        .oneOf([Yup.ref("newPassword")], "Las contraseñas deben coincidir"),
     }),
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/auth/reset-password?token=${token}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            newPassword: values.newPassword,
-            confirmPassword: values.confirmPassword,
-          }),
-        });
+        const response = await fetch(
+          `http://localhost:3000/auth/reset-password?token=${token}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              newPassword: values.newPassword,
+              confirmPassword: values.confirmPassword,
+            }),
+          }
+        );
 
         if (response.ok) {
           Swal.fire({
@@ -57,11 +60,12 @@ const ResetPasswordView = () => {
             customClass: {
               popup: "bg-[#222222] text-white",
               title: "text-[#B0E9FF]",
-              confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+              confirmButton:
+                "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
             },
             buttonsStyling: false,
           });
-          router.push('/login');
+          router.push("/login");
         } else {
           Swal.fire({
             title: "Error",
@@ -70,7 +74,8 @@ const ResetPasswordView = () => {
             customClass: {
               popup: "bg-[#222222] text-white",
               title: "text-[#B0E9FF]",
-              confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+              confirmButton:
+                "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
             },
             buttonsStyling: false,
           });
@@ -84,7 +89,8 @@ const ResetPasswordView = () => {
           customClass: {
             popup: "bg-[#222222] text-white",
             title: "text-[#B0E9FF]",
-            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });
@@ -101,7 +107,10 @@ const ResetPasswordView = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
       <h2 className="text-2xl font-bold mb-4">Change Password</h2>
-      <form onSubmit={formik.handleSubmit} className="bg-gray-800 p-6 rounded-md shadow-md w-96">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="bg-gray-800 p-6 rounded-md shadow-md w-96"
+      >
         <input
           id="newPassword"
           name="newPassword"
