@@ -2,72 +2,38 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class chatBotService {
-  private awaitingResponse: string | null = null;
+  private responses: any;
+  private currentOption: number; 
 
-  async getResponse(message: string) {
-    const userMensaje = message.toLowerCase();
-    let reply =
-      'No entiendo lo que quieres decir. ¿Puedes reformular tu pregunta?';
+  constructor() {
+    this.initializeResponses();
+    this.currentOption = 0; 
+  }
 
-    //? preguntas esperadas
-    if (this.awaitingResponse === 'clases') {
-      if (userMensaje.includes('sí') || userMensaje.includes('si')) {
-        reply = 'Hoy hay clases de yoga a las 6 PM y spinning a las 7 PM.';
-      } else if (userMensaje.includes('no')) {
-        reply = 'Entendido, avísame si necesitas información sobre otra cosa.';
-      }
-      this.awaitingResponse = null;
-      return reply;
-    }
+  private initializeResponses() {
+    this.responses = {
+      start: "Hola, espero que te encuentres bien. ¿En qué puedo ayudarte?\n1. Información sobre nosotros.\n2. Horario del establecimiento.\n3. Consultas sobre membresía.\n4. Terminar conversación.",
+      responses: {
+        1: "Nosotros somos un gimnasio dedicado a ofrecer las mejores instalaciones y servicios para ayudarte a alcanzar tus metas de fitness. Contamos con un equipo de profesionales listos para guiarte.",
+        2: "Los horarios del establecimiento son de lunes a viernes de 8:00 a 21:00 y los sábados de 9:00 a 14:00.",
+        3: "Para consultas sobre membresía, por favor, revisa las opciones disponibles en nuestra página web. Por temas de cancelación o modificación, comunícate en administración."
+      },
+      end: "Me alegra poder haberte ayudado, gracias. Para más información, puedes comunicarte con gym@gym.com. ¡Saludos!"
+    };
+  }
 
-    if (this.awaitingResponse === 'rutina') {
-      if (userMensaje.includes('piernas')) {
-        reply =
-          'Para entrenar piernas, te sugiero hacer sentadillas, lunges, y peso muerto.';
-      } else if (userMensaje.includes('brazos')) {
-        reply =
-          'Para trabajar brazos, puedes hacer flexiones, curls de bíceps y fondos.';
-      }
-      this.awaitingResponse = null;
-      return reply;
-    }
-
-    if (this.awaitingResponse === 'dieta') {
-      if (userMensaje.includes('sí') || userMensaje.includes('si')) {
-        reply =
-          'Aquí tienes algunas sugerencias: Pechuga de pollo con arroz integral, batido de proteínas con avena, o una ensalada con atún.';
-      } else if (userMensaje.includes('no')) {
-        reply = 'Entendido, avísame si necesitas algo más.';
-      }
-      this.awaitingResponse = null;
-      return reply;
-    }
-
-    if (userMensaje.includes('hola')) {
-      reply = 'Hola, ¿en qué puedo ayudarte?';
-    } else if (userMensaje.includes('clases')) {
-      reply =
-        'Las clases están disponibles de 6 AM a 9 PM. ¿Te gustaría saber sobre alguna clase en particular?';
-      this.awaitingResponse = 'clases';
-    } else if (
-      userMensaje.includes('entrenador') ||
-      userMensaje.includes('entrenadores')
-    ) {
-      reply =
-        'Hoy están disponibles los entrenadores Juan y Marta para sesiones personales.';
-    } else if (userMensaje.includes('rutina')) {
-      reply =
-        'Puedo sugerirte una rutina de ejercicios. ¿Qué área te gustaría entrenar hoy? ¿Piernas o brazos?';
-      this.awaitingResponse = 'rutina';
-    } else if (userMensaje.includes('nutrición')) {
-      reply =
-        'Para antes de entrenar, te recomiendo una comida rica en proteínas y carbohidratos ligeros. ¿Te gustaría sugerencias de comidas?';
-      this.awaitingResponse = 'nutricion';
-    } else if (
-      userMensaje.includes('suscripción') ||
-      userMensaje.includes('membresía')
-    ) {
-      reply = 'La suscripción mensual cuesta $50.';
+  async getResponse(option: number): Promise<string> {
+    if (option === 0) {
+      this.currentOption = 0; 
+      return this.responses.start; 
+    } else if (this.responses.responses[option]) {
+      this.currentOption = option; 
+      return this.responses.responses[option]; 
+    } else if (option === 4) {
+      this.currentOption = 0;
+      return this.responses.end;
+    } else {
+      return "Opción no válida. Por favor, elige una opción del 1 al 4."; 
     }
   }
 }
