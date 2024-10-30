@@ -90,7 +90,7 @@ export interface FormValues {
     intensity: string;
     capacity: number;
     status: string;
-    image: string;
+    file: File | null; //cambio
     description: string;
     duration: string;
     day: string;
