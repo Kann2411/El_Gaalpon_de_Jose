@@ -1,8 +1,9 @@
+import { fitZoneApi } from "@/api/rutaApi";
 import { GymClass } from "@/interfaces/interfaces";
 
 export const getClassData = async () => {
     try {
-      const response = await fetch('https://el-gaalpon-de-jose.onrender.com/class', {
+      const response = await fetch(`${fitZoneApi}/class`, {
         method: 'GET',
       });
   
@@ -22,7 +23,7 @@ export const getClassData = async () => {
 
 export const createGymClass = async (gymClass: GymClass) => {
   try {
-    const response = await fetch('https://el-gaalpon-de-jose.onrender.com/class', {
+    const response = await fetch(`${fitZoneApi}/class`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +45,7 @@ export const createGymClass = async (gymClass: GymClass) => {
 
 export const reserveClass = async (claseId: string, userId: string) => {
   try {
-    const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/class/${claseId}/register/${userId}`, {
+    const response = await fetch(`${fitZoneApi}/class/${claseId}/register/${userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +67,7 @@ export const reserveClass = async (claseId: string, userId: string) => {
 
 export async function getClassRegistration(userId: string) {
   try {
-      const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/classRegistration/user/${userId}`);
+      const response = await fetch(`${fitZoneApi}/classRegistration/user/${userId}`);
       
       if (!response.ok) {
           throw new Error(`Error en la solicitud: ${response.status}`);

@@ -9,6 +9,7 @@ import { UserContext } from '@/context/user';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
+import { fitZoneApi } from "@/api/rutaApi";
 
 export default function LoginView() {
   const { signIn: contextSignIn } = useContext(UserContext);
@@ -17,7 +18,7 @@ export default function LoginView() {
   const handleGoogleSignIn = async () => {
     try {
      
-     router.push('https://el-gaalpon-de-jose.onrender.com/auth/google')
+     router.push(`${fitZoneApi}/auth/google`)
     } catch (error) {
       console.error('Error inesperado durante el inicio de sesión con Google:', error);
     }

@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearch } from "@/context/SearchContext";
+import { fitZoneApi } from "@/api/rutaApi";
 
 const NavBarComponent = () => {
   const { user, logOut, isLogged, imgUrl, setImgUrl } = useContext(UserContext);
@@ -82,7 +83,7 @@ const NavBarComponent = () => {
 
     try {
       const response = await fetch(
-        `https://el-gaalpon-de-jose.onrender.com/files/profileImages/${user.id}`,
+        `${fitZoneApi}/files/profileImages/${user.id}`,
         {
           method: "POST",
           body: formData,

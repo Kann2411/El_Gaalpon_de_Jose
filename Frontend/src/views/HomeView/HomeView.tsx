@@ -15,6 +15,7 @@ import Button from "@/components/Button/Button";
 import Swal from "sweetalert2";
 import { useSearch } from "@/context/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { fitZoneApi } from "@/api/rutaApi";
 
 interface ClassInfo {
   id: number;
@@ -87,7 +88,7 @@ const HomeView: React.FC = () => {
       const claseId = selectedClass.id;
       const userId = user.id;
       const response = await fetch(
-        `https://el-gaalpon-de-jose.onrender.com/classRegistration/${claseId}/register/${userId}`,
+        `${fitZoneApi}/classRegistration/${claseId}/register/${userId}`,
         {
           method: "POST",
           headers: {

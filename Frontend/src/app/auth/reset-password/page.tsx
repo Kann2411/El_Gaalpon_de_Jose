@@ -6,6 +6,7 @@ import { UserContext } from "@/context/user";
 import { useRouter } from 'next/navigation';
 import Swal from "sweetalert2";
 import Loading from '@/components/Loading/Loading';
+import { fitZoneApi } from "@/api/rutaApi";
 
 const ResetPasswordView = () => {
   const { user } = useContext(UserContext);
@@ -38,7 +39,7 @@ const ResetPasswordView = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/auth/reset-password?token=${token}`, {
+        const response = await fetch(`${fitZoneApi}/auth/reset-password?token=${token}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
