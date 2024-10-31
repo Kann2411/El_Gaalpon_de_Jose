@@ -40,7 +40,7 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
 
       switch (decodedToken.role) {
         case 'admin':
-          router.push('/users');
+          router.push('/users-controller');
           break;
         case 'coach':
           router.push('/training-management');
