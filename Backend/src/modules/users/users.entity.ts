@@ -6,6 +6,8 @@ import { TrainingPlan } from '../training/trainingPlan.entity';
 import { RegistrationMethod } from 'src/enums/registrationMethod';
 import { ClassRegistration } from '../classes/classesRegistration.entity';
 import { Class } from '../classes/classes.entity';
+import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
+import { TipoMembresia } from 'src/enums/tipoMembresia.enum';
 
 @Entity('users')
 export class User {
@@ -94,6 +96,22 @@ export class User {
   })
   @Column({ type: 'boolean', default: false })
   isBanned: boolean;
+
+  @ApiProperty({
+    description: 'Estado de la membresía del usuario',
+    enum: EstadoMembresia,
+    default: EstadoMembresia.INACTIVA,
+  })
+  @Column({ type: 'enum', enum: EstadoMembresia, default: EstadoMembresia.INACTIVA })
+  estadoMembresia: EstadoMembresia;
+
+  @ApiProperty({
+    description: 'Tipo de membresía del usuario',
+    enum: TipoMembresia, 
+    nullable: true,
+  })
+  @Column({ type: 'enum', enum: TipoMembresia, nullable: true })
+  membership: TipoMembresia;
 
   @ApiProperty({
     description: 'Entrenamientos asociados al usuario',
