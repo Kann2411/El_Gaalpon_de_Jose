@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { UUID } from 'crypto';
@@ -18,7 +19,9 @@ import { ClassService } from './classes.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
 import { OmitPasswordInterceptor } from 'src/interceptors/omitPasswordClassData.interceptor';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @UseInterceptors(OmitPasswordInterceptor)
 @ApiTags('Class')
@@ -36,6 +39,8 @@ export class ClassesController {
     return this.classesService.getClassById(id);
   }
 
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuard)
   @Post()
   createClass(@Body() classData: CreateClassDto) {
     return this.classesService.createClass(classData);
