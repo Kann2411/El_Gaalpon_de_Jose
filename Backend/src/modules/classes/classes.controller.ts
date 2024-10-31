@@ -39,8 +39,6 @@ export class ClassesController {
     return this.classesService.getClassById(id);
   }
 
-  @Roles(Role.Admin)
-  @UseGuards(RolesGuard)
   @Post()
   createClass(@Body() classData: CreateClassDto) {
     return this.classesService.createClass(classData);
