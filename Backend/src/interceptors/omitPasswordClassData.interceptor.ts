@@ -13,21 +13,22 @@ export class OmitPasswordInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        if (data && data.coach) {
-          // Si existe el coach en la data, eliminamos el campo de password
-          const { password, ...coachWithoutPassword } = data.coach;
-          data.coach = coachWithoutPassword;
+        if (data && data.class && data.class.coach) {
+          const { password, ...coachWithoutPassword } = data.class.coach;
+          data.class.coach = coachWithoutPassword;
         }
 
-        if (data && data.registrations) {
+        if (data?.registrations) {
           data.registrations = data.registrations.map((registration) => {
-            const { password, ...userWithoutPassword } = registration.user;
+            const { password, ...userWithoutPassword } =
+              registration.user || {};
             return {
               ...registration,
-              user: userWithoutPassword,
+              user: userWithoutPassword || registration.user,
             };
           });
         }
+
         return data;
       }),
     );

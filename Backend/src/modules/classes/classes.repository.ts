@@ -42,7 +42,7 @@ export class ClassRepository {
     }
   }
 
-  async createClass(classData: CreateClassDto, file: Express.Multer.File) {
+  async createClass(classData: CreateClassDto) {
     const {
       name,
       capacity,
@@ -61,16 +61,10 @@ export class ClassRepository {
       throw new BadRequestException(`coach con id ${coachUser} not found`);
     }
 
-    const uploadResult = await this.fileRepository.uploadImage(file);
-    if (!uploadResult) {
-      throw new BadRequestException('Error al subir la imagen');
-    }
-
     const nuevaClase = new Class();
     nuevaClase.name = name;
     nuevaClase.capacity = Number(capacity);
     nuevaClase.status = status;
-    nuevaClase.image = uploadResult.secure_url;
     nuevaClase.description = description;
     nuevaClase.duration = duration;
     nuevaClase.intensity = intensity;
@@ -81,11 +75,9 @@ export class ClassRepository {
 
     await this.classesRepository.save(nuevaClase);
 
-    const savedClass = await this.classesRepository.findOneBy({
-      name: nuevaClase.name,
-    });
-
-    return savedClass;
+    return {
+      class: nuevaClase,
+    };
   }
 
   async updateClass(id: UUID, classData: Class) {
