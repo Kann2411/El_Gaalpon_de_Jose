@@ -18,7 +18,7 @@ const CreateGymClassForm: React.FC = () => {
       intensity: "",
       capacity: 0,
       status: "Active",
-      image: null,
+      // file: null,
       description: "",
       duration: "",
       day: "",
@@ -69,41 +69,41 @@ const CreateGymClassForm: React.FC = () => {
           ...values,
           coach: values.coach,
         };
-        const gymClassResponse = await createGymClass(gymClassData);
-        if (gymClassResponse) {
-          const uploadResponse = await uploadClassImage(
-            gymClassResponse.id,
-            values.image!
-          );
-          if (uploadResponse) {
-            Swal.fire({
-              title: "Yey!",
-              text: "Class created successfully!",
-              icon: "success",
-              customClass: {
-                popup: "bg-[#222222] text-white",
-                title: "text-[#B0E9FF]",
-                confirmButton:
-                  "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
-              },
-              buttonsStyling: false,
-            });
-            resetForm();
-          }
-        }
-      } catch (error: any) {
-        Swal.fire({
-          title: "Ups!",
-          text: "Error when creating the plan",
-          icon: "error",
-          customClass: {
-            popup: "bg-[#222222] text-white",
-            title: "text-[#B0E9FF]",
-            confirmButton:
-              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
-          },
-          buttonsStyling: false,
-        });
+        // const gymClassResponse = await createGymClass(gymClassData);
+        // if (gymClassResponse) {
+        //   const uploadResponse = await uploadClassImage(
+        //     gymClassResponse.id,
+        //     values.file!
+        //   );
+      //     if (uploadResponse) {
+      //       Swal.fire({
+      //         title: "Yey!",
+      //         text: "Class created successfully!",
+      //         icon: "success",
+      //         customClass: {
+      //           popup: "bg-[#222222] text-white",
+      //           title: "text-[#B0E9FF]",
+      //           confirmButton:
+      //             "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+      //         },
+      //         buttonsStyling: false,
+      //       });
+      //       resetForm();
+      //     }
+      //   }
+      // } catch (error: any) {
+      //   Swal.fire({
+      //     title: "Ups!",
+      //     text: "Error when creating the plan",
+      //     icon: "error",
+      //     customClass: {
+      //       popup: "bg-[#222222] text-white",
+      //       title: "text-[#B0E9FF]",
+      //       confirmButton:
+      //         "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+      //     },
+      //     buttonsStyling: false,
+      //   });
       } finally {
         setLoading(false); // Desactivar el estado de carga
       }
@@ -287,9 +287,9 @@ const CreateGymClassForm: React.FC = () => {
                 onChange={handleFileChange} // Manejar el cambio de archivo
                 className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2 w-full"
               />
-              {formik.errors.image && formik.touched.image && (
-                <div className="text-red-500">{formik.errors.image}</div>
-              )}
+              {/* {formik.errors.file && formik.touched.file && (
+                <div className="text-red-500">{formik.errors.file}</div>
+              )} */}
             </div>
             {/* Campo para seleccionar el coach */}
             <div>
