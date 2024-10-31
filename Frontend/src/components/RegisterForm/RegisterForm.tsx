@@ -29,32 +29,36 @@ export default function RegisterForm() {
     const { success } = await signUp(values);
 
     if (success) {
+      // Alerta de éxito
       Swal.fire({
-        title: "Success!",
-        text: "You have registered successfully!",
+        position: "top-end",
         icon: "success",
+        title: "You have registered successfully!",
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
         customClass: {
-          popup: "bg-black text-white",
-          title: "text-red-600",
-          confirmButton:
-            "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md",
-        },
-        buttonsStyling: false,
+          popup: 'animated slideInRight'
+        }
       });
       resetForm();
       router.push("/");
     } else {
+      // Alerta de error
       Swal.fire({
-        title: "Ups!",
-        text: "Something went wrong!",
+        position: "top-end",
         icon: "error",
+        title: "Something went wrong!",
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
         customClass: {
-          popup: "bg-black text-white",
-          title: "text-red-600",
-          confirmButton:
-            "bg-red-600 text-white hover:bg-red-700 py-2 px-4 border-none rounded-md",
-        },
-        buttonsStyling: false,
+          popup: 'animated slideInRight'
+        }
       });
     }
   };

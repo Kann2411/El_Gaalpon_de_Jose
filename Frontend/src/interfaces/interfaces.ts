@@ -125,3 +125,4 @@ export interface IClassInfo {
     registrations: IRegistration[]
 }
 
+export default IUser;

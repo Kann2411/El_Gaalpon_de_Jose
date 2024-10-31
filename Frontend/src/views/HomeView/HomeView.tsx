@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 import { useSearch } from "@/context/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { fitZoneApi } from "@/api/rutaApi";
+import CoachCard from "@/components/CoachCard/CoachCard";
 
 interface ClassInfo {
   id: number;
@@ -365,6 +366,8 @@ const HomeView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <CoachCard />
     </div>
   );
 };
