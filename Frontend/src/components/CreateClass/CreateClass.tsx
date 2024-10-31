@@ -25,11 +25,7 @@ const CreateGymClassForm: React.FC = () => {
       day: "",
       starttime: "",
       endtime: "",
-      coach: {
-        id: "",
-        name: "",
-        email: "",
-      },
+      coach: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
@@ -44,12 +40,13 @@ const CreateGymClassForm: React.FC = () => {
           return value && value instanceof File && value.size <= 200 * 1024;
         })
         .test(
-          "fileType",
-          "Only JPG, JPEG, PNG, or WEBP files are allowed",
+          "fileSizeAndType",
+          "The file must be smaller than 200KB and in JPG, JPEG, PNG, or WEBP format",
           (value) => {
             return (
               value &&
               value instanceof File &&
+              value.size <= 200 * 1024 &&
               ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
                 value.type
               )
@@ -69,7 +66,12 @@ const CreateGymClassForm: React.FC = () => {
       console.log("Submitting values de class:", values);
 
       try {
-        const gymClassResponse = await createGymClass(values);
+        const gymClassData = {
+          ...values,
+          coach: values.coach,
+        };
+        const gymClassResponse = await createGymClass(gymClassData);
+
         if (values.image) {
           const uploadResponse = await uploadImage(
             gymClassResponse.id,
@@ -126,8 +128,8 @@ const CreateGymClassForm: React.FC = () => {
   }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.currentTarget.files?.[0]; // Obtener el primer archivo
-    formik.setFieldValue("image", file); // Establecer el valor del archivo en Formik
+    const image = event.currentTarget.files?.[0]; // Obtener el primer archivo
+    formik.setFieldValue("image", image); // Establecer el valor del archivo en Formik
   };
 
   if (loading) {
@@ -291,8 +293,27 @@ const CreateGymClassForm: React.FC = () => {
                 <div className="text-red-500">{formik.errors.image}</div>
               )}
             </div>
-            {/* Description */}
-            <div className="flex flex-col col-span-2">
+            {/* Campo para seleccionar el coach */}
+            <div>
+              <label htmlFor="coach">Coach</label>
+              <select
+                id="coach"
+                name="coach"
+                onChange={formik.handleChange}
+                value={formik.values.coach}
+                className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2 w-full"
+              >
+                <option value="">Select a coach</option>
+                {coaches.map((coach) => (
+                  <option key={coach.id} value={coach.id}>
+                    {coach.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          {/* Description */}
+          <div className="flex flex-col col-span-2">
               <label htmlFor="description">Description</label>
               <textarea
                 id="description"
@@ -308,25 +329,6 @@ const CreateGymClassForm: React.FC = () => {
                 </div>
               )}
             </div>
-            {/* Campo para seleccionar el coach */}
-            <div>
-              <label htmlFor="coach.id">Coach</label>
-              <select
-                id="coach.id"
-                name="coach.id"
-                onChange={formik.handleChange}
-                value={formik.values.coach.id}
-                className="bg-zinc-950 border-b-2 border-transparent border-b-red-500 focus:outline-none focus:border-red-700 p-2 w-full"
-              >
-                <option value="">Select a coach</option>
-                {coaches.map((coach) => (
-                  <option key={coach.id} value={coach.id}>
-                    {coach.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
           <button
             type="submit"
             className="mt-6 bg-red-700 hover:bg-red-600 text-white p-2 rounded"

@@ -56,7 +56,7 @@ export class ClassRepository {
       coach,
     } = classData;
 
-    const coachUser = await this.userRepository.findOneBy({ id: coach.id });
+    const coachUser = await this.userRepository.findOneBy({ id: coach });
     if (!coachUser) {
       throw new BadRequestException(`coach con id ${coachUser} not found`);
     }

@@ -9,10 +9,8 @@ import {
   Max,
   Min,
   Matches,
-  IsEmpty,
 } from 'class-validator';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
-import { User } from 'src/modules/users/users.entity';
 
 export class CreateClassDto {
   @ApiProperty({ description: 'Nombre de la clase', example: 'Yoga' })
@@ -82,6 +80,7 @@ export class CreateClassDto {
   @IsNotEmpty()
   endtime: string;
 
-  @IsEmpty()
-  coach: Partial<User>;
+  @IsNotEmpty()
+  @IsString()
+  coach: string;
 }
