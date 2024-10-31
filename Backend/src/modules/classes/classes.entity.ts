@@ -57,7 +57,7 @@ export class Class {
   @Column()
   day: string;
 
-  @Column({ type: 'time', default: '00:00:00' })
+  @Column({ type: 'time', default: '00:00' })
   starttime: string;
 
   @Column({ type: 'time' })
