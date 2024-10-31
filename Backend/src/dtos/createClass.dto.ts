@@ -7,6 +7,7 @@ import {
   Max,
   Min,
   Matches,
+  IsOptional,
 } from 'class-validator';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
 
@@ -38,6 +39,13 @@ export class CreateClassDto {
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({
+    description: 'Archivo del plan de entrenamiento (ruta o nombre)',
+    type: 'string',
+  })
+  @IsOptional()
+  file?: string;
 
   @ApiProperty({
     description: 'Duración de la clase en minutos',

@@ -54,6 +54,7 @@ export class ClassRepository {
       starttime,
       endtime,
       coach,
+      file,
     } = classData;
 
     const coachUser = await this.userRepository.findOneBy({ id: coach });
@@ -71,6 +72,7 @@ export class ClassRepository {
     nuevaClase.day = day;
     nuevaClase.starttime = starttime;
     nuevaClase.endtime = endtime;
+    nuevaClase.image = file;
     nuevaClase.coach = coachUser;
 
     await this.classesRepository.save(nuevaClase);
