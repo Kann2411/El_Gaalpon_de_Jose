@@ -98,7 +98,11 @@ export interface FormValues {
     endtime: string;
     coach: string;  
   }
-  
+
+  export interface ImageClass {
+    id: string;
+    file: string;
+  }
 
   export interface FormValues {
     description: string;
