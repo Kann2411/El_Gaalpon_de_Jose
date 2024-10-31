@@ -1,5 +1,6 @@
 import { fitZoneApi } from "@/api/rutaApi";
-import { GymClass } from "@/interfaces/interfaces";
+import { GymClass, IClassData } from "@/interfaces/interfaces";
+import { Result } from "postcss";
 
 export const getClassData = async () => {
     try {
@@ -19,68 +20,61 @@ export const getClassData = async () => {
     }
   }
 
-  export const createGymClass = async (gymClass: GymClass) => {
+  export const createClass = async (classData: IClassData): Promise<any> => {
     try {
-      const token = localStorage.getItem("token");
-  
-      const response = await fetch(`${fitZoneApi}/class`, {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/class", {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(gymClass),
+        body: JSON.stringify(classData),
       });
   
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Server error while creating gym class:", errorData);
-        throw new Error(`Failed to create gym class: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
+        console.error("Error al crear la clase:", errorData);
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
   
-      const data = await response.json();
-      console.log("Server response for created gym class:", data);
-      return data;
+      const result = await response.json();
+      console.log("Clase creada:", result); // Log para verificar el resultado
+      return result;
     } catch (error) {
-      console.error("Error while creating gym class:", error);
-      return null;
+      console.error("Error al crear la clase:", error);
     }
   };
   
-  export async function uploadClassImage(classId: string, file: File) {
-    try {
-      const token = localStorage.getItem("token");
   
+  export const uploadClassImage = async (classId: string, file: File): Promise<any> => {
+    try {
+
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
       if (!validTypes.includes(file.type) || file.size > 200 * 1024) {
-        throw new Error("The file must be an image in jpg, jpeg, png, or webp format and less than 200KB.");
+          throw new Error("El archivo debe ser una imagen en formato jpg, jpeg, png o webp y menor a 200KB");
       }
-  
+
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
   
       const response = await fetch(`${fitZoneApi}/files/uploadClassImage/${classId}`, {
         method: "PATCH",
         body: formData,
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Server error while uploading class image:", errorData);
-        throw new Error(`Failed to upload image for class ID ${classId}: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`);
-      }
-  
+        console.error("Server error:", errorData); 
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
       const result = await response.json();
-      console.log("Server response for uploaded class image:", result);
-      return result;
+      console.log("Server response", result);
+      return Result
     } catch (error) {
-      console.error("Error while uploading class image:", error);
+      console.error("Error when uploading image", error);
       return null;
     }
-  }
+  };
   
 
 export const reserveClass = async (claseId: string, userId: string) => {

@@ -124,7 +124,7 @@ export const getTrainingPlans = async () => {
 export const getReservedClasses = async (classId: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000//classRegistration/class/${classId}`,
+      `${fitZoneApi}/classRegistration/class/${classId}`,
       {
         method: "GET",
       }
@@ -136,5 +136,25 @@ export const getReservedClasses = async (classId: string) => {
     return data;
   } catch (error) {
     console.error("Error obtaining reservated classes:", error);
+  }
+};
+
+
+export const getCoaches = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${fitZoneApi}/users/coaches`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error obtaining coaches:", error);
   }
 };

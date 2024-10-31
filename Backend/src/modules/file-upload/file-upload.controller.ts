@@ -42,6 +42,7 @@ export class FileUploadController {
   }
 
   @Patch('uploadClassImage/:id')
+  @UseInterceptors(FileInterceptor('file'))
   uploadClassImage(
     @Param('id', ParseUUIDPipe) classId: string,
     @UploadedFile(

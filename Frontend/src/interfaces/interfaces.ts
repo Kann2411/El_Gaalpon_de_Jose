@@ -15,6 +15,19 @@ export interface IProviderLogin {
     provider: 'google'; 
 }
 
+export interface IClassData {
+    name: string;
+    intensity: "low" | "medium" | "high";
+    capacity: number;
+    status: "Active" | "Inactive";
+    description: string;
+    duration: string;
+    day: string;
+    starttime: string;
+    endtime: string;
+    coach: string;
+  }
+
 
 export type SignInCredential = ILogin | IProviderLogin;
 

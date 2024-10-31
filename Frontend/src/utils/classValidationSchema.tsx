@@ -1,18 +1,22 @@
-import * as Yup from 'yup';
+// validationSchemas.js
+import * as Yup from "yup";
 
 export const classValidationSchema = Yup.object().shape({
-    name: Yup.string().required('El nombre es requerido'),
-    intensity: Yup.string().required('La intensidad es requerida'),
-    capacity: Yup.number()
-        .required('La capacidad es requerida')
-        .min(0, 'La capacidad no puede ser menor que 0')
-        .max(20, 'La capacidad no puede ser mayor que 20')
-        .integer('La capacidad debe ser un número entero'),
-    status: Yup.string().oneOf(['Active', 'Finished', 'Canceled'], 'Estado no válido'),
-    image: Yup.string().url('URL de imagen no válida').required('La imagen es requerida'),
-    description: Yup.string().required('La descripción es requerida'),
-    duration: Yup.string().required('La duración es requerida'),
-    day: Yup.string().required('El día es requerido'),
-    starttime: Yup.string().required('La hora de inicio es requerida'),
-    endtime: Yup.string().required('La hora de fin es requerida'),
+  name: Yup.string().required("Name is required"),
+  intensity: Yup.string().oneOf(["low", "medium", "high"], "Invalid intensity").required("Intensity is required"),
+  capacity: Yup.number()
+    .min(1, "Minimum capacity is 1")
+    .max(20, "Maximum capacity is 20")
+    .required("Capacity is required"),
+  status: Yup.string().oneOf(["Active", "Inactive"], "Invalid status").required("Status is required"),
+  description: Yup.string().required("Description is required"),
+  duration: Yup.string().required("Duration is required"),
+  day: Yup.string().required("Day is required"),
+  starttime: Yup.string()
+    .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
+    .required("Start time is required"),
+  endtime: Yup.string()
+    .matches(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format")
+    .required("End time is required"),
+  coach: Yup.string().required("Coach is required"),
 });
