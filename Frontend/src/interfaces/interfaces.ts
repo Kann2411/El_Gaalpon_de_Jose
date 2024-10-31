@@ -125,3 +125,8 @@ export interface IClassInfo {
     registrations: IRegistration[]
 }
 
+export interface IUserListProps {
+    users: IUser[];
+    renderRoleButtons: (userRole: 'user' | 'admin' | 'coach', userId: string) => JSX.Element;
+    changeUserRole: (userId: string, newRole: 'user' | 'admin' | 'coach') => void;
+}

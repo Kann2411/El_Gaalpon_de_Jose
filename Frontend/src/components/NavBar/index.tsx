@@ -152,7 +152,7 @@ const NavBarComponent = () => {
   useEffect(() => {
     if (isLogged) {
       if(user?.role === 'admin') {
-        router.push("/users");
+        router.push("/users-controller");
       } else if (user?.role === 'coach') {
         router.push("/training-management");
       } else if (user?.role === 'user') {
@@ -218,15 +218,11 @@ const NavBarComponent = () => {
       ) : user?.role === "admin" ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Users", "Coaches", "Admins", "Classes"].map((item, index) => {
+            {["Users Controller","Classes"].map((item, index) => {
               const lowerCaseItem = item.toLowerCase();
               const route =
-                lowerCaseItem === "users"
-                  ? "/users"
-                  : lowerCaseItem === "coaches"
-                  ? "/coaches"
-                  : lowerCaseItem === "admins"
-                  ? "/admins"
+                lowerCaseItem === "users-controller"
+                  ? "/users-controller"
                   : "/classes";
 
               return (

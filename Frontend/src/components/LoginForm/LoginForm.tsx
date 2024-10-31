@@ -38,7 +38,7 @@ export default function LoginForm() {
         buttonsStyling: false,
       });
       if(user?.role === 'admin') {
-        router.push("/users");
+        router.push("/users-controller");
       } else if (user?.role === 'coach') {
         router.push("/training-management");
       } else if (user?.role === 'user') {
@@ -61,6 +61,7 @@ export default function LoginForm() {
     }
     resetForm();
   };
+  
 
   return (
     <Formik

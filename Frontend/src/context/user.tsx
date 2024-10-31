@@ -6,8 +6,7 @@ import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import { useRouter } from 'next/navigation';
-import { Session } from "next-auth";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export const UserContext = createContext<IUserContext>({
     user: null,
@@ -30,63 +29,60 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("🚀 ~ UserProvider ~ status:", status);
     console.log("🚀 ~ UserProvider ~ session:", session);
 
-
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
-        try {
-          let data: IUserResponse | null;
-      
-          if ('provider' in credentials) {
-            return true;
-          } else {
-            const userResponse = await postSignIn(credentials);
-            if (userResponse) {
-              data = { user: userResponse.user, token: userResponse.token };
-            } else {
-              data = null;
-            }
-          }
-      
-          if (data && data.token) {
-            const decodedToken: DecodedToken = jwtDecode(data.token);
-            const role = decodedToken.roles;
-            const userId = decodedToken.id;
-      
-            const userWithRole = {
-              ...data.user,
-              role: role,
-              id: userId,
-              token: data.token,
-            };
-      
-            // Llamar a fetchUserData y obtener imgUrl y otros datos
-            const fetchedUserData = await fetchUserData(userId, data.token);
-            
-            if (fetchedUserData) {
-              setUser({ ...userWithRole, ...fetchedUserData });
-              setImgUrl(fetchedUserData.imgUrl || null);
-              localStorage.setItem(`imgUrl_${userId}`, fetchedUserData.imgUrl || '');
-            }
-      
-            localStorage.setItem('user', JSON.stringify(userWithRole));
-            localStorage.setItem('token', data.token);
-      
-            setIsLogged(true);
-            return true;
-          }
-      
-          console.warn("No se pudo iniciar sesión, datos no válidos:", data);
-          return false;
-        } catch (error) {
-          if (error instanceof Error) {
-            console.error('Error durante el login:', error.message);
-          } else {
-            console.error('Error inesperado durante el login:', error);
-          }
-          return false;
-        }
-      };
-      
+      try {
+        let data: IUserResponse | null;
     
+        if ('provider' in credentials) {
+          return true;
+        } else {
+          const userResponse = await postSignIn(credentials);
+          if (userResponse) {
+            data = { user: userResponse.user, token: userResponse.token };
+          } else {
+            data = null;
+          }
+        }
+    
+        if (data && data.token) {
+          const decodedToken: DecodedToken = jwtDecode(data.token);
+          const role = decodedToken.roles;
+          const userId = decodedToken.id;
+    
+          const userWithRole = {
+            ...data.user,
+            role: role,
+            id: userId,
+            token: data.token,
+          };
+    
+          // Llamar a fetchUserData y obtener imgUrl y otros datos
+          const fetchedUserData = await fetchUserData(userId, data.token);
+          
+          if (fetchedUserData) {
+            setUser({ ...userWithRole, ...fetchedUserData });
+            setImgUrl(fetchedUserData.imgUrl || null);
+            localStorage.setItem(`imgUrl_${userId}`, fetchedUserData.imgUrl || '');
+          }
+    
+          localStorage.setItem('user', JSON.stringify(userWithRole));
+          localStorage.setItem('token', data.token);
+    
+          setIsLogged(true);
+          return true;
+        }
+    
+        console.warn("No se pudo iniciar sesión, datos no válidos:", data);
+        return false;
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error('Error durante el login:', error.message);
+        } else {
+          console.error('Error inesperado durante el login:', error);
+        }
+        return false;
+      }
+    };
     
 
     const signUp = async (user: Omit<IUser, "id">): Promise<{ success: boolean; errorMessage?: string }> => {
