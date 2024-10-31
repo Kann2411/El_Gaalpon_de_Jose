@@ -1,4 +1,4 @@
-import { Injectable, Redirect } from '@nestjs/common';
+import { BadRequestException, Injectable, Redirect } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import MercadoPagoConfig, { Payment, Preference } from 'mercadopago';
 import { config as dotenvConfig } from 'dotenv';
@@ -31,11 +31,16 @@ export class MercadoPagoRepository {
       if(response.ok){
         const data = await response.json();
 
-        const pago = await this.mercadoPagoRepository.findOne({
+        let pago = await this.mercadoPagoRepository.findOne({
           where: { preferenceId: data.id },
         });
 
-        const newPago = {
+        if(!pago){
+          throw new BadRequestException("El pago no ha sido encontrado")
+        }
+
+        pago = {
+          ...pago,
           estado: EstadoPago.COMPLETADO,
           fecha: data.date_approved,
           metodoPago: MetodoPago.MERCADOPAGO,
@@ -45,7 +50,6 @@ export class MercadoPagoRepository {
           monto: data.transaction_details.total_paid_amount,
         }
         return this.dataSource.manager.transaction(async (manager) => {
-            const pagoData = manager.create(Pago, newPago)
             const result = await manager.save(Pago, pago);
             return "Pago successfully"+result
         });
@@ -74,7 +78,7 @@ export class MercadoPagoRepository {
         email: 'test_user_1072648989@testuser.com',
       },
       // Url de la aplicación deployada o un url de un tunnel
-      // notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}`,
+      notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}`,
     };
     try {
       const preference = await new Preference(client).create({ body });
