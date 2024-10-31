@@ -31,7 +31,7 @@ export async function postSignIn(
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
 
-    const result: IUserResponse = await response.json(); // Asegúrate de que el resultado cumpla con IUserResponse
+    const result: IUserResponse = await response.json();
     return result;
   } catch (error) {
     if (error instanceof Error) {
@@ -45,6 +45,9 @@ export async function postSignIn(
     return null;
   }
 }
+
+
+
 
 export async function postSignUp(user: Omit<IUser, "id">) {
   try {
@@ -160,3 +163,32 @@ export const fetchUserData = async (
     return null;
   }
 };
+
+export async function banUser(userId: string, isBanned: boolean): Promise<void> {
+  const token = localStorage.getItem("token"); 
+
+  if (!token) {
+    console.error("Error: Usuario no autenticado.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${fitZoneApi}/users/ban-user/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ isBanned }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error al cambiar estado de baneo: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("Estado de baneo actualizado exitosamente:", data);
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}

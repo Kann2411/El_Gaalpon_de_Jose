@@ -4,7 +4,7 @@ import { MetodoPago } from 'src/enums/metodoPago.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-  name: 'Pagos',
+  name: 'pagos',
 })
 export class Pago {
   @ApiProperty({
