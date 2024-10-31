@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { UserContext } from "@/context/user";
 import ModalProfilePhoto from "../ModalProfilePhoto/ModalProfilePhoto";
 import Swal from "sweetalert2";
-import { Search } from "lucide-react";
+import { Search, LogOut, UserRound } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearch } from "@/context/SearchContext";
 import { fitZoneApi } from "@/api/rutaApi";
@@ -55,6 +55,15 @@ const NavBarComponent = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  const handleDashboardClick = () => {
+    closeMenu();
+    router.push("/dashboard");
   };
 
   const handleLogout = () => {
@@ -155,9 +164,9 @@ const NavBarComponent = () => {
         router.push("/users-controller");
       } else if (user?.role === 'coach') {
         router.push("/training-management");
-      } else if (user?.role === 'user') {
+      } else if (user?.role === "user") {
         router.push("/home");
-      } 
+      }
     }
   }, [isLogged, router]);
 
@@ -247,30 +256,32 @@ const NavBarComponent = () => {
       ) : user?.role === "coach" ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Training Management", "Registrated Classes"].map((item, index) => {
-              const lowerCaseItem = item.toLowerCase();
-              const route =
-                lowerCaseItem === "training management"
-                  ? "/training-management"
-                  : "/registrated-classes";
+            {["Training Management", "Registrated Classes"].map(
+              (item, index) => {
+                const lowerCaseItem = item.toLowerCase();
+                const route =
+                  lowerCaseItem === "training management"
+                    ? "/training-management"
+                    : "/registrated-classes";
 
-              return (
-                <li key={index} className="relative group">
-                  <Link
-                    href={route}
-                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
-                  >
-                    {item}
-                  </Link>
-                  <span
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                      pathname === route ? "scale-x-100" : "scale-x-0"
-                    }`}
-                  />
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
-                </li>
-              );
-            })}
+                return (
+                  <li key={index} className="relative group">
+                    <Link
+                      href={route}
+                      className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                    >
+                      {item}
+                    </Link>
+                    <span
+                      className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
+                        pathname === route ? "scale-x-100" : "scale-x-0"
+                      }`}
+                    />
+                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
+                  </li>
+                );
+              }
+            )}
           </ul>
         </nav>
       ) : !isLogged ? (
@@ -363,30 +374,44 @@ const NavBarComponent = () => {
             {isMenuOpen && (
               <>
                 <div className="px-4 py-2 text-black">
-                  <p className="font-medium">{user?.name}</p>
-                  <p className="font-light">{user?.email}</p>
+                  {/* Información del usuario */}
+                  <div className="mb-4 border-solid ">
+                    <p className="font-medium text-center">{user?.name}</p>
+                    <p className="font-light ml-1 text-center">{user?.email}</p>
+                  </div>
+
+                  {/* Botón del Dashboard */}
+                  <button
+                    onClick={() => {
+                      closeMenu(); // Cerrar el menú
+                      router.push("/dashboard"); // Redirigir al dashboard
+                    }}
+                    className="w-full px-4 py-2 flex items-center text-left text-black hover:bg-red-100 mb-4"
+                  >
+                    <UserRound className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </button>
+
+                  {/* Línea gris separadora */}
+                  <hr className="border-gray-400 my-4 w-full" />
+
+                  {/* Botón de Cerrar Sesión */}
+                  <button
+                    onClick={handleLogout}
+                    className="w-full px-4 py-2 flex items-center text-left text-red-600 hover:bg-red-100 mb-2"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Log Out
+                  </button>
                 </div>
-                {/*     <button
-                  onClick={() => router.push("/dashboard")}
-                  className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
-                >
-                  Dashboard
-                </button> */}
 
-                <button
-                  onClick={handleLogout}
-                  className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-100"
-                >
-                  Log Out
-                </button>
-
-                {/* Botón para cambiar la foto de perfil */}
+                {/* Botón para cambiar la foto de perfil
                 <button
                   onClick={() => document.getElementById("fileInput")?.click()}
                   className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
                 >
                   Change profile photo
-                </button>
+                </button> */}
 
                 {/* Input oculto para subir archivos */}
                 <input
@@ -419,13 +444,13 @@ const NavBarComponent = () => {
         </div>
       )}
 
-      <ModalProfilePhoto
+      {/* <ModalProfilePhoto
         isOpen={showModal}
         onClose={handleCancel}
         onAccept={handleUpload}
       >
         Are you sure you want to change your photo?
-      </ModalProfilePhoto>
+      </ModalProfilePhoto> */}
     </header>
   );
 };

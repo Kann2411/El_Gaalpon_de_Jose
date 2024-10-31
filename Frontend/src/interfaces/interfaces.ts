@@ -130,3 +130,5 @@ export interface IUserListProps {
     renderRoleButtons: (userRole: 'user' | 'admin' | 'coach', userId: string) => JSX.Element;
     changeUserRole: (userId: string, newRole: 'user' | 'admin' | 'coach') => void;
 }
+
+export default IUser;
