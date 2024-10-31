@@ -12,6 +12,7 @@ interface ISuscriptionData {
   quantity: number;
   unit_price: number;
   currency_id: string;
+  userId: string
 }
 interface PlanCardProps {
   planId: string;
@@ -20,10 +21,12 @@ interface PlanCardProps {
   currency: string;
   description: string;
   benefits: string[];
+  userId: string;
   idealFor: string;
 }
 
 const PlansView: React.FC = () => {
+  const { user } = useContext(UserContext);
   const [plans, setPlans] = useState<PlanCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,6 +79,7 @@ const PlansView: React.FC = () => {
             description={plan.description}
             benefits={plan.benefits}
             idealFor={plan.idealFor}
+            userId={user?.id || ""}
           />
         ))}
       </div>
@@ -91,6 +95,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
   benefits,
   idealFor,
   planId,
+  userId
 }) => {
   const { user } = useContext(UserContext);
   const router = useRouter();
@@ -122,6 +127,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       quantity: 1,
       currency_id: currency,
       unit_price: Number(price),
+      userId: userId,
     };
 
     console.log(suscripcionData);
