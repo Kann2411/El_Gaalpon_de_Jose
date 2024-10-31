@@ -2,9 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { GymClass, IUser } from "@/interfaces/interfaces"; // Asegúrate de importar IUser
-import { createGymClass } from "@/lib/server/fetchClasses";
-import { uploadImage } from "@/lib/server/fetchCoaches";
+import { GymClass, IUser, ImageClass } from "@/interfaces/interfaces"; // Asegúrate de importar IUser
+import { createGymClass, uploadClassImage } from "@/lib/server/fetchClasses";
 import { getUsers } from "@/lib/server/fetchUsers"; // Asegúrate de importar la función para obtener usuarios
 import Loading from "@/components/Loading/Loading"; // Asegúrate de que la ruta sea correcta
 import Swal from "sweetalert2";
@@ -71,9 +70,8 @@ const CreateGymClassForm: React.FC = () => {
           coach: values.coach,
         };
         const gymClassResponse = await createGymClass(gymClassData);
-
-        if (values.image) {
-          const uploadResponse = await uploadImage(
+        if (gymClassResponse) {
+          const uploadResponse = await uploadClassImage(
             gymClassResponse.id,
             values.image!
           );
