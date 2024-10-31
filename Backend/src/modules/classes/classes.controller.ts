@@ -20,7 +20,7 @@ import { CreateClassDto } from 'src/dtos/createClass.dto';
 import { OmitPasswordInterceptor } from 'src/interceptors/omitPasswordClassData.interceptor';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-UseInterceptors(OmitPasswordInterceptor);
+@UseInterceptors(OmitPasswordInterceptor)
 @ApiTags('Class')
 @Controller('class')
 export class ClassesController {
@@ -37,15 +37,8 @@ export class ClassesController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('image'))
-  async createClass(
-    @Body() classData: CreateClassDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    if (!file) {
-      throw new BadRequestException('Image file is required');
-    }
-    return this.classesService.createClass(classData, file);
+  createClass(@Body() classData: CreateClassDto) {
+    return this.classesService.createClass(classData);
   }
 
   @Put()

@@ -16,8 +16,8 @@ export class ClassService {
     return this.classesRepository.getClassById(id);
   }
 
-  createClass(classData: CreateClassDto, file: Express.Multer.File) {
-    return this.classesRepository.createClass(classData, file);
+  createClass(classData: CreateClassDto) {
+    return this.classesRepository.createClass(classData);
   }
 
   updateClass(id: UUID, classData: Class) {
