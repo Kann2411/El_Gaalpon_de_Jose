@@ -96,7 +96,7 @@ export interface FormValues {
     day: string;
     starttime: string;
     endtime: string;
-    coach: Partial<IUser>;
+    coach: string;  
   }
   
 

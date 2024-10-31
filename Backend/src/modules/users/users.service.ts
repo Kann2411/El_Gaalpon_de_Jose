@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
-import { CreateUserDto } from '../../dtos/createUser.dto';
 import { UpdateProfileDto } from 'src/dtos/updateProfile.dto';
 import { ChangePasswordDto } from 'src/dtos/changePassword.dto';
 import { SetPasswordDto } from 'src/dtos/setPassword.dto';
@@ -11,6 +10,10 @@ export class UsersService {
 
   getUsers() {
     return this.usersRepository.getUsers();
+  }
+
+  getCoaches() {
+    return this.usersRepository.getCoaches();
   }
 
   getUserByIdImag(id: string) {

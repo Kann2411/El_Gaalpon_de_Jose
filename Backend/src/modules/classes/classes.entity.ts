@@ -70,6 +70,6 @@ export class Class {
   registrations: ClassRegistration[];
 
   @ApiProperty({ description: 'Usuario coach asignado a la clase' })
-  @ManyToOne(() => User, { nullable: true })
-  coach?: User;
+  @ManyToOne(() => User, { nullable: false })
+  coach: User;
 }
