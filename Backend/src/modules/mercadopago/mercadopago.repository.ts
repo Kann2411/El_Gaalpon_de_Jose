@@ -11,6 +11,7 @@ import { UsersRepository } from '../users/users.repository';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 import { v4 as uuidv4 } from 'uuid';
 import { MailerService } from '@nestjs-modules/mailer';
+import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
 
 dotenvConfig({ path: '.env' });
 
@@ -40,6 +41,7 @@ export class MercadoPagoRepository {
 
       if(response.ok){
         const data = await response.json();
+        console.log(data)
 
         let pago = await this.mercadoPagoRepository.findOne({
           where: { id: pagoId },
@@ -61,6 +63,9 @@ export class MercadoPagoRepository {
         }
         return this.dataSource.manager.transaction(async (manager) => {
             const result = await manager.save(Pago, pago);
+            user.estadoMembresia = EstadoMembresia.ACTIVA;
+            // user.membership = data.
+
             this.mailerService.sendMail({
               to: user.email,
               from: process.env.EMAIL_USER,
@@ -178,11 +183,8 @@ export class MercadoPagoRepository {
           currency_id: 'USD',
         },
       ],
-      payer: {
-        email: 'test_user_1072648989@testuser.com',
-      },
       // Url de la aplicación deployada o un url de un tunnel
-      notification_url: `https://toolbox-deputy-york-devil.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
+      notification_url: `https://covers-capacity-cube-kill.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
     };
     try {
       const preference = await new Preference(client).create({ body });
