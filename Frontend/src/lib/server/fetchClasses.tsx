@@ -118,3 +118,15 @@ export async function getClassRegistration(classId: string) {
     return null;
   }
 }
+
+export const cancelClassRegistration = async (classId: string, userId: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`${fitZoneApi}/classRegistration/${classId}/delete/${userId}`, {
+      method: 'DELETE',
+    });
+    return response.ok;
+  } catch (error) {
+    console.error('Error cancelling class registration:', error);
+    return false;
+  }
+};

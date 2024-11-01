@@ -1,7 +1,7 @@
 'use client';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@/context/user';
-import { getClassRegistration } from '@/lib/server/fetchClasses';
+import { getClassRegistration, cancelClassRegistration } from '@/lib/server/fetchClasses';
 import Loading from '@/components/Loading/Loading'; // Asegúrate de que la ruta sea correcta
 
 const AppointmentsView: React.FC = () => {
@@ -41,7 +41,7 @@ interface ReservedClassesProps {
 
 const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -49,13 +49,21 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
       if (data) {
         setClasses(data);
       }
-      setLoading(false); // Cambiar el estado de carga a false después de obtener los datos
+      setLoading(false);
     };
 
     fetchClasses();
   }, [userId]);
 
-  // Mostrar el componente de carga si está en estado de carga
+  const handleCancel = async (classId: string) => {
+    setLoading(true);
+    const success = await cancelClassRegistration(classId, userId);
+    if (success) {
+      setClasses((prevClasses) => prevClasses.filter((classItem) => classItem.id !== classId));
+    }
+    setLoading(false);
+  };  
+
   if (loading) return <Loading />;
 
   return (
@@ -79,6 +87,12 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
                   <br />
                   <span className="text-sm">Time: Start: {classItem.starttime} - End: {classItem.endtime}</span>
                 </div>
+                <button
+                  onClick={() => handleCancel(classItem.id)}
+                  className="mt-4 w-full bg-red-500 text-white py-1 px-4 rounded-lg hover:bg-red-600"
+                >
+                  Cancel Appointment
+                </button>
               </div>
               <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                 {classItem.status}
@@ -88,7 +102,7 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
         </div>
       ) : (
         <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
-          <p className="text-white">There's no reservated classes</p>
+          <p className="text-white">There's no reserved classes</p>
         </div>
       )}
     </div>
