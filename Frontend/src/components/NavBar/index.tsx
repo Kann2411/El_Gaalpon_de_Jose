@@ -13,7 +13,7 @@ import { useSearch } from "@/context/SearchContext";
 import { fitZoneApi } from "@/api/rutaApi";
 
 const NavBarComponent = () => {
-  const { user, logOut, isLogged, imgUrl, setImgUrl } = useContext(UserContext);
+  const { user, logOut, isLogged,  } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
@@ -104,7 +104,6 @@ const NavBarComponent = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setImgUrl(() => data.imgUrl);
 
         // Actualiza el localStorage con la nueva imagen
         const userId = user.id;
@@ -355,7 +354,7 @@ const NavBarComponent = () => {
           >
             <img
               src={
-                imgUrl ||
+                user?.imgUrl ||
                 "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"
               }
               alt="avatar"

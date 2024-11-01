@@ -6,6 +6,7 @@ import { getUsers, changeUserRole, banUser } from "@/lib/server/fetchUsers";
 import { IUser } from "@/interfaces/interfaces";
 import Loading from "@/components/Loading/Loading";
 import Swal from "sweetalert2";
+import Image from "next/image";
 
 export default function UserManagementView() {
   const router = useRouter();
@@ -143,9 +144,18 @@ export default function UserManagementView() {
       <ul className="space-y-4">
         {users.map((u) => (
           <li key={u.id} className="flex justify-between items-center p-4 bg-zinc-900 rounded-lg shadow-md">
-            <span className="text-lg">
+            <div className="flex flex-row">
+            <Image
+          src={u.imgUrl || "/default-avatar.png"} 
+          alt={u.name}
+          width={40}
+          height={40} 
+          className="rounded-full me-4"
+        />
+            <span className="text-lg pt-1">
               {u.name} - {u.email} - Role: {u.role || "Role not defined"}
             </span>
+            </div>
             <div className="flex space-x-2">
               {u.role ? renderRoleButtons(u.role as "user" | "admin" | "coach", u.id) : null}
               <button

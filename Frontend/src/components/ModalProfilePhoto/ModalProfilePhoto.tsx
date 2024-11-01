@@ -15,6 +15,7 @@ const ModalProfilePhoto: React.FC<ModalProps> = ({ isOpen, onClose, onAccept, ch
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-75">
             <div className="bg-neutral-900 rounded-lg p-6 max-w-md w-full">
                 <h2 className="text-white text-lg font-mediummb-4 text-center mb-7">{children}</h2>
+                
                 <div className="flex justify-center">
                     <button
                         onClick={onAccept}

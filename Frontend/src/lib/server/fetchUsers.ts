@@ -192,3 +192,29 @@ export async function banUser(userId: string, isBanned: boolean): Promise<void> 
     console.error("Error en la solicitud:", error);
   }
 }
+
+export const uploadProfilePhoto = async (userId: string, file: File): Promise<string | null> => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const token = localStorage.getItem("token");
+
+  try {
+      const response = await fetch(`${fitZoneApi}/files/profileImages/${userId}`, {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+      });
+
+      if (!response.ok) throw new Error("Error al subir la foto de perfil");
+
+      const data = await response.json();
+      return data.imgUrl; // Asegúrate de que el backend devuelva la URL de la imagen
+  } catch (error) {
+      console.error("Error en uploadProfilePhoto:", error);
+      return null;
+  }
+};
+
+
