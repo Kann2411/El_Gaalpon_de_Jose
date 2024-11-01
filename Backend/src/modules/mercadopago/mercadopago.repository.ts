@@ -6,6 +6,10 @@ import { Pago } from './pago.entity';
 import { DataSource, Repository } from 'typeorm';
 import { EstadoPago } from 'src/enums/estadoPago.enum';
 import { MetodoPago } from 'src/enums/metodoPago.enum';
+import { User } from '../users/users.entity';
+import { UsersRepository } from '../users/users.repository';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { v4 as uuidv4 } from 'uuid';
 
 dotenvConfig({ path: '.env' });
 
@@ -16,10 +20,11 @@ export class MercadoPagoRepository {
   constructor(
     @InjectRepository(Pago)
     private readonly mercadoPagoRepository: Repository<Pago>,
+    @InjectRepository(User) private readonly usersRepository: UsersRepository,
     @InjectDataSource() private readonly dataSource: DataSource,
   ) {}
 
-  async getPaymentStatus(id, userId) {
+  async getPaymentStatus(id, userId, pagoId) {
     try {
       const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
         method: 'GET',
@@ -30,9 +35,10 @@ export class MercadoPagoRepository {
 
       if(response.ok){
         const data = await response.json();
+        console.log("data: ",data, "fin data")
 
         let pago = await this.mercadoPagoRepository.findOne({
-          where: { preferenceId: data.id },
+          where: { id: pagoId },
         });
 
         if(!pago){
@@ -45,7 +51,7 @@ export class MercadoPagoRepository {
           fecha: data.date_approved,
           metodoPago: MetodoPago.MERCADOPAGO,
           preferenceId: data.id,
-          userId: userId,
+          user: userId,
           moneda: data.currency_id,
           monto: data.transaction_details.total_paid_amount,
         }
@@ -61,8 +67,20 @@ export class MercadoPagoRepository {
   }
 
   async createPreference(bodySuscription) {
-    bodySuscription.userId = "userId";
-    console.log(bodySuscription);
+    const uuid = uuidv4();
+    let pagoB = this.mercadoPagoRepository.create({
+      id: String(uuid),
+      preferenceId: "null",
+      user: bodySuscription.userId,
+      estado: EstadoPago.PENDIENTE,
+      monto: 0,
+      moneda: 'USD',
+      fecha: new Date(),
+      metodoPago: MetodoPago.MERCADOPAGO,
+    });
+    await this.mercadoPagoRepository.save(pagoB);
+    let pago = await this.mercadoPagoRepository.findOne({where: {id: pagoB.id}})
+
     const body = {
       items: [
         {
@@ -70,30 +88,31 @@ export class MercadoPagoRepository {
           title: bodySuscription.title,
           quantity: Number(bodySuscription.quantity),
           unit_price: Number(bodySuscription.unit_price),
-          //unit_price: 1,
-          currency_id: 'ARS',
+          currency_id: 'USD',
         },
       ],
       payer: {
         email: 'test_user_1072648989@testuser.com',
       },
       // Url de la aplicación deployada o un url de un tunnel
-      notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}`,
+      notification_url: `https://principles-conviction-sparc-refused.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
     };
     try {
       const preference = await new Preference(client).create({ body });
-      
-      const pago = this.mercadoPagoRepository.create({
+
+      pago ={
+        ...pago,
         preferenceId: preference.id,
-        userId: bodySuscription.userId,
+        user: bodySuscription.userId,
         estado: EstadoPago.PENDIENTE,
         monto: body.items[0].quantity,
         moneda: 'USD',
         fecha: new Date(),
         metodoPago: MetodoPago.MERCADOPAGO,
-      });
+      };
+      
       await this.mercadoPagoRepository.save(pago);
-
+      
       return { redirectUrl: preference.init_point };
     } catch (error) {
       console.log('error: ', error);

@@ -5,8 +5,8 @@ import { MercadoPagoRepository } from './mercadopago.repository';
 export class MercadoPagoService {
   constructor(private readonly mercadoPagoRepository: MercadoPagoRepository) {}
 
-  async getPaymentStatus(id, userId) {
-    return this.mercadoPagoRepository.getPaymentStatus(id, userId);
+  async getPaymentStatus(id, userId, pagoId) {
+    return this.mercadoPagoRepository.getPaymentStatus(id, userId, pagoId);
   }
 
   async createPreference(bodySuscription) {

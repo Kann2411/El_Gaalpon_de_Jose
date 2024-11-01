@@ -8,6 +8,7 @@ import { ClassRegistration } from '../classes/classesRegistration.entity';
 import { Class } from '../classes/classes.entity';
 import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
 import { TipoMembresia } from 'src/enums/tipoMembresia.enum';
+import { Pago } from '../mercadopago/pago.entity';
 
 @Entity('users')
 export class User {
@@ -140,4 +141,11 @@ export class User {
   })
   @OneToMany(() => Class, (classEntity) => classEntity.coach)
   classesAsCoach: Class[];
+
+  @ApiProperty({
+    description: 'Pagos asociados al usuario',
+    type: () => [Pago],
+  })
+  @OneToMany(() => Pago, (pago) => pago.user, {nullable: true})
+  pagos: Pago[];
 }
