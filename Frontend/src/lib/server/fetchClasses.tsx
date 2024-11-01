@@ -119,9 +119,9 @@ export async function getClassRegistration(classId: string) {
   }
 }
 
-export const cancelClassRegistration = async (classId: string): Promise<boolean> => {
+export const cancelClassRegistration = async (classId: string, userId: string): Promise<boolean> => {
   try {
-    const response = await fetch(`/api/cancel-registration/${classId}`, {
+    const response = await fetch(`${fitZoneApi}/classRegistration/${classId}/delete/${userId}`, {
       method: 'DELETE',
     });
     return response.ok;

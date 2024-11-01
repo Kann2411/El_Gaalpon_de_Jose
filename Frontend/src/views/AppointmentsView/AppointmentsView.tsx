@@ -57,12 +57,12 @@ const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
 
   const handleCancel = async (classId: string) => {
     setLoading(true);
-    const success = await cancelClassRegistration(classId);
+    const success = await cancelClassRegistration(classId, userId);
     if (success) {
       setClasses((prevClasses) => prevClasses.filter((classItem) => classItem.id !== classId));
     }
     setLoading(false);
-  };
+  };  
 
   if (loading) return <Loading />;
 
