@@ -10,6 +10,7 @@ import { User } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 import { v4 as uuidv4 } from 'uuid';
+import { MailerService } from '@nestjs-modules/mailer';
 
 dotenvConfig({ path: '.env' });
 
@@ -18,14 +19,18 @@ const client = new MercadoPagoConfig({ accessToken: process.env.ACCESS_TOKEN });
 @Injectable()
 export class MercadoPagoRepository {
   constructor(
-    @InjectRepository(Pago)
-    private readonly mercadoPagoRepository: Repository<Pago>,
-    @InjectRepository(User) private readonly usersRepository: UsersRepository,
+    @InjectRepository(Pago) private readonly mercadoPagoRepository: Repository<Pago>,
+    private readonly usersRepository: UsersRepository,
     @InjectDataSource() private readonly dataSource: DataSource,
+    private readonly mailerService: MailerService,
   ) {}
 
   async getPaymentStatus(id, userId, pagoId) {
     try {
+      const user = await this.usersRepository.getUserById(userId)
+      if (!user) {
+        throw new BadRequestException('User not found');
+      }
       const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
         method: 'GET',
         headers: {
@@ -35,7 +40,6 @@ export class MercadoPagoRepository {
 
       if(response.ok){
         const data = await response.json();
-        console.log("data: ",data, "fin data")
 
         let pago = await this.mercadoPagoRepository.findOne({
           where: { id: pagoId },
@@ -57,6 +61,89 @@ export class MercadoPagoRepository {
         }
         return this.dataSource.manager.transaction(async (manager) => {
             const result = await manager.save(Pago, pago);
+            this.mailerService.sendMail({
+              to: user.email,
+              from: process.env.EMAIL_USER,
+              subject: 'Pago Confirmado',
+              template: 'payment-confirmation',
+              text: "Confirmado",
+              html: `
+              <!DOCTYPE html>
+              <html lang="es">
+              <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Confirmación de Pago</title>
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f7f7f7;
+                    color: #333;
+                  }
+                  .container {
+                    max-width: 600px;
+                    margin: 20px auto;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                  }
+                  .header {
+                    text-align: center;
+                    padding: 10px 0;
+                    color: #4CAF50;
+                  }
+                  .header h1 {
+                    margin: 0;
+                    font-size: 24px;
+                  }
+                  .content {
+                    margin-top: 20px;
+                    line-height: 1.6;
+                  }
+                  .payment-details {
+                    background-color: #f1f1f1;
+                    padding: 15px;
+                    border-radius: 6px;
+                    margin-top: 20px;
+                  }
+                  .footer {
+                    text-align: center;
+                    margin-top: 30px;
+                    color: #999;
+                    font-size: 14px;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <div class="header">
+                    <h1>¡Pago Confirmado!</h1>
+                    <p>Gracias por su compra</p>
+                  </div>
+                  <div class="content">
+                    <p>Estimado/a <strong>${user.name}</strong>,</p>
+                    <p>Nos complace informarle que hemos recibido su pago de manera exitosa. A continuación, encontrará los detalles de su transacción:</p>
+                    
+                    <div class="payment-details">
+                      <p><strong>ID de Transacción:</strong> ${data.id}</p>
+                      <p><strong>Monto:</strong> ${data.transaction_details.total_paid_amount} ${data.currency_id}</p>
+                      <p><strong>Fecha:</strong> ${data.date_approved}</p>
+                    </div>
+
+                    <p>Si tiene alguna pregunta o necesita asistencia adicional, no dude en ponerse en contacto con nuestro equipo de soporte.</p>
+                    <p>Gracias por confiar en nosotros.</p>
+                  </div>
+                  <div class="footer">
+                    <p>Atentamente,<br>Equipo de Desarrolladores del Gimnasio</p>
+                  </div>
+                </div>
+              </body>
+              </html>
+            `
+            })
             return "Pago successfully"+result
         });
       }
@@ -95,7 +182,7 @@ export class MercadoPagoRepository {
         email: 'test_user_1072648989@testuser.com',
       },
       // Url de la aplicación deployada o un url de un tunnel
-      notification_url: `https://principles-conviction-sparc-refused.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
+      notification_url: `https://toolbox-deputy-york-devil.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
     };
     try {
       const preference = await new Preference(client).create({ body });
