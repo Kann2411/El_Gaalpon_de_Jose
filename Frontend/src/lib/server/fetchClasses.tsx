@@ -118,3 +118,15 @@ export async function getClassRegistration(classId: string) {
     return null;
   }
 }
+
+export const cancelClassRegistration = async (classId: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`/api/cancel-registration/${classId}`, {
+      method: 'DELETE',
+    });
+    return response.ok;
+  } catch (error) {
+    console.error('Error cancelling class registration:', error);
+    return false;
+  }
+};
