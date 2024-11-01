@@ -113,7 +113,7 @@ export class ClassRepository {
           throw new Error('No se encontró la clase.');
         }
         await manager.remove(classData);
-        return 'Clase eliminada exitosamente';
+        return { message: 'Clase eliminada exitosamente' };
       } catch (error) {
         throw error;
       }
