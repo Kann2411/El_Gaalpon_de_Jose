@@ -10,11 +10,4 @@ import { Horario } from './horario.entity';
   controllers: [HorarioController],
   providers: [HorarioService, HorarioRepository],
 })
-export class HorarioModule {
-  constructor(private readonly horarioRepository: HorarioRepository) {}
-
-  async onModuleInit() {
-    console.log('preload Horarios');
-    await this.horarioRepository.horariosSeeder();
-  }
-}
+export class HorarioModule {}

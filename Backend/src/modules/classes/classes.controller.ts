@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,13 +9,21 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { Class } from './classes.entity';
 import { ClassService } from './classes.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
+import { OmitPasswordInterceptor } from 'src/interceptors/omitPasswordClassData.interceptor';
+import { Roles } from 'src/decorators/role.decorator';
+import { Role } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/guards/roles.guard';
 
+@UseInterceptors(OmitPasswordInterceptor)
 @ApiTags('Class')
 @Controller('class')
 export class ClassesController {
@@ -23,11 +32,6 @@ export class ClassesController {
   @Get()
   getClasses() {
     return this.classesService.getClasses();
-  }
-
-  @Get('seeder')
-  getClassesSeeder() {
-    return this.classesService.classesSeeder();
   }
 
   @Get(':id')

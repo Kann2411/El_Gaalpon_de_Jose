@@ -38,7 +38,29 @@ export class FileUploadController {
     )
     file: Express.Multer.File,
   ) {
-    return this.fileService.updateClassImage(trainingId, file);
+    return this.fileService.updateTrainingPlanImage(trainingId, file);
+  }
+
+  @Patch('uploadClassImage/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadClassImage(
+    @Param('id', ParseUUIDPipe) classId: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 200000,
+            message: 'El archivo debe ser menor a 200kb',
+          }),
+          new FileTypeValidator({
+            fileType: /(jpg|jpeg|png|webp)$/,
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.fileService.updateClassImage(classId, file);
   }
 
   @Post('profileImages/:id')

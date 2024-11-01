@@ -15,6 +15,19 @@ export interface IProviderLogin {
     provider: 'google'; 
 }
 
+export interface IClassData {
+    name: string;
+    intensity: "low" | "medium" | "high";
+    capacity: number;
+    status: "Active" | "Inactive";
+    description: string;
+    duration: string;
+    day: string;
+    starttime: string;
+    endtime: string;
+    coach: string;
+  }
+
 
 export type SignInCredential = ILogin | IProviderLogin;
 
@@ -25,12 +38,12 @@ export interface IUser {
     phone: string; 
     dni: string;
     imgUrl?: string;
-    image?: string;
     registrationMethod?: string; 
     password: string;
     confirmPassword: string;
     role?: string | 'admin' | 'user' | 'coach'; 
     token?: string;
+    isBanned?: boolean
 
   }
 
@@ -90,16 +103,49 @@ export interface FormValues {
     intensity: string;
     capacity: number;
     status: string;
+    // file: File | null;
+    description: string;
+    duration: string;
+    day: string;
+    starttime: string;
+    endtime: string;
+    coach: string;  
+  }
+
+  export interface ImageClass {
+    id: string;
+    file: string;
+  }
+
+  export interface FormValues {
+    description: string;
+    file: File | null;
+}
+
+export interface IRegistration {
+    id: string;
+    user: IUser
+}
+
+export interface IClassInfo {
+    id: string;
+    name: string;
+    intensity: string;
+    capacity: string;
+    status: string;
     image: string;
     description: string;
     duration: string;
     day: string;
     starttime: string;
     endtime: string;
-  }
-  
-
-  export interface FormValues {
-    description: string;
-    file: File | null;
+    registrations: IRegistration[]
 }
+
+export interface IUserListProps {
+    users: IUser[];
+    renderRoleButtons: (userRole: 'user' | 'admin' | 'coach', userId: string) => JSX.Element;
+    changeUserRole: (userId: string, newRole: 'user' | 'admin' | 'coach') => void;
+}
+
+export default IUser;

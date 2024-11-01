@@ -34,8 +34,8 @@ export class MercadoPagoController {
   }
 
   @Post('payment')
-  async getPaymentStatus(@Query('id') id, @Query('userId') userId) {
-    return this.mercadoPagoService.getPaymentStatus(id, userId);
+  async getPaymentStatus(@Query('id') id, @Query('userId') userId, @Query('pagoId') pagoId) {
+    return this.mercadoPagoService.getPaymentStatus(id, userId, pagoId);
   }
 
   @Post('create_preference')

@@ -35,6 +35,10 @@ export class UsersRepository {
     }
   }
 
+  async getCoaches() {
+    return await this.userRepository.find({ where: { role: Role.Coach } });
+  }
+
   async getUserByIdImag(id: string): Promise<string> {
     try {
       const user = await this.userRepository.findOne({

@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { EstadoPago } from 'src/enums/estadoPago.enum';
 import { MetodoPago } from 'src/enums/metodoPago.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../users/users.entity';
 
 @Entity({
-  name: 'Pagos',
+  name: 'pagos',
 })
 export class Pago {
   @ApiProperty({
@@ -35,17 +36,6 @@ export class Pago {
     nullable: true,
   })
   preferenceId: string;
-
-  @ApiProperty({
-    description: 'ID del usuario que realiza el pago',
-    type: 'string',
-    format: 'uuid',
-  })
-  @Column({
-    type: 'varchar',
-    nullable: false,
-  })
-  userId: string;
 
   @ApiProperty({
     description: 'Método de pago utilizado',
@@ -85,13 +75,10 @@ export class Pago {
   })
   moneda: string;
 
-  // @ApiProperty({
-  //   description: 'URL de redirección para confirmar el pago en MercadoPago',
-  //   type: 'string',
-  // })
-  // @Column({
-  //   type: 'varchar',
-  //   nullable: true,
-  // })
-  // redirectUrl: string;
+  @ApiProperty({
+    description: 'Usuario que realiza el pago',
+    type: () => User,
+  })
+  @ManyToOne(() => User, (user) => user.pagos, { nullable: false })
+  user: User;
 }

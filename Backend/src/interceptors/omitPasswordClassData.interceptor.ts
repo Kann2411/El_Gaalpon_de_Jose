@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   CallHandler,
   ExecutionContext,
@@ -12,15 +13,22 @@ export class OmitPasswordInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        if (data && data.registrations) {
+        if (data && data.class && data.class.coach) {
+          const { password, ...coachWithoutPassword } = data.class.coach;
+          data.class.coach = coachWithoutPassword;
+        }
+
+        if (data?.registrations) {
           data.registrations = data.registrations.map((registration) => {
-            const { password, ...userWithoutPassword } = registration.user;
+            const { password, ...userWithoutPassword } =
+              registration.user || {};
             return {
               ...registration,
-              user: userWithoutPassword,
+              user: userWithoutPassword || registration.user,
             };
           });
         }
+
         return data;
       }),
     );

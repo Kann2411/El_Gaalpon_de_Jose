@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ClassRegistration } from './classesRegistration.entity';
+import { User } from '../users/users.entity';
 
 @Entity({ name: 'classes' })
 export class Class {
@@ -50,7 +57,7 @@ export class Class {
   @Column()
   day: string;
 
-  @Column({ type: 'time', default: '00:00:00' })
+  @Column({ type: 'time', default: '00:00' })
   starttime: string;
 
   @Column({ type: 'time' })
@@ -61,4 +68,8 @@ export class Class {
     (classRegistration) => classRegistration.classEntity,
   )
   registrations: ClassRegistration[];
+
+  @ApiProperty({ description: 'Usuario coach asignado a la clase' })
+  @ManyToOne(() => User, { nullable: false })
+  coach: User;
 }

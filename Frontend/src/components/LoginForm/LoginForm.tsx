@@ -4,19 +4,29 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import { loginValidationSchema } from "@/utils/loginValidationSchema";
 import { useRouter } from "next/navigation";
 import { ILogin } from "@/interfaces/interfaces";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "@/context/user";
 import Swal from "sweetalert2";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { signIn } = useContext(UserContext);
+  const { signIn, user } = useContext(UserContext);
   const [focusedField, setFocusedField] = useState("");
 
   const initialValues = {
     email: "",
     password: "",
   };
+
+  // Guardar información del usuario en localStorage después de iniciar sesión
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('userData', JSON.stringify({
+        name: user.name,
+        email: user.email
+      }));
+    }
+  }, [user]);
 
   const handleSubmit = async (
     values: ILogin,
@@ -25,36 +35,48 @@ export default function LoginForm() {
     const res = await signIn(values);
 
     if (res) {
+      // Toast notification para éxito
       Swal.fire({
-        title: "Success!",
-        text: "You are logged in!",
+        position: "top-end",
         icon: "success",
+        title: "You are logged in!",
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
         customClass: {
-          popup: "bg-[#222222] text-white",
-          title: "text-[#B0E9FF]",
-          confirmButton:
-            "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
-        },
-        buttonsStyling: false,
+          popup: 'animated slideInRight'
+        }
       });
 
-      router.push("/home");
+      if(user?.role === 'admin') {
+        router.push("/users-controller");
+      } else if (user?.role === 'coach') {
+        router.push("/training-management");
+      } else if (user?.role === 'user') {
+        router.push("/home");
+      } 
+     
     } else {
+      // Toast notification para error
       Swal.fire({
-        title: "Ups!",
-        text: "Email or password incorrect!",
+        position: "top-end",
         icon: "error",
+        title: "Email or password incorrect!",
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
         customClass: {
-          popup: "bg-[#222222] text-white",
-          title: "text-[#B0E9FF]",
-          confirmButton:
-            "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
-        },
-        buttonsStyling: false,
+          popup: 'animated slideInRight'
+        }
       });
     }
     resetForm();
   };
+  
 
   return (
     <Formik

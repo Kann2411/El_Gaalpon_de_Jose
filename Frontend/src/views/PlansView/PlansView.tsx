@@ -1,17 +1,18 @@
-'use client'
+"use client";
 import React, { useContext, useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { getMembresia } from "@/lib/server/fetchMembresias";
 import { UserContext } from "@/context/user";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-
+import { fitZoneApi } from "@/api/rutaApi";
 
 interface ISuscriptionData {
   title: string;
   quantity: number;
   unit_price: number;
   currency_id: string;
+  userId: string
 }
 interface PlanCardProps {
   planId: string;
@@ -20,36 +21,37 @@ interface PlanCardProps {
   currency: string;
   description: string;
   benefits: string[];
+  userId: string;
   idealFor: string;
 }
 
 const PlansView: React.FC = () => {
+  const { user } = useContext(UserContext);
   const [plans, setPlans] = useState<PlanCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getMembresia()
-    .then((data) => {
-      console.log(data);
-      const formattedPlans = data.map((plan: any) => ({
-        planId: plan.id,
-        plan: plan.plan,
-        price: plan.price,
-        currency: plan.currency || "ARS",  
-        description: plan.description,
-        benefits: plan.benefits,
-        idealFor: plan.idealFor
-      }));
-      setPlans(formattedPlans);
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error("Error fetching membership data:", err);
-      setError("Failed to load plans.");
-      setLoading(false);
-    });
-    
+      .then((data) => {
+        console.log(data);
+        const formattedPlans = data.map((plan: any) => ({
+          planId: plan.id,
+          plan: plan.plan,
+          price: plan.price,
+          currency: plan.currency || "ARS",
+          description: plan.description,
+          benefits: plan.benefits,
+          idealFor: plan.idealFor,
+        }));
+        setPlans(formattedPlans);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching membership data:", err);
+        setError("Failed to load plans.");
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
@@ -70,13 +72,14 @@ const PlansView: React.FC = () => {
         {plans.map((plan, index) => (
           <PlanCard
             key={index}
-            planId= {plan.planId}
+            planId={plan.planId}
             plan={plan.plan}
             price={plan.price}
             currency={plan.currency}
             description={plan.description}
             benefits={plan.benefits}
             idealFor={plan.idealFor}
+            userId={user?.id || ""}
           />
         ))}
       </div>
@@ -84,23 +87,33 @@ const PlansView: React.FC = () => {
   );
 };
 
-const PlanCard: React.FC<PlanCardProps> = ({ plan, price, currency, description, benefits, idealFor, planId }) => {
+const PlanCard: React.FC<PlanCardProps> = ({
+  plan,
+  price,
+  currency,
+  description,
+  benefits,
+  idealFor,
+  planId,
+  userId
+}) => {
   const { user } = useContext(UserContext);
-const router = useRouter()
+  const router = useRouter();
   const createPreference = async () => {
     if (!user) {
       Swal.fire({
-        title: 'Hey!',
-        text: 'You have to be logged in to make a purchase.',
-        icon: 'warning',
+        title: "Hey!",
+        text: "You have to be logged in to make a purchase.",
+        icon: "warning",
         customClass: {
-          popup: 'bg-[#222222] text-white',
-          title: 'text-[#B0E9FF]',
-          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+          popup: "bg-[#222222] text-white",
+          title: "text-[#B0E9FF]",
+          confirmButton:
+            "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
         },
         buttonsStyling: false,
       });
-      router.push('/login')
+      router.push("/login");
 
       return;
     }
@@ -108,18 +121,20 @@ const router = useRouter()
       console.error("Faltan datos para crear la preferencia.");
       return;
     }
-  
+
     const suscripcionData: ISuscriptionData = {
       title: plan,
       quantity: 1,
       currency_id: currency,
       unit_price: Number(price),
+      userId: userId,
     };
 
-    console.log(suscripcionData)
-  
+    console.log(suscripcionData);
+
     try {
-      const response = await fetch("https://el-gaalpon-de-jose.onrender.com/mercadopago/create_preference", {
+
+      const response = await fetch(`${fitZoneApi}/mercadopago/create_preference`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,18 +145,19 @@ const router = useRouter()
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
-  
+
       const data = await response.json();
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl;
       } else {
-        console.error("No se recibió una URL de redirección desde Mercado Pago.");
+        console.error(
+          "No se recibió una URL de redirección desde Mercado Pago."
+        );
       }
     } catch (error) {
       console.error("Error al crear la preferencia:", error);
     }
   };
-  
 
   return (
     <div className="bg-zinc-900 text-white p-6 rounded-lg shadow-lg flex flex-col">
@@ -166,7 +182,7 @@ const router = useRouter()
         Get Plan
       </button>
     </div>
-  );  
+  );
 };
 
 export default PlansView;

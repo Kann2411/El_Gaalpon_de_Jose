@@ -1,5 +1,5 @@
 export enum TipoMembresia {
-  MENSUAL = 'Mensual',
-  SEMESTRAL = 'Semestral',
-  ANUAL = 'Anual',
+  BASIC = 'Basic Membership',
+  PREMIUM = 'Premium Membership',
+  STANDARD= 'Standard Membership'
 }

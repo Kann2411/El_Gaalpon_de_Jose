@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
 import LoadingSpinner from "@/components/Loading/Loading";
+import { fitZoneApi } from "@/api/rutaApi";
 
 const ForgotPasswordView = () => {
   const [emailSent, setEmailSent] = useState(false);
@@ -17,7 +18,8 @@ const ForgotPasswordView = () => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await fetch("https://el-gaalpon-de-jose.onrender.com/auth/forgot-password", {
+
+        const response = await fetch(`${fitZoneApi}/auth/forgot-password`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: values.email }),
@@ -32,7 +34,8 @@ const ForgotPasswordView = () => {
           customClass: {
             popup: "bg-[#222222] text-white",
             title: "text-[#B0E9FF]",
-            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });
@@ -44,7 +47,8 @@ const ForgotPasswordView = () => {
           customClass: {
             popup: "bg-[#222222] text-white",
             title: "text-[#B0E9FF]",
-            confirmButton: "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+            confirmButton:
+              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
           },
           buttonsStyling: false,
         });

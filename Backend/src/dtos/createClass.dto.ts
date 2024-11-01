@@ -3,11 +3,11 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
-  IsOptional,
   IsString,
   Max,
   Min,
   Matches,
+  IsOptional,
 } from 'class-validator';
 import { EstadoClase } from 'src/enums/estadoClase.enum';
 
@@ -33,21 +33,19 @@ export class CreateClassDto {
   status: EstadoClase;
 
   @ApiProperty({
-    description: 'Imagen de la clase',
-    example: 'yogaClass.jpg',
-    default: 'defaultImage.webp',
-  })
-  @IsString()
-  @IsOptional()
-  image: string = 'defaultImage.webp';
-
-  @ApiProperty({
     description: 'Descripción de la clase',
     example: 'Clase de yoga avanzada.',
   })
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty({
+    description: 'Archivo del plan de entrenamiento (ruta o nombre)',
+    type: 'string',
+  })
+  @IsOptional()
+  file?: string;
 
   @ApiProperty({
     description: 'Duración de la clase en minutos',
@@ -77,4 +75,8 @@ export class CreateClassDto {
   @Matches(/^\d{2}:\d{2}$/, { message: 'endtime must be in HH:mm format' })
   @IsNotEmpty()
   endtime: string;
+
+  @IsNotEmpty()
+  @IsString()
+  coach: string;
 }

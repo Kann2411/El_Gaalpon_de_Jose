@@ -7,9 +7,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
 import { TrainingPlan } from '../training/trainingPlan.entity';
+import { Class } from '../classes/classes.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, TrainingPlan])],
+  imports: [TypeOrmModule.forFeature([User, TrainingPlan, Class])],
   controllers: [FileUploadController],
   providers: [FileService, FileRepository, cloudinaryConfig, UsersRepository],
 })

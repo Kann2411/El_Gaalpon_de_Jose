@@ -3,18 +3,20 @@
 import { FcGoogle } from "react-icons/fc";
 import RegisterForm from "@/components/RegisterForm/RegisterForm";
 import { signIn } from "next-auth/react";
-import { useContext } from 'react';
-import { UserContext } from '@/context/user';
-import Image from 'next/image';
-import Link from 'next/link';
+import { useContext } from "react";
+import { UserContext } from "@/context/user";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { fitZoneApi } from "@/api/rutaApi";
 
 export default function RegisterView() {
   const { signIn: contextSignIn } = useContext(UserContext);
   const router = useRouter();
   const handleGoogleSignUp = async () => {
     try {
-      router.push('https://el-gaalpon-de-jose.onrender.com/auth/google')
+
+      router.push(`${fitZoneApi}/auth/google`)
      } catch (error) {
        console.error('Error inesperado durante el inicio de sesión con Google:', error);
      }
@@ -46,7 +48,7 @@ export default function RegisterView() {
           </button>
 
           <p className="text-center text-gray-400 mt-4">
-          Already have an account?{" "}
+            Already have an account?{" "}
             <Link href="/login" className="text-red-500 hover:underline">
               Sign In
             </Link>

@@ -1,16 +1,14 @@
+import { fitZoneApi } from "@/api/rutaApi";
+
 export async function createPlan(description: string) {
-    try {
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
-            throw new Error("Token no disponible");
-        }
+  try {
+    const token = localStorage.getItem("token");
 
         const bodyData = {
             description: description
         };
       
-        const response = await fetch("https://el-gaalpon-de-jose.onrender.com/training-plans", {
+        const response = await fetch(`${fitZoneApi}/training-plans`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -32,16 +30,13 @@ export async function createPlan(description: string) {
         console.error("Error when creating plan", error);
         return null;
     }
+
 }
 
-
 export async function uploadImage(id: string, file: File) {
-    try {
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
-            throw new Error("Token no disponible");
-        }
+  try {
+    const token = localStorage.getItem("token");
+
 
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
         if (!validTypes.includes(file.type) || file.size > 200 * 1024) {
@@ -51,7 +46,7 @@ export async function uploadImage(id: string, file: File) {
         const formData = new FormData();
         formData.append('file', file); 
 
-        const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/files/uploadImage/${id}`, {
+        const response = await fetch(`${fitZoneApi}/files/uploadImage/${id}`, {
             method: "PATCH",
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -72,51 +67,94 @@ export async function uploadImage(id: string, file: File) {
         console.error("Error when uploading image", error);
         return null;
     }
+
+  
 }
 
 // api/trainingApi.ts
 export const deleteTrainingPlan = async (id: string) => {
+  
     try {
         const token = localStorage.getItem('token'); 
-        const response = await fetch(`https://el-gaalpon-de-jose.onrender.com/training-plans/${id}`, {
+        const response = await fetch(`${fitZoneApi}/training-plans/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         });
 
-        if (!response.ok) {
-            const errorText = await response.text(); 
-            throw new Error(`Error: ${response.status} ${response.statusText}, Details: ${errorText}`);
-        }
-
-        return true; 
-    } catch (error) {
-        console.error('Error al eliminar el plan de entrenamiento:', error);
-        alert('Error al eliminar el plan de entrenamiento');
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Error: ${response.status} ${response.statusText}, Details: ${errorText}`
+      );
     }
+
+    return true;
+  } catch (error) {
+    console.error("Error al eliminar el plan de entrenamiento:", error);
+    alert("Error al eliminar el plan de entrenamiento");
+  }
 };
 
-
 export const getTrainingPlans = async () => {
+
     try {
         const token = localStorage.getItem('token'); 
-        const response = await fetch('https://el-gaalpon-de-jose.onrender.com/training-plans', {
+        const response = await fetch(`${fitZoneApi}/training-plans`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
             },
         });
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`);
-        }
-        
-        const data = await response.json();
-        console.log('Training plans data:', data);
-        return data;
-    } catch (error) {
-        console.error('Error obtaining training plans:', error);
-        alert('Error obtaining training plans');
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
+
+    const data = await response.json();
+    console.log("Training plans data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error obtaining training plans:", error);
+    alert("Error obtaining training plans");
+  }
+};
+
+export const getReservedClasses = async (classId: string) => {
+  try {
+    const response = await fetch(
+      `${fitZoneApi}/classRegistration/class/${classId}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error obtaining reservated classes:", error);
+  }
+};
+
+
+export const getCoaches = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${fitZoneApi}/users/coaches`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error obtaining coaches:", error);
+  }
 };

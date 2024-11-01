@@ -11,10 +11,6 @@ export class HorarioService {
     return this.horarioesRepository.getHorarios();
   }
 
-  horariosSeeder() {
-    return this.horarioesRepository.horariosSeeder();
-  }
-
   getHorarioById(id: UUID) {
     return this.horarioesRepository.getHorarioById(id);
   }

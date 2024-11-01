@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TrainingPlan } from '../training/trainingPlan.entity';
 import { Repository } from 'typeorm';
 import { User } from '../users/users.entity';
+import { Class } from '../classes/classes.entity';
 
 @Injectable()
 export class FileService {
@@ -12,6 +13,8 @@ export class FileService {
     @InjectRepository(TrainingPlan)
     private readonly trainingPlanRepository: Repository<TrainingPlan>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Class)
+    private readonly classRepository: Repository<Class>,
   ) {}
 
   async uploadImgProfile(userid: string, file: Express.Multer.File) {
@@ -31,7 +34,28 @@ export class FileService {
     return findUser;
   }
 
-  async updateClassImage(trainingId: string, file: Express.Multer.File) {
+  async updateClassImage(classId: string, file: Express.Multer.File) {
+    const classInfo = await this.classRepository.findOneBy({
+      id: classId,
+    });
+
+    if (!classInfo) {
+      throw new NotFoundException(`class id ${classId} not found`);
+    }
+    const uploadImage = await this.fileRepository.uploadImage(file);
+
+    await this.classRepository.update(classId, {
+      image: uploadImage.secure_url,
+    });
+
+    const findUpdateImage = await this.classRepository.findOneBy({
+      id: classId,
+    });
+
+    return findUpdateImage;
+  }
+
+  async updateTrainingPlanImage(trainingId: string, file: Express.Multer.File) {
     const training = await this.trainingPlanRepository.findOneBy({
       id: trainingId,
     });
