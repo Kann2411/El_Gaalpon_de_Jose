@@ -11,6 +11,7 @@ import { UsersRepository } from '../users/users.repository';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 import { v4 as uuidv4 } from 'uuid';
 import { MailerService } from '@nestjs-modules/mailer';
+import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
 
 dotenvConfig({ path: '.env' });
 
@@ -23,44 +24,49 @@ export class MercadoPagoRepository {
     private readonly usersRepository: UsersRepository,
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mailerService: MailerService,
-  ) {}
+  ) { }
 
   async getPaymentStatus(id, userId, pagoId) {
-    try {
-      const user = await this.usersRepository.getUserById(userId)
-      if (!user) {
-        throw new BadRequestException('User not found');
-      }
-      const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+    return await this.dataSource.manager.transaction(async (manager) => {
+      try {
+        const user = await this.usersRepository.getUserById(userId)
+        if (!user) {
+          throw new BadRequestException('User not found');
         }
-      })
+        const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+          }
+        })
 
-      if(response.ok){
-        const data = await response.json();
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data)
 
-        let pago = await this.mercadoPagoRepository.findOne({
-          where: { id: pagoId },
-        });
+          let pago = await this.mercadoPagoRepository.findOne({
+            where: { id: pagoId },
+          });
 
-        if(!pago){
-          throw new BadRequestException("El pago no ha sido encontrado")
-        }
+          if (!pago) {
+            throw new BadRequestException("El pago no ha sido encontrado")
+          }
 
-        pago = {
-          ...pago,
-          estado: EstadoPago.COMPLETADO,
-          fecha: data.date_approved,
-          metodoPago: MetodoPago.MERCADOPAGO,
-          preferenceId: data.id,
-          user: userId,
-          moneda: data.currency_id,
-          monto: data.transaction_details.total_paid_amount,
-        }
-        return this.dataSource.manager.transaction(async (manager) => {
+          pago = {
+            ...pago,
+            estado: EstadoPago.COMPLETADO,
+            fecha: data.date_approved,
+            metodoPago: MetodoPago.MERCADOPAGO,
+            preferenceId: data.id,
+            user: userId,
+            moneda: data.currency_id,
+            monto: data.transaction_details.total_paid_amount,
+          }
+          return this.dataSource.manager.transaction(async (manager) => {
             const result = await manager.save(Pago, pago);
+            user.estadoMembresia = EstadoMembresia.ACTIVA;
+            await manager.save(User, user)
+
             this.mailerService.sendMail({
               to: user.email,
               from: process.env.EMAIL_USER,
@@ -144,66 +150,72 @@ export class MercadoPagoRepository {
               </html>
             `
             })
-            return "Pago successfully"+result
-        });
+            return "Pago successfully" + result
+          });
+        }
+      } catch (error) {
+        console.log('errorssdsds: ', error);
+        return error;
       }
-    } catch (error) {
-      console.log('errorssdsds: ', error);
-      return error;
-    }
+    })
   }
 
   async createPreference(bodySuscription) {
-    const uuid = uuidv4();
-    let pagoB = this.mercadoPagoRepository.create({
-      id: String(uuid),
-      preferenceId: "null",
-      user: bodySuscription.userId,
-      estado: EstadoPago.PENDIENTE,
-      monto: 0,
-      moneda: 'USD',
-      fecha: new Date(),
-      metodoPago: MetodoPago.MERCADOPAGO,
-    });
-    await this.mercadoPagoRepository.save(pagoB);
-    let pago = await this.mercadoPagoRepository.findOne({where: {id: pagoB.id}})
-
-    const body = {
-      items: [
-        {
-          id: bodySuscription.id,
-          title: bodySuscription.title,
-          quantity: Number(bodySuscription.quantity),
-          unit_price: Number(bodySuscription.unit_price),
-          currency_id: 'USD',
-        },
-      ],
-      payer: {
-        email: 'test_user_1072648989@testuser.com',
-      },
-      // Url de la aplicación deployada o un url de un tunnel
-      notification_url: `https://toolbox-deputy-york-devil.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
-    };
-    try {
-      const preference = await new Preference(client).create({ body });
-
-      pago ={
-        ...pago,
-        preferenceId: preference.id,
+    return await this.dataSource.manager.transaction(async (manager) => {
+      const uuid = uuidv4();
+      let pagoB = this.mercadoPagoRepository.create({
+        id: String(uuid),
+        preferenceId: "null",
         user: bodySuscription.userId,
         estado: EstadoPago.PENDIENTE,
-        monto: body.items[0].quantity,
+        monto: 0,
         moneda: 'USD',
         fecha: new Date(),
         metodoPago: MetodoPago.MERCADOPAGO,
+      });
+      await this.mercadoPagoRepository.save(pagoB);
+      let pago = await this.mercadoPagoRepository.findOne({ where: { id: pagoB.id } })
+
+      const body = {
+        items: [
+          {
+            id: bodySuscription.id,
+            title: bodySuscription.title,
+            quantity: Number(bodySuscription.quantity),
+            unit_price: Number(bodySuscription.unit_price),
+            currency_id: 'USD',
+          },
+        ],
+        // Url de la aplicación deployada o un url de un tunnel
+        notification_url: `https://spotlight-comm-favor-independence.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
       };
-      
-      await this.mercadoPagoRepository.save(pago);
-      
-      return { redirectUrl: preference.init_point };
-    } catch (error) {
-      console.log('error: ', error);
-      return error;
-    }
+      try {
+        const preference = await new Preference(client).create({ body });
+        const user = await this.usersRepository.getUserById(bodySuscription.userId);
+
+        if (!user)
+          throw new BadRequestException('User not found')
+
+        pago = {
+          ...pago,
+          preferenceId: preference.id,
+          user: bodySuscription.userId,
+          estado: EstadoPago.PENDIENTE,
+          monto: body.items[0].quantity,
+          moneda: 'USD',
+          fecha: new Date(),
+          metodoPago: MetodoPago.MERCADOPAGO,
+        };
+        user.membership = bodySuscription.title
+
+        await this.mercadoPagoRepository.save(pago);
+        await manager.save(User, user);
+
+        return { redirectUrl: preference.init_point };
+      } catch (error) {
+        console.log('error: ', error);
+        return error;
+      }
+    })
   }
 }
