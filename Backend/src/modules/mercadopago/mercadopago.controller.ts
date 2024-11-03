@@ -5,32 +5,33 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
 import { MercadoPagoService } from './mercadopago.service';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('mercadopago')
+@UseGuards(AuthGuard)
 export class MercadoPagoController {
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
-  @Post('success')
-  async successPayment(@Query('id') id) {
-    // return this.mercadoPagoService.getPaymentStatus(id);
-    console.log('Pago exitoso');
-    return { message: 'Pago exitoso' };
+  @Get('success')
+  async successPayment(@Query('id') paymentId, @Query('userId') userId, @Res() res) {
+      console.log('Pago exitosoID de pago:', paymentId, 'ID de usuario:', userId);
+      return res.redirect(`http://localhost:3001/plans?paymentSuccess=true&id=${paymentId}&userId=${userId}`);
   }
 
   @Get('failure')
-  async failurePayment(@Query('id') id) {
-    // return this.mercadoPagoService.getPaymentStatus(id);
-    console.log('Pago fallido');
-    return { message: 'Pago fallido' };
+  async failurePayment(@Query('id') paymentId, @Query('userId') userId,@Res() res) {
+    console.log('Pago fallido ID de pago:', paymentId, 'ID de usuario:', userId);
+    return res.redirect(`http://localhost:3001/plans?paymentSuccess=false&&id=${paymentId}&userId=${userId}`);
   }
 
-  @Post('pending')
-  async pendingPayment(@Query('id') id) {
-    // return this.mercadoPagoService.getPaymentStatus(id);
-    console.log('Pago pendiente');
-    return { message: 'Pago pendiente' };
+  @Get('pending')
+  async pendingPayment(@Query('id') paymentId, @Query('userId') userId,@Res() res) {
+    console.log('Pago pendiente ID de pago:', paymentId, 'ID de usuario:', userId);
+    return res.redirect(`http://localhost:3001/plans?paymentSuccess=pending&&id=${paymentId}&userId=${userId}`);
   }
 
   @Post('payment')
