@@ -7,13 +7,15 @@ import Link from "next/link";
 import EditProfileModal from "@/components/editProfile/EditProfileModal";
 import Swal from "sweetalert2";
 import IUser from "@/interfaces/interfaces";
+import ModalProfilePhoto from "@/components/ModalProfilePhoto/ModalProfilePhoto";
+import { uploadProfilePhoto } from "@/lib/server/fetchUsers";
 
 export default function DashboardView() {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { user, logOut, setUser, imgUrl, setImgUrl } = useContext(UserContext);
+  const { user, logOut, setUser } = useContext(UserContext);
 
   const handleLogout = () => {
     logOut();
@@ -33,12 +35,37 @@ export default function DashboardView() {
   };
 
   const handleUpload = async () => {
-    if (!file || !user) return;
-    const formData = new FormData();
-    formData.append("file", file);
+    if (!file || !user || !user.id) return;
+
+    const imgUrl = await uploadProfilePhoto(user.id, file);
+    if (imgUrl) {
+        setUser(prevUser => ({
+            ...prevUser,
+            imgUrl
+        }));
+        Swal.fire({
+            icon: "success",
+            title: "¡Foto de perfil actualizada!",
+            timer: 2000,
+            showConfirmButton: false,
+            background: '#222222',
+            color: '#ffffff'
+        });
+    } else {
+        Swal.fire({
+            icon: "error",
+            title: "Error al actualizar la foto de perfil",
+            timer: 2000,
+            showConfirmButton: false,
+            background: '#222222',
+            color: '#ffffff'
+        });
+    }
+
     setShowModal(false);
     setFile(null);
-  };
+};
+
 
   const handleSaveProfile = async (userData: Partial<IUser>) => {
     try {
@@ -90,7 +117,7 @@ export default function DashboardView() {
               <div className="flex flex-col items-center">
                 <div className="relative group">
                   <img
-                    src={imgUrl ?? "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"}
+                    src={user?.imgUrl || "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"}
                     alt="Profile"
                     className="w-32 h-32 rounded-full object-cover border-4 border-red-600"
                   />
@@ -182,6 +209,15 @@ export default function DashboardView() {
           </button>
         </div>
       </div>
+
+      <ModalProfilePhoto
+  isOpen={showModal}
+  onClose={handleCancel} // Cambia aquí
+  onAccept={handleUpload} // Cambia aquí
+>
+  Change photo
+</ModalProfilePhoto>
+
 
       {/* Edit Profile Modal */}
       <EditProfileModal
