@@ -139,10 +139,23 @@ export interface UserDataResponse {
   registrationMethod: string;
 }
 
+interface IUserInfo {
+  imgUrl: string;
+  id: string;
+  name: string;
+  dni: string;
+  email: string;
+  phone: string;
+  registrationMethod: string;
+  estadoMembresia: string;
+  membership: null | string
+}
+
+
 export const fetchUserData = async (
   userId: string,
   token: string
-): Promise<UserDataResponse | null> => {
+): Promise<IUserInfo | null> => {
   try {
 
     const response = await fetch(`${fitZoneApi}/users/${userId}`, {
@@ -152,8 +165,8 @@ export const fetchUserData = async (
     });
 
     if (response.ok) {
-      const data: UserDataResponse = await response.json();
-      return data; // Devuelve los datos en lugar de establecerlos en el contexto
+      const data: IUserInfo = await response.json();
+      return data;
     } else {
       console.error("Error fetching user data:", response.statusText);
       return null;
