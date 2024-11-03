@@ -11,6 +11,9 @@ import { Search, LogOut, UserRound } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearch } from "@/context/SearchContext";
 import { fitZoneApi } from "@/api/rutaApi";
+import { MessageCircle } from "lucide-react"; 
+import ChatModal from '@/components/ChatModal/ChatModal';
+
 
 const NavBarComponent = () => {
   const { user, logOut, isLogged,  } = useContext(UserContext);
@@ -20,6 +23,11 @@ const NavBarComponent = () => {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const handleOpenChat = () => setIsChatOpen(true);
+  const handleCloseChat = () => setIsChatOpen(false);
+
 
   const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } =
     useSearch();
@@ -259,7 +267,7 @@ const NavBarComponent = () => {
               (item, index) => {
                 const lowerCaseItem = item.toLowerCase();
                 const route =
-                  lowerCaseItem === "training management"
+                  lowerCaseItem === "training-management"
                     ? "/training-management"
                     : "/registrated-classes";
 
@@ -311,6 +319,18 @@ const NavBarComponent = () => {
         </nav>
       ) : null}
 
+           {user?.role === "user" && (
+             
+  <button
+    onClick={handleOpenChat}
+    className="p-2 text-white hover:text-red-600 transition-colors duration-200 ml-4"
+  >
+    <MessageCircle />
+  </button>
+           )} 
+
+  {isChatOpen && <ChatModal onClose={handleCloseChat} />}
+
       {/* Icono de búsqueda solo en /home */}
       {pathname === "/home" && (
         <div className="relative ml-auto mr-5" ref={searchContainerRef}>
@@ -345,7 +365,7 @@ const NavBarComponent = () => {
           </AnimatePresence>
         </div>
       )}
-
+ 
       {isLogged ? (
         <div className="relative" ref={menuRef}>
           <div

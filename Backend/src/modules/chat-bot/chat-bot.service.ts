@@ -12,13 +12,13 @@ export class chatBotService {
 
   private initializeResponses() {
     this.responses = {
-      start: "Hola, espero que te encuentres bien. ¿En qué puedo ayudarte?\n1. Información sobre nosotros.\n2. Horario del establecimiento.\n3. Consultas sobre membresía.\n4. Terminar conversación.",
+      start: "Hello, I hope you are well. How can I help you?\n1. Information about us.\n2. Establishment hours.\n3. Membership inquiries.\n4. End the conversation.",
       responses: {
-        1: "Nosotros somos un gimnasio dedicado a ofrecer las mejores instalaciones y servicios para ayudarte a alcanzar tus metas de fitness. Contamos con un equipo de profesionales listos para guiarte.",
-        2: "Los horarios del establecimiento son de lunes a viernes de 8:00 a 21:00 y los sábados de 9:00 a 14:00.",
-        3: "Para consultas sobre membresía, por favor, revisa las opciones disponibles en nuestra página web. Por temas de cancelación o modificación, comunícate en administración."
+        1: "We are a gym dedicated to offering the best facilities and services to help you achieve your fitness goals. We have a team of professionals ready to guide you.",
+        2: "The establishment's opening hours are Monday to Friday from 8:00 a.m. to 9:00 p.m. and Saturdays from 9:00 a.m. to 2:00 p.m.",
+        3: "For membership inquiries, please review the options available on our website. For cancellation or modification issues, contact administration."
       },
-      end: "Me alegra poder haberte ayudado, gracias. Para más información, puedes comunicarte con gym@gym.com. ¡Saludos!"
+      end: "I'm glad I could help you, thank you. For more information, you can contact gym@gym.com. Greetings!"
     };
   }
 
@@ -33,7 +33,7 @@ export class chatBotService {
       this.currentOption = 0;
       return this.responses.end;
     } else {
-      return "Opción no válida. Por favor, elige una opción del 1 al 4."; 
+      return "Invalid option. Please choose an option from 1 to 4."; 
     }
   }
 }
