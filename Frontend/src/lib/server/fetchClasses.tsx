@@ -101,10 +101,16 @@ export const reserveClass = async (claseId: string, userId: string) => {
 
 export async function getClassRegistration(classId: string) {
   try {
-      const response = await fetch(`${fitZoneApi}/classRegistration/user/${classId}`);
+    const token = localStorage.getItem('token')
+      const response = await fetch(`${fitZoneApi}/classRegistration/class/${classId}`, {
+          method: 'GET',
+          headers: {
+            Authorization : `Bearer ${token}`
+          }
+      });
       
       if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
+          throw new Error(`Error en la solicitud: ${response.status} `);
       }
 
     if (!response.ok) {
