@@ -14,6 +14,7 @@ interface ISuscriptionData {
   unit_price: number;
   currency_id: string;
   userId: string
+  token: string | null
 }
 interface PlanCardProps {
   planId: string;
@@ -162,6 +163,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       console.error("Faltan datos para crear la preferencia.");
       return;
     }
+    const userToken = localStorage.getItem('token')
 
     const suscripcionData: ISuscriptionData = {
       title: plan,
@@ -169,6 +171,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       currency_id: currency,
       unit_price: Number(price),
       userId: userId,
+      token: userToken
     };
 
     console.log(suscripcionData);
