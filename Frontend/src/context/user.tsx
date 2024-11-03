@@ -16,14 +16,11 @@ export const UserContext = createContext<IUserContext>({
     signIn: async () => false,
     signUp: async (user: Omit<IUser, "id">) => ({ success: false, errorMessage: '' }),
     logOut: () => {},
-    imgUrl: null,
-    setImgUrl: () => {},
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<Partial<IUser> | null>(null);
     const [isLogged, setIsLogged] = useState<boolean>(false);
-    const [imgUrl, setImgUrl] = useState<string | null>(null);
     const router = useRouter();
     const { data: session, status } = useSession();
     console.log("🚀 ~ UserProvider ~ status:", status);
@@ -55,14 +52,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             id: userId,
             token: data.token,
           };
-    
-          // Llamar a fetchUserData y obtener imgUrl y otros datos
           const fetchedUserData = await fetchUserData(userId, data.token);
           
           if (fetchedUserData) {
             setUser({ ...userWithRole, ...fetchedUserData });
-            setImgUrl(fetchedUserData.imgUrl || null);
-            localStorage.setItem(`imgUrl_${userId}`, fetchedUserData.imgUrl || '');
           }
     
           localStorage.setItem('user', JSON.stringify(userWithRole));
@@ -94,7 +87,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             if (data && data.user && data.user.id) {
                 console.log("Usuario registrado correctamente:", data.user);
                 await signIn({ email: user.email, password: user.password });
-                setImgUrl(data.user.imgUrl);
                 return { success: true };
             } else {
                 console.log("La respuesta no contiene el usuario o el ID:", data);
@@ -108,7 +100,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const logOut = async () => {
-      // Mostrar el diálogo de confirmación con SweetAlert2
       const result = await Swal.fire({
           title: 'Are you sure?',
           text: "You'll need to log in again to access your account",
@@ -137,20 +128,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           }
       });
 
-      // Si el usuario confirma, proceder con el logout
-      if (result.isConfirmed) {
-          const userId = user?.id;
-          if (userId) {
-              localStorage.removeItem(`imgUrl_${userId}`);
-          }
+      if (result.isConfirmed) {;
+         
           localStorage.removeItem("user");
           localStorage.removeItem("token");
 
           setUser(null);
           setIsLogged(false);
-          setImgUrl(null);
 
-          // Mostrar mensaje de despedida
           Swal.fire({
               title: 'Come back soon!',
               text: "You've been logged out successfully",
@@ -185,14 +170,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                 const role = decodedToken.roles;
                 const userId = parsedUser.id;
     
-                // Recupera la imagen de perfil específica para este usuario
-                const savedImgUrl = localStorage.getItem(`imgUrl_${userId}`);
                 setUser({
                     ...parsedUser,
                     role: role,
                     id: decodedToken.id,
                 });
-                setImgUrl(savedImgUrl || null);
                 setIsLogged(true);
             } catch (error) {
                 console.warn("Error al decodificar el token:", error);
@@ -205,7 +187,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <UserContext.Provider
-            value={{ user, setUser, isLogged, setIsLogged, signIn, signUp, logOut, imgUrl, setImgUrl, }}
+            value={{ user, setUser, isLogged, setIsLogged, signIn, signUp, logOut }}
         >
             {children}
         </UserContext.Provider>
