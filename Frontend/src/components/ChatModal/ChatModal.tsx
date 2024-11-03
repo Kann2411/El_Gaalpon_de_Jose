@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react";
+import { fitZoneApi } from "@/api/rutaApi";
 
 // Define el tipo de las props, incluyendo onClose
 interface ChatModalProps {
@@ -18,7 +19,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
 
   const fetchStartMessage = async () => {
     try {
-      const response = await fetch("http://localhost:3000/chatbot/start");
+      const response = await fetch(`${fitZoneApi}/chatbot/start`);
       if (response.ok) {
         const data = await response.text();
         setMessages([{ sender: "bot", text: data }]); 
@@ -42,7 +43,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
   const sendMessage = async (option: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/chatbot/response/?option=${option}`);
+      const response = await fetch(`${fitZoneApi}/chatbot/response/?option=${option}`);
       if (response.ok) {
         const data = await response.text();
         setMessages((prevMessages) => [
