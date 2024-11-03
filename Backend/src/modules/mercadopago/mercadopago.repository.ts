@@ -169,7 +169,7 @@ export class MercadoPagoRepository {
         user: bodySuscription.userId,
         estado: EstadoPago.PENDIENTE,
         monto: 0,
-        moneda: 'USD',
+        moneda: 'ARS',
         fecha: new Date(),
         metodoPago: MetodoPago.MERCADOPAGO,
       });
@@ -183,11 +183,17 @@ export class MercadoPagoRepository {
             title: bodySuscription.title,
             quantity: Number(bodySuscription.quantity),
             unit_price: Number(bodySuscription.unit_price),
-            currency_id: 'USD',
+            currency_id: 'ARS',
           },
         ],
-        // Url de la aplicación deployada o un url de un tunnel
-        notification_url: `https://spotlight-comm-favor-independence.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
+        back_urls: {
+          success: `http://localhost:3000/mercadopago/success?id=${pagoB.id}&userId=${bodySuscription.userId}`,  // URL de éxito
+          failure: `http://localhost:3000/mercadopago/failure?id=${pagoB.id}&userId=${bodySuscription.userId}`,  // URL de fallo
+          pending: `http://localhost:3000/mercadopago/pending?id=${pagoB.id}&userId=${bodySuscription.userId}`,  // URL de pendiente
+      },
+        auto_return: 'approved',
+        
+        notification_url: `https://switching-darkness-movement-usb.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
       };
       try {
         const preference = await new Preference(client).create({ body });
@@ -202,7 +208,7 @@ export class MercadoPagoRepository {
           user: bodySuscription.userId,
           estado: EstadoPago.PENDIENTE,
           monto: body.items[0].quantity,
-          moneda: 'USD',
+          moneda: 'ARS',
           fecha: new Date(),
           metodoPago: MetodoPago.MERCADOPAGO,
         };
