@@ -1,6 +1,6 @@
 "use client";
 import { UserContext } from "@/context/user";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Pencil, LogOut, Key, CreditCard } from "lucide-react";
 import Link from "next/link";
@@ -8,19 +8,59 @@ import EditProfileModal from "@/components/editProfile/EditProfileModal";
 import Swal from "sweetalert2";
 import IUser from "@/interfaces/interfaces";
 import ModalProfilePhoto from "@/components/ModalProfilePhoto/ModalProfilePhoto";
-import { uploadProfilePhoto } from "@/lib/server/fetchUsers";
+import { fetchUserData, getUsers, uploadProfilePhoto } from "@/lib/server/fetchUsers";
 
 export default function DashboardView() {
+
+  interface IUserInfo {
+    imgUrl: string;
+    id: string;
+    name: string;
+    dni: string;
+    email: string;
+    phone: string;
+    registrationMethod: string;
+    estadoMembresia: string;
+    membership: null | string
+  }
+
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
   const { user, logOut, setUser } = useContext(UserContext);
+  const [userInfo, setUserInfo] = useState({} as IUserInfo);
 
   const handleLogout = () => {
     logOut();
     router.push("/");
   };
+
+
+  useEffect(() => {
+    const getUsersInfo = async () => {
+      try {
+        const userId = user?.id; // Aquí puede ser undefined
+        const token = localStorage.getItem('token');
+  
+        if (userId && token) { // Verificamos que ambos valores estén definidos
+          const usersData = await fetchUserData(userId, token);
+          if (usersData) {
+            console.log(`user data: ${usersData.membership}`);
+            setUserInfo(usersData);
+          }
+        } else {
+          console.error("User ID or token is undefined");
+        }
+      } catch (error) {
+        console.error("Error fetching users data:", error);
+      }
+    };
+  
+    getUsersInfo();
+  }, [user]); // Agregar user como dependencia
+  
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -45,7 +85,7 @@ export default function DashboardView() {
         }));
         Swal.fire({
             icon: "success",
-            title: "¡Foto de perfil actualizada!",
+            title: "Updated profile photo!",
             timer: 2000,
             showConfirmButton: false,
             background: '#222222',
@@ -54,7 +94,7 @@ export default function DashboardView() {
     } else {
         Swal.fire({
             icon: "error",
-            title: "Error al actualizar la foto de perfil",
+            title: "Error when updating profile photo",
             timer: 2000,
             showConfirmButton: false,
             background: '#222222',
@@ -184,7 +224,8 @@ export default function DashboardView() {
               <div className="bg-zinc-900 rounded-lg p-6 shadow-lg">
                 <h3 className="text-xl font-semibold mb-4">My Memberships</h3>
                 <div className="flex items-center justify-center p-8 bg-zinc-800 rounded-lg">
-                  <div className="text-center">
+                  {userInfo.membership === null ? (
+                    <div className="text-center">
                     <CreditCard size={48} className="mx-auto mb-4 text-gray-400" />
                     <p className="text-gray-400">No active memberships</p>
                     <Link
@@ -193,7 +234,12 @@ export default function DashboardView() {
                     >
                       View Plans
                     </Link>
-                  </div>
+                  </div>):(
+                    <div className="text-center">
+                      <p className="text-gray-400">Plan: <span className="text-red-500">{userInfo.membership}</span></p>
+                      <p className="text-gray-400">Status:  <span className="text-red-500">{userInfo.estadoMembresia}</span></p>
+                    </div>
+                  ) }
                 </div>
               </div>
             </div>
