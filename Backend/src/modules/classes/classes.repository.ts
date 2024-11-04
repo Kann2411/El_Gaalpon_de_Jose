@@ -94,8 +94,9 @@ export class ClassRepository {
     if (!classToUpdate) {
       throw new NotFoundException(`Class with id ${id} not found`);
     }
-    const updatedClass = await this.classesRepository.update(id, classData);
-    return updatedClass;
+    await this.classesRepository.update(id, classData);
+    const foundClassUpdate = await this.classesRepository.findOneBy({ id });
+    return foundClassUpdate;
   }
 
   async deleteClass(id: string) {
