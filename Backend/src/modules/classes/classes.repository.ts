@@ -10,7 +10,7 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
 import { User } from '../users/users.entity';
 import { FileRepository } from '../file-upload/file-upload.repository';
-import { ClassRegistration } from './classesRegistration.entity';
+import { ClassRegistration } from '../classRegistration/classesRegistration.entity';
 
 @Injectable()
 export class ClassRepository {

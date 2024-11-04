@@ -4,7 +4,7 @@ import { Role } from '../../enums/role.enum';
 import { Training } from '../training/training.entity';
 import { TrainingPlan } from '../training/trainingPlan.entity';
 import { RegistrationMethod } from 'src/enums/registrationMethod';
-import { ClassRegistration } from '../classes/classesRegistration.entity';
+import { ClassRegistration } from '../classRegistration/classesRegistration.entity';
 import { Class } from '../classes/classes.entity';
 import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
 import { TipoMembresia } from 'src/enums/tipoMembresia.enum';
