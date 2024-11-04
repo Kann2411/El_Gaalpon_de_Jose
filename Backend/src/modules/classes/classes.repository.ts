@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Class } from './classes.entity';
 import { UUID } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
@@ -85,27 +89,13 @@ export class ClassRepository {
     };
   }
 
-  async updateClass(id: UUID, classData: Class) {
-    return this.dataSource.manager.transaction(async (manager) => {
-      try {
-        let oldClass = await this.getClassById(id);
-        // Se verifica que la clase con el id exista
-        if (!oldClass) {
-          throw new Error('No se encontró la clase.');
-        }
-        // Se actualizan los datos a la clase
-        oldClass = {
-          id: oldClass.id,
-          ...classData,
-        };
-        // Se guardan los cambios a la base de datos
-        await manager.save(oldClass);
-        // retorna la clase actualizada
-        return oldClass;
-      } catch (error) {
-        throw error;
-      }
-    });
+  async updateClass(id: string, classData: Partial<Class>) {
+    const classToUpdate = await this.classesRepository.findOneBy({ id });
+    if (!classToUpdate) {
+      throw new NotFoundException(`Class with id ${id} not found`);
+    }
+    const updatedClass = await this.classesRepository.update(id, classData);
+    return updatedClass;
   }
 
   async deleteClass(id: string) {
