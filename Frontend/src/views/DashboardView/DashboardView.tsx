@@ -188,7 +188,7 @@ const handleSaveProfile = async (userData: Partial<IUser>) => {
               <div className="flex flex-col items-center">
                 <div className="relative group">
                   <img
-                    src={user?.imgUrl || "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"}
+                    src={user?.imgUrl}
                     alt="Profile"
                     className="w-32 h-32 rounded-full object-cover border-4 border-red-600"
                   />
