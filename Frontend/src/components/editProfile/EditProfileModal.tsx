@@ -30,6 +30,11 @@ export default function EditProfileModal({
     onSave(formData);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -69,8 +74,22 @@ export default function EditProfileModal({
                 </label>
                 <input
                   type="text"
+                  name="name"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={handleChange}
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-white focus:outline-none focus:border-red-500 transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-white focus:outline-none focus:border-red-500 transition-colors"
                 />
               </div>
@@ -81,8 +100,9 @@ export default function EditProfileModal({
                 </label>
                 <input
                   type="number"
+                  name="phone"
                   value={formData.phone}
-                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  onChange={handleChange}
                   className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-white focus:outline-none focus:border-red-500 transition-colors"
                 />
               </div>
@@ -93,8 +113,9 @@ export default function EditProfileModal({
                 </label>
                 <input
                   type="number"
+                  name="dni"
                   value={formData.dni}
-                  onChange={(e) => setFormData(prev => ({ ...prev, dni: e.target.value }))}
+                  onChange={handleChange}
                   className="w-full bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 text-white focus:outline-none focus:border-red-500 transition-colors"
                 />
               </div>
