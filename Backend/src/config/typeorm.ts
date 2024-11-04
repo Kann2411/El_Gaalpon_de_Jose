@@ -14,8 +14,6 @@ const config = {
   autoLoadEntities: true,
   //dropSchema: true,
   synchronize: true,
-  // dropSchema: true,
-  //  synchronize: true,
   //logging: true,
   entities: [__dirname + '/../**/*.entity.{js,ts}'],
   migrations: [__dirname + '/../migrations/**/*.{js,ts}'],
