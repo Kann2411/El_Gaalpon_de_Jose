@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -63,7 +64,7 @@ export class FileUploadController {
     return this.fileService.updateClassImage(classId, file);
   }
 
-  @Post('profileImages/:id')
+  @Patch('profileImages/:id')
   @UseInterceptors(FileInterceptor('file'))
   imageProfile(
     @Param('id') id: string,
