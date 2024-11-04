@@ -102,7 +102,7 @@ export const reserveClass = async (claseId: string, userId: string) => {
 export async function getClassRegistration(classId: string) {
   try {
     const token = localStorage.getItem('token')
-      const response = await fetch(`${fitZoneApi}/classRegistration/class/${classId}`, {
+      const response = await fetch(`${fitZoneApi}/classRegistration/user/${classId}`, {
           method: 'GET',
           headers: {
             Authorization : `Bearer ${token}`
