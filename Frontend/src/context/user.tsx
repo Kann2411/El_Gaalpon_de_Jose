@@ -175,9 +175,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
 }, []);
     
-    
-    
-
     return (
         <UserContext.Provider
             value={{ user, setUser, isLogged, setIsLogged, signIn, signUp, logOut }}
