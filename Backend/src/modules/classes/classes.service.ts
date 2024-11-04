@@ -24,7 +24,7 @@ export class ClassService {
     return this.classesRepository.updateClass(id, classData);
   }
 
-  deleteClass(id: UUID) {
+  deleteClass(id: string) {
     return this.classesRepository.deleteClass(id);
   }
 }

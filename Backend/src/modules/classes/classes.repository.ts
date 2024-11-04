@@ -105,7 +105,7 @@ export class ClassRepository {
     });
   }
 
-  async deleteClass(id: UUID) {
+  async deleteClass(id: string) {
     const classFound = await this.classesRepository.findOneBy({ id });
     if (!classFound) {
       throw new Error('No se encontró la clase.');
