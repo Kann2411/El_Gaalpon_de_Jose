@@ -12,7 +12,6 @@ import { MercadoPagoService } from './mercadopago.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('mercadopago')
-@UseGuards(AuthGuard)
 export class MercadoPagoController {
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
@@ -60,8 +59,8 @@ export class MercadoPagoController {
     return res.redirect(
       `http://localhost:3001/plans?paymentSuccess=pending&&id=${paymentId}&userId=${userId}`,
     );
+ 
   }
-
   @Post('payment')
   async getPaymentStatus(
     @Query('id') id,
@@ -72,6 +71,7 @@ export class MercadoPagoController {
   }
 
   @Post('create_preference')
+  @UseGuards(AuthGuard)
   async createPreference(@Body() bodySuscription) {
     return this.mercadoPagoService.createPreference(bodySuscription);
   }
