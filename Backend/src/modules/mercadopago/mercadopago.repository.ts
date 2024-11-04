@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, Redirect } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  Redirect,
+} from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import MercadoPagoConfig, { Payment, Preference } from 'mercadopago';
 import { config as dotenvConfig } from 'dotenv';
@@ -33,7 +38,7 @@ export class MercadoPagoRepository {
       .select('SUM(pago.monto)', 'sum')
       .where('pago.estado = :estado', { estado: EstadoPago.COMPLETADO })
       .getRawOne();
-      
+
     return { totalPayments: sum || 0 };
   }
 
@@ -42,9 +47,11 @@ export class MercadoPagoRepository {
       where: { user: { id: userId } },
       order: { fecha: 'DESC' },
     });
-    
+
     if (!lastPayment) {
-      throw new NotFoundException('No se encontró ningún pago para este usuario');
+      throw new NotFoundException(
+        'No se encontró ningún pago para este usuario',
+      );
     }
     return lastPayment;
   }
@@ -194,7 +201,7 @@ export class MercadoPagoRepository {
       }
     });
   }
-  
+
   async createPreference(bodySuscription) {
     return await this.dataSource.manager.transaction(async (manager) => {
       const uuid = uuidv4();
@@ -231,7 +238,7 @@ export class MercadoPagoRepository {
         auto_return: 'approved',
 
         notification_url: `https://games-trout-eyed-gay.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
-      }
+      };
       try {
         const preference = await new Preference(client).create({ body });
         const user = await this.usersRepository.getUserById(
@@ -262,8 +269,6 @@ export class MercadoPagoRepository {
       }
     });
   }
-
-
 }
 /*
 back_urls: {

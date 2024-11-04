@@ -106,17 +106,11 @@ export class ClassRepository {
   }
 
   async deleteClass(id: UUID) {
-    return await this.dataSource.transaction(async (manager) => {
-      try {
-        const classData = await this.getClassById(id);
-        if (!classData) {
-          throw new Error('No se encontró la clase.');
-        }
-        await manager.remove(classData);
-        return { message: 'Clase eliminada exitosamente' };
-      } catch (error) {
-        throw error;
-      }
-    });
+    const classFound = await this.classesRepository.findOneBy({ id });
+    if (!classFound) {
+      throw new Error('No se encontró la clase.');
+    }
+    await this.classesRepository.delete(classFound);
+    return { message: 'Class deleted successfully' };
   }
 }
