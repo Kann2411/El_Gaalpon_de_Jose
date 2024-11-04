@@ -10,10 +10,31 @@ import {
 } from '@nestjs/common';
 import { MercadoPagoService } from './mercadopago.service';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Role } from '../../enums/role.enum';
+import { Roles } from '../../decorators/role.decorator';
 
 @Controller('mercadopago')
 export class MercadoPagoController {
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
+
+  @Get('total-payments')
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard)
+  async getTotalPayments() {
+    return this.mercadoPagoService.getTotalPayments();
+  }
+
+  @Get('last-payment')
+  @UseGuards(AuthGuard)
+  async getLastPaymentByUser(@Query('userId') userId: string) {
+    return this.mercadoPagoService.getLastPaymentByUser(userId);
+  }
+
+  @Get('payments-by-user')
+  @UseGuards(AuthGuard)
+  async getPaymentsByUser(@Query('userId') userId: string) {
+    return this.mercadoPagoService.getPaymentsByUser(userId);
+  }
 
   @Get('success')
   async successPayment(
