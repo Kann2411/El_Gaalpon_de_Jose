@@ -1,24 +1,67 @@
 "use client";
 import { UserContext } from "@/context/user";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Pencil, LogOut, Key, CreditCard } from "lucide-react";
 import Link from "next/link";
 import EditProfileModal from "@/components/editProfile/EditProfileModal";
 import Swal from "sweetalert2";
 import IUser from "@/interfaces/interfaces";
+import ModalProfilePhoto from "@/components/ModalProfilePhoto/ModalProfilePhoto";
+import { fetchUserData, getUsers, uploadProfilePhoto, updateUserProfile, updateProfilePhoto } from "@/lib/server/fetchUsers";
+
 
 export default function DashboardView() {
+
+  interface IUserInfo {
+    imgUrl: string;
+    id: string;
+    name: string;
+    dni: string;
+    email: string;
+    phone: string;
+    registrationMethod: string;
+    estadoMembresia: string;
+    membership: null | string
+  }
+
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { user, logOut, setUser, imgUrl, setImgUrl } = useContext(UserContext);
+  const { user, logOut, setUser } = useContext(UserContext);
+  const [userInfo, setUserInfo] = useState({} as IUserInfo);
 
   const handleLogout = () => {
     logOut();
     router.push("/");
   };
+
+
+  useEffect(() => {
+    const getUsersInfo = async () => {
+      try {
+        const userId = user?.id; // Aquí puede ser undefined
+        const token = localStorage.getItem('token');
+  
+        if (userId && token) { // Verificamos que ambos valores estén definidos
+          const usersData = await fetchUserData(userId, token);
+          if (usersData) {
+            console.log(`user data: ${usersData.membership}`);
+            setUserInfo(usersData);
+          }
+        } else {
+          console.error("User ID or token is undefined");
+        }
+      } catch (error) {
+        console.error("Error fetching users data:", error);
+      }
+    };
+  
+    getUsersInfo();
+  }, [user]); // Agregar user como dependencia
+  
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -33,21 +76,71 @@ export default function DashboardView() {
   };
 
   const handleUpload = async () => {
-    if (!file || !user) return;
-    const formData = new FormData();
-    formData.append("file", file);
+    if (!file || !user || !user.id) return;
+  
+    try {
+      const result = await updateProfilePhoto(user.id, file);
+      if (result) {
+        setUser(prevUser => ({
+          ...prevUser,
+          imgUrl: result.imgUrl
+        }));
+        setUserInfo(prevInfo => ({
+          ...prevInfo,
+          imgUrl: result.imgUrl
+        }));
+        Swal.fire({
+          icon: "success",
+          title: "Updated profile photo!",
+          timer: 2000,
+          showConfirmButton: false,
+          background: '#222222',
+          color: '#ffffff'
+        });
+      } else {
+        throw new Error("Failed to update profile photo");
+      }
+    } catch (error) {
+      console.error("Error updating profile photo:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error when updating profile photo",
+        text: "Please try again later.",
+        timer: 2000,
+        showConfirmButton: false,
+        background: '#222222',
+        color: '#ffffff'
+      });
+    }
+  
     setShowModal(false);
     setFile(null);
   };
 
-  const handleSaveProfile = async (userData: Partial<IUser>) => {
-    try {
-      //Implementar la llamada al  para actualizar los datos
-      // onst response = await updateUserProfile(userData);
-      
+
+  
+const handleSaveProfile = async (userData: Partial<IUser>) => {
+  try {
+    if (!user || !user.id) {
+      throw new Error("User ID is missing");
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error("Authentication token is missing");
+    }
+
+    const updatedUser = await updateUserProfile(user.id, userData, token);
+
+    if (updatedUser) {
       setUser(prevUser => ({
         ...prevUser,
-        ...userData
+        ...updatedUser
+      }));
+
+      setUserInfo(prevInfo => ({
+        ...prevInfo,
+        ...updatedUser
       }));
 
       Swal.fire({
@@ -62,19 +155,24 @@ export default function DashboardView() {
       });
 
       setIsEditing(false);
-    } catch (error) {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Error updating profile",
-        showConfirmButton: false,
-        timer: 3000,
-        toast: true,
-        background: '#222222',
-        color: '#ffffff'
-      });
+    } else {
+      throw new Error("Error updating user profile");
     }
-  };
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: "Error updating profile",
+      showConfirmButton: false,
+      timer: 3000,
+      toast: true,
+      background: '#222222',
+      color: '#ffffff'
+    });
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -90,7 +188,7 @@ export default function DashboardView() {
               <div className="flex flex-col items-center">
                 <div className="relative group">
                   <img
-                    src={imgUrl ?? "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"}
+                    src={user?.imgUrl}
                     alt="Profile"
                     className="w-32 h-32 rounded-full object-cover border-4 border-red-600"
                   />
@@ -157,7 +255,8 @@ export default function DashboardView() {
               <div className="bg-zinc-900 rounded-lg p-6 shadow-lg">
                 <h3 className="text-xl font-semibold mb-4">My Memberships</h3>
                 <div className="flex items-center justify-center p-8 bg-zinc-800 rounded-lg">
-                  <div className="text-center">
+                  {userInfo.membership === null ? (
+                    <div className="text-center">
                     <CreditCard size={48} className="mx-auto mb-4 text-gray-400" />
                     <p className="text-gray-400">No active memberships</p>
                     <Link
@@ -166,7 +265,12 @@ export default function DashboardView() {
                     >
                       View Plans
                     </Link>
-                  </div>
+                  </div>):(
+                    <div className="text-center">
+                      <p className="text-gray-400">Plan: <span className="text-red-500">{userInfo.membership}</span></p>
+                      <p className="text-gray-400">Status:  <span className="text-red-500">{userInfo.estadoMembresia}</span></p>
+                    </div>
+                  ) }
                 </div>
               </div>
             </div>
@@ -182,6 +286,15 @@ export default function DashboardView() {
           </button>
         </div>
       </div>
+
+      <ModalProfilePhoto
+  isOpen={showModal}
+  onClose={handleCancel} // Cambia aquí
+  onAccept={handleUpload} // Cambia aquí
+>
+  Change photo
+</ModalProfilePhoto>
+
 
       {/* Edit Profile Modal */}
       <EditProfileModal

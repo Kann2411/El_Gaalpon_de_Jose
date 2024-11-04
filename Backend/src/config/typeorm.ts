@@ -12,6 +12,8 @@ const config = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   autoLoadEntities: true,
+  //dropSchema: true,
+  synchronize: true,
   // dropSchema: true,
   //  synchronize: true,
   //logging: true,

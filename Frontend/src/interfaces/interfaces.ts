@@ -44,7 +44,6 @@ export interface IUser {
     role?: string | 'admin' | 'user' | 'coach'; 
     token?: string;
     isBanned?: boolean
-
   }
 
 export interface IUserResponse {
@@ -64,8 +63,6 @@ export interface IUserContext{
     signUp: (user: Omit<IUser, "id">) => Promise<{ success: boolean; errorMessage?: string }>;
 
     logOut: () => void
-    imgUrl: string | null
-    setImgUrl: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 

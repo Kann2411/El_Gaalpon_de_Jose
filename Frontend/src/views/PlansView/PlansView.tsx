@@ -4,8 +4,9 @@ import { FaCheck } from "react-icons/fa6";
 import { getMembresia } from "@/lib/server/fetchMembresias";
 import { UserContext } from "@/context/user";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams } from "next/navigation";
 import { fitZoneApi } from "@/api/rutaApi";
+
 
 interface ISuscriptionData {
   title: string;
@@ -13,6 +14,7 @@ interface ISuscriptionData {
   unit_price: number;
   currency_id: string;
   userId: string
+  token: string | null
 }
 interface PlanCardProps {
   planId: string;
@@ -26,12 +28,52 @@ interface PlanCardProps {
 }
 
 const PlansView: React.FC = () => {
+  const searchParams = useSearchParams();
   const { user } = useContext(UserContext);
   const [plans, setPlans] = useState<PlanCardProps[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const paymentSuccess = searchParams.get("paymentSuccess");
+
+    if (paymentSuccess === 'true') {
+      Swal.fire({
+        title: '¡Pago exitoso!',
+        text: 'Su transacción se ha completado.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          popup: 'bg-[#222222] text-white',
+          title: 'text-[#B0E9FF]',
+          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+        },
+      });
+    } else if (paymentSuccess === 'false') {
+      Swal.fire({
+        title: '¡Pago fallido!',
+        text: 'Por favor, inténtelo de nuevo.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          popup: 'bg-[#222222] text-white',
+          title: 'text-[#B0E9FF]',
+          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+        },
+      });
+    } else if (paymentSuccess === 'pending') {
+      Swal.fire({
+        title: 'Pago pendiente',
+        text: 'Su pago está pendiente de confirmación.',
+        icon: 'info',
+        confirmButtonText: 'Aceptar',
+        customClass: {
+          popup: 'bg-[#222222] text-white',
+          title: 'text-[#B0E9FF]',
+          confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
+        },
+      });
+    }
     getMembresia()
       .then((data) => {
         console.log(data);
@@ -52,7 +94,7 @@ const PlansView: React.FC = () => {
         setError("Failed to load plans.");
         setLoading(false);
       });
-  }, []);
+  }, [searchParams]);
 
   if (loading) {
     return <div className="text-white">Loading plans...</div>;
@@ -121,6 +163,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       console.error("Faltan datos para crear la preferencia.");
       return;
     }
+   const userToken = localStorage.getItem('token')
 
     const suscripcionData: ISuscriptionData = {
       title: plan,
@@ -128,6 +171,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       currency_id: currency,
       unit_price: Number(price),
       userId: userId,
+      token: userToken
     };
 
     console.log(suscripcionData);
@@ -138,6 +182,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${userToken}`,
         },
         body: JSON.stringify(suscripcionData),
       });
@@ -148,7 +193,8 @@ const PlanCard: React.FC<PlanCardProps> = ({
 
       const data = await response.json();
       if (data.redirectUrl) {
-        window.location.href = data.redirectUrl;
+        //window.open(data.redirectUrl, '_blank');
+        router.push(data.redirectUrl);
       } else {
         console.error(
           "No se recibió una URL de redirección desde Mercado Pago."
