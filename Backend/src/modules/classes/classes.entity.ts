@@ -66,6 +66,9 @@ export class Class {
   @OneToMany(
     () => ClassRegistration,
     (classRegistration) => classRegistration.classEntity,
+    {
+      cascade: ['remove'],
+    },
   )
   registrations: ClassRegistration[];
 
