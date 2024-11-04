@@ -6,12 +6,15 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
 import { User } from '../users/users.entity';
 import { FileRepository } from '../file-upload/file-upload.repository';
+import { ClassRegistration } from './classesRegistration.entity';
 
 @Injectable()
 export class ClassRepository {
   constructor(
     @InjectRepository(Class)
     private readonly classesRepository: Repository<Class>,
+    @InjectRepository(ClassRegistration)
+    private readonly classRegistrationRepository: Repository<ClassRegistration>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectDataSource() private dataSource: DataSource,
@@ -110,6 +113,7 @@ export class ClassRepository {
     if (!classFound) {
       throw new Error('No se encontró la clase.');
     }
+    await this.classRegistrationRepository.delete({ classEntity: { id } });
     await this.classesRepository.delete(classFound);
     return { message: 'Class deleted successfully' };
   }
