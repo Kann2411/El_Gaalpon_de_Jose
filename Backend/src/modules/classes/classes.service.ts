@@ -20,7 +20,7 @@ export class ClassService {
     return this.classesRepository.createClass(classData);
   }
 
-  updateClass(id: UUID, classData: Class) {
+  updateClass(id: string, classData: Partial<Class>) {
     return this.classesRepository.updateClass(id, classData);
   }
 

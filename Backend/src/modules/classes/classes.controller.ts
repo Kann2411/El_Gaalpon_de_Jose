@@ -44,8 +44,11 @@ export class ClassesController {
     return this.classesService.createClass(classData);
   }
 
-  @Put()
-  updateClass(@Param('id', ParseUUIDPipe) id: UUID, @Body() classData: Class) {
+  @Put(':id')
+  updateClass(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() classData: Partial<Class>,
+  ) {
     return this.classesService.updateClass(id, classData);
   }
 
