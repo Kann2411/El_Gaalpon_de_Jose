@@ -8,7 +8,8 @@ import EditProfileModal from "@/components/editProfile/EditProfileModal";
 import Swal from "sweetalert2";
 import IUser from "@/interfaces/interfaces";
 import ModalProfilePhoto from "@/components/ModalProfilePhoto/ModalProfilePhoto";
-import { fetchUserData, getUsers, uploadProfilePhoto } from "@/lib/server/fetchUsers";
+import { fetchUserData, getUsers, uploadProfilePhoto, updateUserProfile, updateProfilePhoto } from "@/lib/server/fetchUsers";
+
 
 export default function DashboardView() {
 
@@ -76,45 +77,70 @@ export default function DashboardView() {
 
   const handleUpload = async () => {
     if (!file || !user || !user.id) return;
-
-    const imgUrl = await uploadProfilePhoto(user.id, file);
-    if (imgUrl) {
+  
+    try {
+      const result = await updateProfilePhoto(user.id, file);
+      if (result) {
         setUser(prevUser => ({
-            ...prevUser,
-            imgUrl
+          ...prevUser,
+          imgUrl: result.imgUrl
+        }));
+        setUserInfo(prevInfo => ({
+          ...prevInfo,
+          imgUrl: result.imgUrl
         }));
         Swal.fire({
-            icon: "success",
-            title: "Updated profile photo!",
-            timer: 2000,
-            showConfirmButton: false,
-            background: '#222222',
-            color: '#ffffff'
+          icon: "success",
+          title: "Updated profile photo!",
+          timer: 2000,
+          showConfirmButton: false,
+          background: '#222222',
+          color: '#ffffff'
         });
-    } else {
-        Swal.fire({
-            icon: "error",
-            title: "Error when updating profile photo",
-            timer: 2000,
-            showConfirmButton: false,
-            background: '#222222',
-            color: '#ffffff'
-        });
+      } else {
+        throw new Error("Failed to update profile photo");
+      }
+    } catch (error) {
+      console.error("Error updating profile photo:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error when updating profile photo",
+        text: "Please try again later.",
+        timer: 2000,
+        showConfirmButton: false,
+        background: '#222222',
+        color: '#ffffff'
+      });
     }
-
+  
     setShowModal(false);
     setFile(null);
-};
+  };
 
 
-  const handleSaveProfile = async (userData: Partial<IUser>) => {
-    try {
-      //Implementar la llamada al  para actualizar los datos
-      // onst response = await updateUserProfile(userData);
-      
+  
+const handleSaveProfile = async (userData: Partial<IUser>) => {
+  try {
+    if (!user || !user.id) {
+      throw new Error("User ID is missing");
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error("Authentication token is missing");
+    }
+
+    const updatedUser = await updateUserProfile(user.id, userData, token);
+
+    if (updatedUser) {
       setUser(prevUser => ({
         ...prevUser,
-        ...userData
+        ...updatedUser
+      }));
+
+      setUserInfo(prevInfo => ({
+        ...prevInfo,
+        ...updatedUser
       }));
 
       Swal.fire({
@@ -129,19 +155,24 @@ export default function DashboardView() {
       });
 
       setIsEditing(false);
-    } catch (error) {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Error updating profile",
-        showConfirmButton: false,
-        timer: 3000,
-        toast: true,
-        background: '#222222',
-        color: '#ffffff'
-      });
+    } else {
+      throw new Error("Error updating user profile");
     }
-  };
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: "Error updating profile",
+      showConfirmButton: false,
+      timer: 3000,
+      toast: true,
+      background: '#222222',
+      color: '#ffffff'
+    });
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-black text-white">
