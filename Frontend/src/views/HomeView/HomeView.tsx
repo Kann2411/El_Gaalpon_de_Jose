@@ -17,6 +17,7 @@ import { useSearch } from "@/context/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { fitZoneApi } from "@/api/rutaApi";
 import CoachCard from "@/components/CoachCard/CoachCard";
+import ClassFilters from "@/components/class-filters/class-filters"; // Asegúrate de que esta ruta sea correcta
 
 interface ClassInfo {
   id: number;
@@ -73,9 +74,9 @@ const HomeView: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const { searchQuery } = useSearch();
   const [filters, setFilters] = useState({
-    intensity: "",
-    duration: "",
-    day: "",
+    intensity: [] as string[],
+    duration: [] as string[],
+    day: [] as string[],
   });
 
   const onClick = async () => {
@@ -184,18 +185,30 @@ const HomeView: React.FC = () => {
     return images;
   };
 
-  // Filtra las clases basándose en la consulta de búsqueda
+  // Filtra las clases basándose en la consulta de búsqueda y los filtros
   const filteredClasses = classesData.filter((classInfo) => {
     const matchesSearch = classInfo.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesIntensity =
-      filters.intensity === "" || classInfo.intensity === filters.intensity;
+      filters.intensity.length === 0 ||
+      filters.intensity.includes(classInfo.intensity);
     const matchesDuration =
-      filters.duration === "" || classInfo.duration === filters.duration;
-    const matchesDay = filters.day === "" || classInfo.day === filters.day;
+      filters.duration.length === 0 ||
+      filters.duration.includes(classInfo.duration);
+    const matchesDay =
+      filters.day.length === 0 || filters.day.includes(classInfo.day);
     return matchesSearch && matchesIntensity && matchesDuration && matchesDay;
   });
+
+  // Función para manejar cambios en los filtros
+  const handleFilterChange = (newFilters: {
+    intensity: string[];
+    duration: string[];
+    day: string[];
+  }) => {
+    setFilters(newFilters);
+  };
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
@@ -207,13 +220,20 @@ const HomeView: React.FC = () => {
         </h1>
       </div>
 
-      {/* Grid de Clases */}
-      <h2 className="text-3xl font-bold text-center mb-4">
-        Experience <span className="text-red-600">FitZone</span>
-      </h2>
-      <h1 className="text-xl font-extrabold">
-        Discover our <span className="text-red-600">exclusive classes</span>
-      </h1>
+      {/* Contenedor para filtros y subtítulo */}
+      <div className="w-full max-w-9xl px-5 mb-8">
+        <div className="flex flex-col items-center relative">
+          <div className="absolute left-0 mt-8">
+            <ClassFilters onFilterChange={setFilters} />
+          </div>
+          <h2 className="text-3xl font-bold">
+            Experience <span className="text-red-600">FitZone</span>
+          </h2>
+          <h1 className="text-xl font-extrabold mt-4">
+            Discover our <span className="text-red-600">exclusive classes</span>
+          </h1>
+        </div>
+      </div>
 
       <div className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <AnimatePresence>

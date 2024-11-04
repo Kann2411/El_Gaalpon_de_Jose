@@ -76,7 +76,7 @@ const CreateTrainingPlan: React.FC = () => {
 
     return (
         <div className="bg-black text-white flex flex-col items-center">
-            <div className="w-[500px] bg-zinc-900 p-8 rounded-lg">
+            <div className="w-max bg-zinc-900 p-8 rounded-lg mt-32 mb-26">
                 <h2 className="text-3xl font-bold text-white mb-6 text-center">Create Training Plan</h2>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="flex flex-col mb-4">
