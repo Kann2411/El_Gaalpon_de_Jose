@@ -3,6 +3,9 @@ import {
   Controller,
   // Delete,
   Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
   Post,
   // Put,
   UseGuards,
@@ -10,9 +13,10 @@ import {
 import { membresiaService } from './membresia.service';
 import { ApiTags } from '@nestjs/swagger';
 import { MembresiaDto } from 'src/dtos/createMembresia.dto';
-import { Roles } from 'src/decorators/role.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { Role } from 'src/enums/role.enum';
+import { RolesGuard } from '../../guards/roles.guard';
+import { Role } from '../../enums/role.enum';
+import { Roles } from '../../decorators/role.decorator';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @ApiTags('Membresia')
 @Controller('membresia')
@@ -41,6 +45,16 @@ export class MembresiaController {
   @Post()
   createMembresia(@Body() membresiaDto: MembresiaDto) {
     return this.membresiaService.createMembresia(membresiaDto);
+  }
+
+  @Patch('price/:id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
+  updateMembresiaPrice(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body('price') price: number,
+  ) {
+    return this.membresiaService.updateMembresiaPrice(id, price);
   }
 
   // @Roles(Role.Admin)
