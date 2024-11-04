@@ -51,5 +51,4 @@ export class Membresia {
   })
   @Column()
   idealFor: string;
-
 }

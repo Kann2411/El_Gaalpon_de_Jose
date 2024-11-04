@@ -80,7 +80,6 @@ export class MercadoPagoController {
     return res.redirect(
       `http://localhost:3001/plans?paymentSuccess=pending&&id=${paymentId}&userId=${userId}`,
     );
- 
   }
   @Post('payment')
   async getPaymentStatus(
