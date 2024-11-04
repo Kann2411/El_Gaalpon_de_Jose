@@ -159,32 +159,22 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
   };
 
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        const token = localStorage.getItem("token");
-    
-        if (storedUser && token) {
-            const parsedUser = JSON.parse(storedUser);
-            try {
-                const decodedToken: DecodedToken = jwtDecode(token);
-                const role = decodedToken.roles;
-                const userId = parsedUser.id;
-    
-                setUser({
-                    ...parsedUser,
-                    role: role,
-                    id: decodedToken.id,
-                });
-                setIsLogged(true);
-            } catch (error) {
-                console.warn("Error al decodificar el token:", error);
-            }
-        }
-    }, []);
-    
-    
-    
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
 
+    if (storedUser && token) {
+        const parsedUser = JSON.parse(storedUser);
+        try {
+            const decodedToken: DecodedToken = jwtDecode(token);
+            setUser(parsedUser);
+            setIsLogged(true);
+        } catch (error) {
+            console.warn("Error al decodificar el token:", error);
+        }
+    }
+}, []);
+    
     return (
         <UserContext.Provider
             value={{ user, setUser, isLogged, setIsLogged, signIn, signUp, logOut }}

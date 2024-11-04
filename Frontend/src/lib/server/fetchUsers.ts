@@ -241,7 +241,7 @@ export const uploadProfilePhoto = async (userId: string, file: File): Promise<{ 
 
   try {
     const response = await fetch(`${fitZoneApi}/files/profileImages/${userId}`, {
-      method: "POST",
+      method: "PATCH",
       body: formData,
       headers: {
         Authorization: `Bearer ${token}`

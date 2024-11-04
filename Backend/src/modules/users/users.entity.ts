@@ -103,12 +103,16 @@ export class User {
     enum: EstadoMembresia,
     default: EstadoMembresia.INACTIVA,
   })
-  @Column({ type: 'enum', enum: EstadoMembresia, default: EstadoMembresia.INACTIVA })
+  @Column({
+    type: 'enum',
+    enum: EstadoMembresia,
+    default: EstadoMembresia.INACTIVA,
+  })
   estadoMembresia: EstadoMembresia;
 
   @ApiProperty({
     description: 'Tipo de membresía del usuario',
-    enum: TipoMembresia, 
+    enum: TipoMembresia,
     nullable: true,
   })
   @Column({ type: 'enum', enum: TipoMembresia, nullable: true })
@@ -146,6 +150,6 @@ export class User {
     description: 'Pagos asociados al usuario',
     type: () => [Pago],
   })
-  @OneToMany(() => Pago, (pago) => pago.user, {nullable: true})
+  @OneToMany(() => Pago, (pago) => pago.user, { nullable: true })
   pagos: Pago[];
 }

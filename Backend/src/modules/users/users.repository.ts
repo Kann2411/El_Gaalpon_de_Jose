@@ -26,7 +26,17 @@ export class UsersRepository {
   async getUsers(): Promise<User[]> {
     try {
       const [users] = await this.userRepository.findAndCount({
-        select: ['id', 'name', 'dni', 'email', 'phone', 'role','estadoMembresia','membership','registrationMethod'],
+        select: [
+          'id',
+          'name',
+          'dni',
+          'email',
+          'phone',
+          'role',
+          'estadoMembresia',
+          'membership',
+          'registrationMethod',
+        ],
       });
       return users;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -74,8 +84,8 @@ export class UsersRepository {
           email: true,
           phone: true,
           registrationMethod: true,
-          membership:true,
-          estadoMembresia:true
+          membership: true,
+          estadoMembresia: true,
         },
       });
 

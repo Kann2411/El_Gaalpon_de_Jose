@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Redirect } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  Redirect,
+} from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import MercadoPagoConfig, { Payment, Preference } from 'mercadopago';
 import { config as dotenvConfig } from 'dotenv';
@@ -20,36 +25,73 @@ const client = new MercadoPagoConfig({ accessToken: process.env.ACCESS_TOKEN });
 @Injectable()
 export class MercadoPagoRepository {
   constructor(
-    @InjectRepository(Pago) private readonly mercadoPagoRepository: Repository<Pago>,
+    @InjectRepository(Pago)
+    private readonly mercadoPagoRepository: Repository<Pago>,
     private readonly usersRepository: UsersRepository,
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mailerService: MailerService,
-  ) { }
+  ) {}
+
+  async getTotalPayments() {
+    const { sum } = await this.mercadoPagoRepository
+      .createQueryBuilder('pago')
+      .select('SUM(pago.monto)', 'sum')
+      .where('pago.estado = :estado', { estado: EstadoPago.COMPLETADO })
+      .getRawOne();
+
+    return { totalPayments: sum || 0 };
+  }
+
+  async getLastPaymentByUser(userId: string) {
+    const lastPayment = await this.mercadoPagoRepository.findOne({
+      where: { user: { id: userId } },
+      order: { fecha: 'DESC' },
+    });
+
+    if (!lastPayment) {
+      throw new NotFoundException(
+        'No se encontró ningún pago para este usuario',
+      );
+    }
+    return lastPayment;
+  }
+
+  async getPaymentsByUser(userId: string) {
+    const payments = await this.mercadoPagoRepository.find({
+      where: { user: { id: userId } },
+      order: { fecha: 'DESC' },
+    });
+
+    return payments;
+  }
 
   async getPaymentStatus(id, userId, pagoId) {
     return await this.dataSource.manager.transaction(async (manager) => {
       try {
-        const user = await this.usersRepository.getUserById(userId)
+        const user = await this.usersRepository.getUserById(userId);
         if (!user) {
           throw new BadRequestException('User not found');
         }
-        const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-          }
-        })
+        const response = await fetch(
+          `https://api.mercadopago.com/v1/payments/${id}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+            },
+          },
+        );
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
+          console.log(data);
 
           let pago = await this.mercadoPagoRepository.findOne({
             where: { id: pagoId },
           });
 
           if (!pago) {
-            throw new BadRequestException("El pago no ha sido encontrado")
+            throw new BadRequestException('El pago no ha sido encontrado');
           }
 
           pago = {
@@ -61,18 +103,18 @@ export class MercadoPagoRepository {
             user: userId,
             moneda: data.currency_id,
             monto: data.transaction_details.total_paid_amount,
-          }
+          };
           return this.dataSource.manager.transaction(async (manager) => {
             const result = await manager.save(Pago, pago);
             user.estadoMembresia = EstadoMembresia.ACTIVA;
-            await manager.save(User, user)
+            await manager.save(User, user);
 
             this.mailerService.sendMail({
               to: user.email,
               from: process.env.EMAIL_USER,
               subject: 'Pago Confirmado',
               template: 'payment-confirmation',
-              text: "Confirmado",
+              text: 'Confirmado',
               html: `
               <!DOCTYPE html>
               <html lang="es">
@@ -148,16 +190,16 @@ export class MercadoPagoRepository {
                 </div>
               </body>
               </html>
-            `
-            })
-            return "Pago successfully" + result
+            `,
+            });
+            return 'Pago successfully' + result;
           });
         }
       } catch (error) {
         console.log('errorssdsds: ', error);
         return error;
       }
-    })
+    });
   }
 
   async createPreference(bodySuscription) {
@@ -165,7 +207,7 @@ export class MercadoPagoRepository {
       const uuid = uuidv4();
       let pagoB = this.mercadoPagoRepository.create({
         id: String(uuid),
-        preferenceId: "null",
+        preferenceId: 'null',
         user: bodySuscription.userId,
         estado: EstadoPago.PENDIENTE,
         monto: 0,
@@ -174,7 +216,9 @@ export class MercadoPagoRepository {
         metodoPago: MetodoPago.MERCADOPAGO,
       });
       await this.mercadoPagoRepository.save(pagoB);
-      let pago = await this.mercadoPagoRepository.findOne({ where: { id: pagoB.id } })
+      let pago = await this.mercadoPagoRepository.findOne({
+        where: { id: pagoB.id },
+      });
 
       const body = {
         items: [
@@ -187,20 +231,21 @@ export class MercadoPagoRepository {
           },
         ],
         back_urls: {
-          success: `http://localhost:3000/mercadopago/success?id=${pagoB.id}&userId=${bodySuscription.userId}`,  // URL de éxito
-          failure: `http://localhost:3000/mercadopago/failure?id=${pagoB.id}&userId=${bodySuscription.userId}`,  // URL de fallo
-          pending: `http://localhost:3000/mercadopago/pending?id=${pagoB.id}&userId=${bodySuscription.userId}`,  // URL de pendiente
-      },
+          success: `http://localhost:3000/mercadopago/success?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de éxito
+          failure: `http://localhost:3000/mercadopago/failure?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de fallo
+          pending: `http://localhost:3000/mercadopago/pending?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de pendiente
+        },
         auto_return: 'approved',
-        
-        notification_url: `https://switching-darkness-movement-usb.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
+
+        notification_url: `https://games-trout-eyed-gay.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
       };
       try {
         const preference = await new Preference(client).create({ body });
-        const user = await this.usersRepository.getUserById(bodySuscription.userId);
+        const user = await this.usersRepository.getUserById(
+          bodySuscription.userId,
+        );
 
-        if (!user)
-          throw new BadRequestException('User not found')
+        if (!user) throw new BadRequestException('User not found');
 
         pago = {
           ...pago,
@@ -212,7 +257,7 @@ export class MercadoPagoRepository {
           fecha: new Date(),
           metodoPago: MetodoPago.MERCADOPAGO,
         };
-        user.membership = bodySuscription.title
+        user.membership = bodySuscription.title;
 
         await this.mercadoPagoRepository.save(pago);
         await manager.save(User, user);
@@ -222,6 +267,14 @@ export class MercadoPagoRepository {
         console.log('error: ', error);
         return error;
       }
-    })
+    });
   }
 }
+/*
+back_urls: {
+          success: `http://localhost:3000/mercadopago/success?id=${pagoB.id}&userId=${bodySuscription.userId}&token=${bodySuscription.token}`,
+          failure: `http://localhost:3000/mercadopago/failure?id=${pagoB.id}&userId=${bodySuscription.userId}&token=${bodySuscription.token}`,
+          pending: `http://localhost:3000/mercadopago/pending?id=${pagoB.id}&userId=${bodySuscription.userId}&token=${bodySuscription.token}`,
+      },
+        auto_return: 'approved',
+*/

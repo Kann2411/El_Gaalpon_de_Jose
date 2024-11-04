@@ -20,11 +20,11 @@ export class ClassService {
     return this.classesRepository.createClass(classData);
   }
 
-  updateClass(id: UUID, classData: Class) {
+  updateClass(id: string, classData: Partial<Class>) {
     return this.classesRepository.updateClass(id, classData);
   }
 
-  deleteClass(id: UUID) {
+  deleteClass(id: string) {
     return this.classesRepository.deleteClass(id);
   }
 }

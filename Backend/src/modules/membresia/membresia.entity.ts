@@ -51,29 +51,4 @@ export class Membresia {
   })
   @Column()
   idealFor: string;
-
-  @ApiProperty({
-    description: 'Fecha de inicio de la membresía',
-    type: 'string',
-    format: 'date',
-  })
-  @Column({ type: 'date', nullable: true })
-  startDate?: Date;
-
-  @ApiProperty({
-    description: 'Fecha de fin de la membresía',
-    type: 'string',
-    format: 'date',
-    nullable: true,
-  })
-  @Column({ type: 'date', nullable: true })
-  endDate?: Date;
-
-  @ApiProperty({
-    description: 'Estado de la membresía',
-    nullable: true,
-    enum: EstadoMembresia,
-  })
-  @Column({ nullable: true })
-  status?: EstadoMembresia;
 }

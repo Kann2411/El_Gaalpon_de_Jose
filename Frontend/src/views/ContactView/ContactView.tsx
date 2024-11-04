@@ -1,13 +1,13 @@
 "use client";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { contactValidationSchema } from "@/utils/contactValidationSchema";
-import { FormValues } from "@/interfaces/interfaces";
+import { FormValues2 } from "@/interfaces/interfaces";
 import { FaLocationDot, FaPhone } from "react-icons/fa6";
 import { IoMdMail } from "react-icons/io";
 import Map from "@/components/Map/Map";
 
 const ContactView: React.FC = () => {
-  const initialValues: FormValues = {
+  const initialValues: FormValues2 = {
     name: "",
     username: "",
     phone: "",
@@ -15,7 +15,7 @@ const ContactView: React.FC = () => {
     message: "",
   };
 
-  const handleSubmit = (values: FormValues) => {
+  const handleSubmit = (values: FormValues2) => {
     alert(JSON.stringify(values, null, 2));
   };
 

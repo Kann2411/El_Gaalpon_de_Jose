@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -27,8 +28,8 @@ export class FileUploadController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 200000,
-            message: 'El archivo debe ser menor a 200kb',
+            maxSize: 400000,
+            message: 'El archivo debe ser menor a 400kb',
           }),
           new FileTypeValidator({
             fileType: /(jpg|jpeg|png|webp)$/,
@@ -49,8 +50,8 @@ export class FileUploadController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 200000,
-            message: 'El archivo debe ser menor a 200kb',
+            maxSize: 400000,
+            message: 'El archivo debe ser menor a 400kb',
           }),
           new FileTypeValidator({
             fileType: /(jpg|jpeg|png|webp)$/,
@@ -63,7 +64,7 @@ export class FileUploadController {
     return this.fileService.updateClassImage(classId, file);
   }
 
-  @Post('profileImages/:id')
+  @Patch('profileImages/:id')
   @UseInterceptors(FileInterceptor('file'))
   imageProfile(
     @Param('id') id: string,
@@ -71,8 +72,8 @@ export class FileUploadController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 200000,
-            message: 'El archivo debe ser menor a 200kb',
+            maxSize: 400000,
+            message: 'El archivo debe ser menor a 400kb',
           }),
           new FileTypeValidator({
             fileType: /(jpg|jpeg|png|webp)$/,
