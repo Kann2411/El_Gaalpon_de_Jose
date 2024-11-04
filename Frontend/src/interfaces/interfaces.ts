@@ -82,7 +82,7 @@ export interface DecodedToken {
 }
 
 
-export interface FormValues {
+export interface FormValues2 {
     name: string;
     username: string;
     phone: string;
