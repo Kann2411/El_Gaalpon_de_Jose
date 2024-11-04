@@ -199,7 +199,7 @@ export class MercadoPagoRepository {
         },
         auto_return: 'approved',
 
-        notification_url: `https://switching-darkness-movement-usb.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
+        notification_url: `https://competitions-votes-makers-rental.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
       }
       try {
         const preference = await new Preference(client).create({ body });

@@ -91,6 +91,11 @@ export class MembresiaRepository {
     });
   }
 
+  async updateMembresiaPrice(id: string, price: number) {
+    await this.membresiaRepository.update({ id }, { price });
+    return await this.membresiaRepository.findOne({ where: { id } });
+  }
+
   // async updateMembresia(id: UUID, membresia: Membresia) {
   //   await this.membresiaRepository.update({ id }, membresia);
   //   return await this.membresiaRepository.findOne({ where: { id } });

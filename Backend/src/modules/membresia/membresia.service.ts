@@ -22,6 +22,10 @@ export class membresiaService {
     return this.membresiaRepository.createMembresia(membresiaDto);
   }
 
+  async updateMembresiaPrice(id: string, price: number) {
+    return await this.membresiaRepository.updateMembresiaPrice(id, price);
+  }
+
   // updateMembresia(id: UUID, membresia: Membresia) {
   //   this.membresiaRepository.updateMembresia(id, membresia);
   // }
