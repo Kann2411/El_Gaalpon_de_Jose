@@ -49,8 +49,8 @@ export class ClassesController {
     return this.classesService.updateClass(id, classData);
   }
 
-  @Delete()
-  deleteClass(@Param(ParseUUIDPipe) id: UUID) {
+  @Delete(':id')
+  deleteClass(@Param('id', ParseUUIDPipe) id: string) {
     return this.classesService.deleteClass(id);
   }
 }
