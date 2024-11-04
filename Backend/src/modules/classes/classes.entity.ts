@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ClassRegistration } from './classesRegistration.entity';
+import { ClassRegistration } from '../classRegistration/classesRegistration.entity';
 import { User } from '../users/users.entity';
 
 @Entity({ name: 'classes' })

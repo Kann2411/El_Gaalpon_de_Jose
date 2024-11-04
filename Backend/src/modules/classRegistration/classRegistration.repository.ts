@@ -6,7 +6,7 @@ import {
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Class } from '../classes/classes.entity';
-import { ClassRegistration } from '../classes/classesRegistration.entity';
+import { ClassRegistration } from './classesRegistration.entity';
 import { User } from '../users/users.entity';
 
 @Injectable()
@@ -82,5 +82,6 @@ export class classRegistrationRepository {
       throw new NotFoundException('No estas registrado en esta clase');
     }
     await this.classRegistrationRepository.remove(registration);
+    return { message: 'class canceled successfully' };
   }
 }

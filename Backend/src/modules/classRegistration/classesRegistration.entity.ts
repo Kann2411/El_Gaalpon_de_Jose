@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../users/users.entity';
-import { Class } from './classes.entity';
+import { Class } from '../classes/classes.entity';
 
 @Entity('class_registrations')
 export class ClassRegistration {
