@@ -27,8 +27,8 @@ export class FileUploadController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 200000,
-            message: 'El archivo debe ser menor a 200kb',
+            maxSize: 400000,
+            message: 'El archivo debe ser menor a 400kb',
           }),
           new FileTypeValidator({
             fileType: /(jpg|jpeg|png|webp)$/,
@@ -49,8 +49,8 @@ export class FileUploadController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 200000,
-            message: 'El archivo debe ser menor a 200kb',
+            maxSize: 400000,
+            message: 'El archivo debe ser menor a 400kb',
           }),
           new FileTypeValidator({
             fileType: /(jpg|jpeg|png|webp)$/,
@@ -71,8 +71,8 @@ export class FileUploadController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({
-            maxSize: 200000,
-            message: 'El archivo debe ser menor a 200kb',
+            maxSize: 400000,
+            message: 'El archivo debe ser menor a 400kb',
           }),
           new FileTypeValidator({
             fileType: /(jpg|jpeg|png|webp)$/,

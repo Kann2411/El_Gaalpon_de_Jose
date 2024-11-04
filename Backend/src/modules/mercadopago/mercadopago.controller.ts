@@ -17,25 +17,57 @@ export class MercadoPagoController {
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
   @Get('success')
-  async successPayment(@Query('id') paymentId, @Query('userId') userId, @Res() res) {
-      console.log('Pago exitosoID de pago:', paymentId, 'ID de usuario:', userId);
-      return res.redirect(`http://localhost:3001/plans?paymentSuccess=true&id=${paymentId}&userId=${userId}`);
+  async successPayment(
+    @Query('id') paymentId,
+    @Query('userId') userId,
+    @Res() res,
+  ) {
+    console.log('Pago exitosoID de pago:', paymentId, 'ID de usuario:', userId);
+    return res.redirect(
+      `http://localhost:3001/plans?paymentSuccess=true&id=${paymentId}&userId=${userId}`,
+    );
   }
 
   @Get('failure')
-  async failurePayment(@Query('id') paymentId, @Query('userId') userId,@Res() res) {
-    console.log('Pago fallido ID de pago:', paymentId, 'ID de usuario:', userId);
-    return res.redirect(`http://localhost:3001/plans?paymentSuccess=false&&id=${paymentId}&userId=${userId}`);
+  async failurePayment(
+    @Query('id') paymentId,
+    @Query('userId') userId,
+    @Res() res,
+  ) {
+    console.log(
+      'Pago fallido ID de pago:',
+      paymentId,
+      'ID de usuario:',
+      userId,
+    );
+    return res.redirect(
+      `http://localhost:3001/plans?paymentSuccess=false&&id=${paymentId}&userId=${userId}`,
+    );
   }
 
   @Get('pending')
-  async pendingPayment(@Query('id') paymentId, @Query('userId') userId,@Res() res) {
-    console.log('Pago pendiente ID de pago:', paymentId, 'ID de usuario:', userId);
-    return res.redirect(`http://localhost:3001/plans?paymentSuccess=pending&&id=${paymentId}&userId=${userId}`);
+  async pendingPayment(
+    @Query('id') paymentId,
+    @Query('userId') userId,
+    @Res() res,
+  ) {
+    console.log(
+      'Pago pendiente ID de pago:',
+      paymentId,
+      'ID de usuario:',
+      userId,
+    );
+    return res.redirect(
+      `http://localhost:3001/plans?paymentSuccess=pending&&id=${paymentId}&userId=${userId}`,
+    );
   }
 
   @Post('payment')
-  async getPaymentStatus(@Query('id') id, @Query('userId') userId, @Query('pagoId') pagoId) {
+  async getPaymentStatus(
+    @Query('id') id,
+    @Query('userId') userId,
+    @Query('pagoId') pagoId,
+  ) {
     return this.mercadoPagoService.getPaymentStatus(id, userId, pagoId);
   }
 
