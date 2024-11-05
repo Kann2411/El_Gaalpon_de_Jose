@@ -17,8 +17,8 @@ const coaches: Coach[] = [
   {
     id: 1,
     name: "Alex Johnson",
-    specialty: "Crossfit & HIIT",
-    image: "https://img.freepik.com/free-photo/portrait-man-close-up-hard-light_1321-497.jpg?t=st=1730335953~exp=1730339553~hmac=dd8a0b59e0021f4fa4222f02b78cd1dd4529465af63b4c75131edf7291a6cb47&w=1380",
+    specialty: "High Intensity and Functional Training Area",
+    image: "https://img.freepik.com/foto-gratis/joven-hombre-deportes-expresion-feliz_1194-1589.jpg?t=st=1730760038~exp=1730763638~hmac=2d8c24cebbb91fb191bf8c80693782fd66312a05e72b164e2690a4e88a5e4f78&w=1380",
     bio: "Alex is a certified Crossfit trainer with 10 years of experience in high-intensity workouts.",
     instagram: "https://instagram.com/alexjohnson",
     twitter: "https://twitter.com/alexjohnson",
@@ -27,8 +27,8 @@ const coaches: Coach[] = [
   {
     id: 2,
     name: "Sarah Lee",
-    specialty: "Yoga & Pilates",
-    image: "https://img.freepik.com/free-photo/beautiful-woman-gym_23-2147789567.jpg?t=st=1730336221~exp=1730339821~hmac=f4f1762e2e928c4ea86c6a1e3810ddeb26389b5f2a0084b0383d44e5a94beb63&w=1380",
+    specialty: "Wellness and Flexibility area",
+    image: "https://img.freepik.com/foto-gratis/hermosa-mujer-gimnasio_23-2147789567.jpg?t=st=1730760165~exp=1730763765~hmac=e56210e535baa640c48ee386823747d8ab98b16bcbf424d07050677b62b0f9bb&w=1380",
     bio: "Sarah specializes in mindfulness and body awareness through Yoga and Pilates practices.",
     instagram: "https://instagram.com/sarahlee",
     twitter: "https://twitter.com/sarahlee",
@@ -37,8 +37,8 @@ const coaches: Coach[] = [
   {
     id: 3,
     name: "Mike Torres",
-    specialty: "Strength & Conditioning",
-    image: "https://img.freepik.com/free-photo/front-view-male-boxer-practicing_23-2148615116.jpg?t=st=1730336188~exp=1730339788~hmac=08e0456955624782a06fd97a98616a8e1e604a0f5bccdf851261594607f9cb62&w=1380",
+    specialty: "Strength and Endurance Training Area",
+    image: "https://img.freepik.com/foto-gratis/ajuste-hombre-trabajando-pesas-rusas_23-2149358164.jpg?t=st=1730760215~exp=1730763815~hmac=f34dbe3d9b7021063d9e002cb009a9e979e22bfc37113615d76390f0c2f1bb9c&w=1380",
     bio: "Mike is passionate about helping clients build strength and improve overall conditioning.",
     instagram: "https://instagram.com/miketorres",
     twitter: "https://twitter.com/miketorres",

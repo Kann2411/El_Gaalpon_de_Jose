@@ -35,7 +35,7 @@ export class ClassRegistrationController {
     return this.classRegistrationService.registerUserToClass(classId, userId);
   }
 
-  @Delete('classId/delete/:userId')
+  @Delete(':classId/delete/:userId')
   deleteRegisterUserFromClass(
     @Param('classId', ParseUUIDPipe) classId: string,
     @Param('userId', ParseUUIDPipe) userId: string,

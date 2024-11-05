@@ -36,30 +36,4 @@ export class MembresiaDto {
 
   @IsString()
   idealFor: string;
-
-  @ApiProperty({
-    description: 'Fecha de inicio de la membresía',
-    type: 'string',
-    format: 'date',
-    nullable: true,
-  })
-  @IsOptional()
-  startDate?: Date;
-
-  @ApiProperty({
-    description: 'Fecha de fin de la membresía',
-    type: 'string',
-    format: 'date',
-    nullable: true,
-  })
-  @IsOptional()
-  endDate?: Date;
-
-  @ApiProperty({
-    description: 'Estado de la membresía',
-    enum: EstadoMembresia,
-    nullable: true,
-  })
-  @IsOptional()
-  status: EstadoMembresia;
 }

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Class } from './classes.entity';
 import { UUID } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
@@ -6,12 +10,15 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { CreateClassDto } from 'src/dtos/createClass.dto';
 import { User } from '../users/users.entity';
 import { FileRepository } from '../file-upload/file-upload.repository';
+import { ClassRegistration } from '../classRegistration/classesRegistration.entity';
 
 @Injectable()
 export class ClassRepository {
   constructor(
     @InjectRepository(Class)
     private readonly classesRepository: Repository<Class>,
+    @InjectRepository(ClassRegistration)
+    private readonly classRegistrationRepository: Repository<ClassRegistration>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectDataSource() private dataSource: DataSource,
@@ -82,41 +89,23 @@ export class ClassRepository {
     };
   }
 
-  async updateClass(id: UUID, classData: Class) {
-    return this.dataSource.manager.transaction(async (manager) => {
-      try {
-        let oldClass = await this.getClassById(id);
-        // Se verifica que la clase con el id exista
-        if (!oldClass) {
-          throw new Error('No se encontró la clase.');
-        }
-        // Se actualizan los datos a la clase
-        oldClass = {
-          id: oldClass.id,
-          ...classData,
-        };
-        // Se guardan los cambios a la base de datos
-        await manager.save(oldClass);
-        // retorna la clase actualizada
-        return oldClass;
-      } catch (error) {
-        throw error;
-      }
-    });
+  async updateClass(id: string, classData: Partial<Class>) {
+    const classToUpdate = await this.classesRepository.findOneBy({ id });
+    if (!classToUpdate) {
+      throw new NotFoundException(`Class with id ${id} not found`);
+    }
+    await this.classesRepository.update(id, classData);
+    const foundClassUpdate = await this.classesRepository.findOneBy({ id });
+    return foundClassUpdate;
   }
 
-  async deleteClass(id: UUID) {
-    return await this.dataSource.transaction(async (manager) => {
-      try {
-        const classData = await this.getClassById(id);
-        if (!classData) {
-          throw new Error('No se encontró la clase.');
-        }
-        await manager.remove(classData);
-        return { message: 'Clase eliminada exitosamente' };
-      } catch (error) {
-        throw error;
-      }
-    });
+  async deleteClass(id: string) {
+    const classFound = await this.classesRepository.findOneBy({ id });
+    if (!classFound) {
+      throw new Error('No se encontró la clase.');
+    }
+    await this.classRegistrationRepository.delete({ classEntity: { id } });
+    await this.classesRepository.delete(classFound);
+    return { message: 'Class deleted successfully' };
   }
 }

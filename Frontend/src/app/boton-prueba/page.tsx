@@ -3,7 +3,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/user';
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import Loading from '@/components/Loading/Loading';
 
 interface DecodedToken {
@@ -33,11 +33,18 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
         id: decodedToken.id,
         email: decodedToken.email,
         role: decodedToken.role,
+        token, // Incluye el token en el objeto de usuario
       };
+
+      // Guarda el usuario completo en `localStorage`
+      localStorage.setItem('user', JSON.stringify(userInfo));
+
+      // Actualiza el contexto de usuario
       setUser(userInfo);
       setIsLogged(true);
       setLoading(false);
 
+      // Redirige según el rol del usuario
       switch (decodedToken.role) {
         case 'admin':
           router.push('/users-controller');
@@ -55,7 +62,6 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
       setLoading(false); 
     }
   }, [searchParams, router, setIsLogged, setUser]);
-
 
   if (loading) {
     return <Loading />;

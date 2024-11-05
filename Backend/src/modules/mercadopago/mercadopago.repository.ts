@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Redirect } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  Redirect,
+} from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import MercadoPagoConfig, { Payment, Preference } from 'mercadopago';
 import { config as dotenvConfig } from 'dotenv';
@@ -26,6 +31,39 @@ export class MercadoPagoRepository {
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mailerService: MailerService,
   ) {}
+
+  async getTotalPayments() {
+    const { sum } = await this.mercadoPagoRepository
+      .createQueryBuilder('pago')
+      .select('SUM(pago.monto)', 'sum')
+      .where('pago.estado = :estado', { estado: EstadoPago.COMPLETADO })
+      .getRawOne();
+
+    return { totalPayments: sum || 0 };
+  }
+
+  async getLastPaymentByUser(userId: string) {
+    const lastPayment = await this.mercadoPagoRepository.findOne({
+      where: { user: { id: userId } },
+      order: { fecha: 'DESC' },
+    });
+
+    if (!lastPayment) {
+      throw new NotFoundException(
+        'No se encontró ningún pago para este usuario',
+      );
+    }
+    return lastPayment;
+  }
+
+  async getPaymentsByUser(userId: string) {
+    const payments = await this.mercadoPagoRepository.find({
+      where: { user: { id: userId } },
+      order: { fecha: 'DESC' },
+    });
+
+    return payments;
+  }
 
   async getPaymentStatus(id, userId, pagoId) {
     return await this.dataSource.manager.transaction(async (manager) => {
@@ -163,7 +201,7 @@ export class MercadoPagoRepository {
       }
     });
   }
-  
+
   async createPreference(bodySuscription) {
     return await this.dataSource.manager.transaction(async (manager) => {
       const uuid = uuidv4();
@@ -199,8 +237,8 @@ export class MercadoPagoRepository {
         },
         auto_return: 'approved',
 
-        notification_url: `https://switching-darkness-movement-usb.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
-      }
+        notification_url: `https://games-trout-eyed-gay.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
+      };
       try {
         const preference = await new Preference(client).create({ body });
         const user = await this.usersRepository.getUserById(

@@ -11,26 +11,23 @@ import { Search, LogOut, UserRound } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearch } from "@/context/SearchContext";
 import { fitZoneApi } from "@/api/rutaApi";
-import { MessageCircle } from "lucide-react"; 
-import ChatModal from '@/components/ChatModal/ChatModal';
-
+import { MessageCircle } from "lucide-react";
+import ChatModal from "@/components/ChatModal/ChatModal";
 
 const NavBarComponent = () => {
-  const { user, logOut, isLogged,  } = useContext(UserContext);
+  const { user, logOut, isLogged } = useContext(UserContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const handleOpenChat = () => setIsChatOpen(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const handleCloseChat = () => setIsChatOpen(false);
 
-
   const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } =
-    useSearch();
+  useSearch();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
@@ -167,9 +164,9 @@ const NavBarComponent = () => {
 
   useEffect(() => {
     if (isLogged) {
-      if(user?.role === 'admin') {
+      if (user?.role === "admin") {
         router.push("/users-controller");
-      } else if (user?.role === 'coach') {
+      } else if (user?.role === "coach") {
         router.push("/training-management");
       } else if (user?.role === "user") {
         router.push("/home");
@@ -234,27 +231,29 @@ const NavBarComponent = () => {
       ) : user?.role === "admin" ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Users Controller","Classes"].map((item, index) => {
-              const lowerCaseItem = item.toLowerCase();
+            {["Users Controller", "Classes"].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase().replace(" ", "-");
               const route =
                 lowerCaseItem === "users-controller"
                   ? "/users-controller"
                   : "/classes";
+              const isActive = pathname === route;
 
               return (
                 <li key={index} className="relative group">
                   <Link
                     href={route}
-                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                    className={`text-white text-sm sm:text-base font-medium px-3 py-2 ${
+                      isActive ? "text-red-600" : ""
+                    }`}
                   >
                     {item}
                   </Link>
                   <span
                     className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                      pathname === route ? "scale-x-100" : "scale-x-0"
+                      isActive ? "scale-x-100" : "scale-x-0"
                     }`}
                   />
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
                 </li>
               );
             })}
@@ -265,26 +264,28 @@ const NavBarComponent = () => {
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
             {["Training Management", "Registrated Classes"].map(
               (item, index) => {
-                const lowerCaseItem = item.toLowerCase();
+                const lowerCaseItem = item.toLowerCase().replace(" ", "-");
                 const route =
                   lowerCaseItem === "training-management"
                     ? "/training-management"
                     : "/registrated-classes";
+                const isActive = pathname === route;
 
                 return (
                   <li key={index} className="relative group">
                     <Link
                       href={route}
-                      className="text-white text-sm sm:text-base font-medium px-3 py-2"
+                      className={`text-white text-sm sm:text-base font-medium px-3 py-2 ${
+                        isActive ? "text-red-600" : ""
+                      }`}
                     >
                       {item}
                     </Link>
                     <span
                       className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                        pathname === route ? "scale-x-100" : "scale-x-0"
+                        isActive ? "scale-x-100" : "scale-x-0"
                       }`}
                     />
-                    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
                   </li>
                 );
               }
@@ -319,17 +320,16 @@ const NavBarComponent = () => {
         </nav>
       ) : null}
 
-           {user?.role === "user" && (
-             
-  <button
-    onClick={handleOpenChat}
-    className="p-2 text-white hover:text-red-600 transition-colors duration-200 ml-4"
-  >
-    <MessageCircle />
-  </button>
-           )} 
-
-  {isChatOpen && <ChatModal onClose={handleCloseChat} />}
+      {user?.role === "user" && (
+        <button
+          onClick={handleCloseChat}
+          className="p-2 text-white hover:text-red-600 transition-colors duration-200 ml-4"
+        >
+          {user?.role === "user" && <ChatModal onClose={handleCloseChat} />}
+          {isChatOpen && <ChatModal onClose={handleCloseChat} />}
+          
+        </button>
+      )}
 
       {/* Icono de búsqueda solo en /home */}
       {pathname === "/home" && (
@@ -365,7 +365,7 @@ const NavBarComponent = () => {
           </AnimatePresence>
         </div>
       )}
- 
+
       {isLogged ? (
         <div className="relative" ref={menuRef}>
           <div
