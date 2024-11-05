@@ -35,7 +35,7 @@ const PlansView: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const paymentSuccess = searchParams.get("paymentSuccess");
+    const paymentSuccess = searchParams ? searchParams.get("paymentSuccess") : null;
 
     if (paymentSuccess === 'true') {
       Swal.fire({
