@@ -2,9 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useFormik, ErrorMessage } from "formik";
 import { classValidationSchema } from "@/utils/classValidationSchema";
-import { createClass, uploadClassImage } from "@/lib/server/fetchClasses";
 import { IClassData, IUser } from "@/interfaces/interfaces";
-import { getCoaches } from "@/lib/server/fetchCoaches";
+import { getCoaches, uploadClassImage } from "@/lib/server/fetchCoaches";
 import Swal from "sweetalert2";
 
 const CreateClassForm: React.FC = () => {
@@ -39,7 +38,15 @@ const CreateClassForm: React.FC = () => {
     validationSchema: classValidationSchema,
     onSubmit: async (values) => {
       try {
-        const classData = await createClass(values);
+        const response = await fetch("http://localhost:3000/class", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        });
+        const classData = await response.json();
+        
         if (classData && selectedImage) {
           const response = await uploadClassImage(
             classData.class.id,

@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { fitZoneApi } from "@/api/rutaApi";
 import CoachCard from "@/components/CoachCard/CoachCard";
 import ClassFilters from "@/components/class-filters/class-filters"; // Asegúrate de que esta ruta sea correcta
+import { useRouter } from "next/navigation";
 
 interface ClassInfo {
   id: number;
@@ -67,6 +68,7 @@ const carouselImages: CarouselImage[] = [
 ];
 
 const HomeView: React.FC = () => {
+  const router = useRouter()
   const { user } = useContext(UserContext);
   const [classesData, setClassesData] = useState<ClassInfo[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
@@ -82,8 +84,37 @@ const HomeView: React.FC = () => {
   const onClick = async () => {
     if (!selectedClass || !user) {
       console.error("No class selected or user not logged in");
-      alert("Please select a class and make sure you are logged in.");
-      return;
+      Swal.fire({
+        title: "Hey!",
+        text: "To schedule a class you need to be logged in",
+        icon: "warning",
+        customClass: {
+          popup: "bg-[#222222] text-white",
+          title: "text-[#B0E9FF]",
+          confirmButton:
+            "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+        },
+        buttonsStyling: false,
+      });
+      router.push("/login");
+      return
+    }
+    
+    if(user.membership === null) {
+      Swal.fire({
+        title: "Hey!",
+        text: "To schedule a class you need a membership",
+        icon: "warning",
+        customClass: {
+          popup: "bg-[#222222] text-white",
+          title: "text-[#B0E9FF]",
+          confirmButton:
+            "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+        },
+        buttonsStyling: false,
+      });
+      router.push("/plans");
+      return
     }
 
     try {
@@ -213,12 +244,7 @@ const HomeView: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
       {/* Título de la sección de clases */}
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-center mb-4"></h2>
-        <h1 className="text-xl font-extrabold">
-          Discover our <span className="text-red-600">exclusive classes</span>
-        </h1>
-      </div>
+      
 
       {/* Contenedor para filtros y subtítulo */}
       <div className="w-full max-w-9xl px-5 mb-8">
@@ -270,6 +296,9 @@ const HomeView: React.FC = () => {
                       <span className="text-sm">INTENSITY</span>
                     </div>
                     <span className="text-sm">{classInfo.intensity}</span>
+                  </div>
+                  <div className="flex justify-center pt-5">
+                    <Button content='Select' onClick={() => openModal(classInfo)} />
                   </div>
                 </div>
               </motion.div>
@@ -332,9 +361,10 @@ const HomeView: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-center mt-4">
-              {user?.role === "user" && (
+             {/*  {user?.role === "user" && (
                 <Button content="Schedule" onClick={onClick} />
-              )}
+              )} */}
+               <Button content="Schedule" onClick={onClick} />
             </div>
           </motion.div>
         </motion.div>

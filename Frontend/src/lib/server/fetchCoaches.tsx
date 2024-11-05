@@ -158,3 +158,34 @@ export const getCoaches = async () => {
     console.error("Error obtaining coaches:", error);
   }
 };
+
+export const uploadClassImage = async (classId: string, file: File): Promise<any> => {
+  try {
+
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type) || file.size > 200 * 1024) {
+        throw new Error("El archivo debe ser una imagen en formato jpg, jpeg, png o webp y menor a 200KB");
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${fitZoneApi}/files/uploadClassImage/${classId}`, {
+      method: "PATCH",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Server error:", errorData); 
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+
+    const result = await response.json();
+    console.log("Server response", result);
+    return result
+  } catch (error) {
+    console.error("Error when uploading image", error);
+    return null;
+  }
+};

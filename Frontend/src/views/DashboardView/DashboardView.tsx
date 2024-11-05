@@ -176,7 +176,7 @@ const handleSaveProfile = async (userData: Partial<IUser>) => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="pt-24 px-6"> 
+      <div className=" px-6"> 
         <div className="max-w-7xl mx-auto">
           <h1 className="text-3xl font-bold mb-8">
             My <span className="text-red-600">Dashboard</span>
@@ -252,6 +252,8 @@ const handleSaveProfile = async (userData: Partial<IUser>) => {
               </div>
 
               {/* Membership Section */}
+              {user?.role === 'user'  ? (
+
               <div className="bg-zinc-900 rounded-lg p-6 shadow-lg">
                 <h3 className="text-xl font-semibold mb-4">My Memberships</h3>
                 <div className="flex items-center justify-center p-8 bg-zinc-800 rounded-lg">
@@ -273,6 +275,7 @@ const handleSaveProfile = async (userData: Partial<IUser>) => {
                   ) }
                 </div>
               </div>
+              ) : null }
             </div>
           </div>
 

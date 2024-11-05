@@ -43,9 +43,9 @@ export const getClassData = async () => {
       console.error("Error al crear la clase:", error);
     }
   };
+
   
-  
-  export const uploadClassImage = async (classId: string, file: File): Promise<any> => {
+/*   export const uploadClassImage = async (classId: string, file: File): Promise<any> => {
     try {
 
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -75,7 +75,7 @@ export const getClassData = async () => {
       return null;
     }
   };
-  
+   */
 
 export const reserveClass = async (claseId: string, userId: string) => {
   try {
@@ -101,38 +101,69 @@ export const reserveClass = async (claseId: string, userId: string) => {
 
 export async function getClassRegistration(classId: string) {
   try {
-    const token = localStorage.getItem('token')
-      const response = await fetch(`${fitZoneApi}/classRegistration/user/${classId}`, {
-          method: 'GET',
-          headers: {
-            Authorization : `Bearer ${token}`
-          }
-      });
-      
-      if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status} `);
-      }
+    const token = localStorage.getItem('token');
+    const url = `${fitZoneApi}/classRegistration/class/${classId}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
-      throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Error en la solicitud: ${response.status} ${response.statusText} - ${url}`
+      );
     }
 
     const data = await response.json();
     return data;
+
   } catch (error: any) {
-    console.error("Error al obtener el registro de clases:", error.message);
+    // Detalles adicionales del error
+    console.error('Error al obtener el registro de clases:', {
+      message: error.message,
+      stack: error.stack,
+      classId: classId,
+      url: `${fitZoneApi}/classRegistration/class/${classId}`,
+    });
     return null;
   }
 }
+
 
 export const cancelClassRegistration = async (classId: string, userId: string): Promise<boolean> => {
   try {
     const response = await fetch(`${fitZoneApi}/classRegistration/${classId}/delete/${userId}`, {
       method: 'DELETE',
     });
-    return response.ok;
+    if (!response.ok) {
+      throw new Error('Failed to cancel class registration');
+    }
+    return true;
   } catch (error) {
     console.error('Error cancelling class registration:', error);
     return false;
   }
 };
+
+
+export async function getUserClassRegistration(userId: string) {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${fitZoneApi}/classRegistration/user/${userId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+    return data;
+
+  } catch (error: any) {
+    console.error('Error al obtener el registro de clases:',error.message);
+    return null;
+  }
+}

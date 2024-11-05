@@ -44,6 +44,7 @@ export interface IUser {
     role?: string | 'admin' | 'user' | 'coach'; 
     token?: string;
     isBanned?: boolean
+    membership?: string | null
   }
 
 export interface IUserResponse {
