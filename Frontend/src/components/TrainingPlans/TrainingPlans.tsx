@@ -15,19 +15,15 @@ const TrainingPlans: React.FC = () => {
   const { user } = useContext(UserContext);
   const [trainingPlans, setTrainingPlans] = useState<TrainingPlan[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTrainingPlans = async () => {
-      setLoading(true);
       try {
         const plans = await getTrainingPlans();
         setTrainingPlans(plans);
       } catch (err) {
         setError('Error fetching training plans');
-      } finally {
-        setLoading(false);
       }
     };
     fetchTrainingPlans();
@@ -78,9 +74,6 @@ const TrainingPlans: React.FC = () => {
     setSelectedPlan(null);
   };
 
-  if (loading) {
-    return <div>Loading training plans...</div>;
-  }
 
   if (error) {
     return <div className="text-red-500">{error}</div>;

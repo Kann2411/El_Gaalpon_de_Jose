@@ -1,12 +1,10 @@
 'use client'
-import Loading from '@/components/Loading/Loading';
 import { IClassInfo } from '@/interfaces/interfaces';
 import { getClassData, getClassRegistration } from '@/lib/server/fetchClasses';
 import React, { useEffect, useState } from 'react';
 
 export default function RegistratedClassesView() {
   const [classes, setClasses] = useState<IClassInfo[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [activeClass, setActiveClass] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,8 +21,6 @@ export default function RegistratedClassesView() {
         setClasses(classesWithRegistrations);
       } catch (error) {
         console.error('Error fetching classes with registration:', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchClassesWithRegistrations();
@@ -34,9 +30,6 @@ export default function RegistratedClassesView() {
     setActiveClass(activeClass === classId ? null : classId);
   };
 
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <div className="text-white bg-black min-h-screen p-8 flex flex-col items-center">

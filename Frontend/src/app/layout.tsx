@@ -5,6 +5,7 @@ import NavBarComponent from "@/components/NavBar";
 import Footer from "@/components/Footer/Footer";
 import { Providers } from "./Providers";
 import { SearchProvider } from "@/context/SearchContext";
+import FullScreenLoader from "@/components/FullScreenLoading/FullScreenLoaging";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <SearchProvider>
           <Providers>
           <NavBarComponent />
+          <FullScreenLoader/>
           <div className="pt-24">
 
           {children}
