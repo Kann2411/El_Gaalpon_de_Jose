@@ -52,7 +52,20 @@ export default function Users() {
                   });
             } else {
                 console.error('Error changing user role:', error);
-                alert('Error desconocido al cambiar el rol');
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Error when changing role",
+                    showConfirmButton: false,
+                    timer: 3500,
+                    toast: true,
+                    background: '#222222',
+                    color: '#ffffff',
+                    customClass: {
+                      popup: 'animated slideInRight'
+                    }
+                  });
+            
             }
         }
     };

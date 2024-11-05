@@ -1,4 +1,5 @@
 import { fitZoneApi } from "@/api/rutaApi";
+import Swal from "sweetalert2";
 
 export async function createPlan(description: string) {
   try {
@@ -93,7 +94,20 @@ export const deleteTrainingPlan = async (id: string) => {
     return true;
   } catch (error) {
     console.error("Error al eliminar el plan de entrenamiento:", error);
-    alert("Error al eliminar el plan de entrenamiento");
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: "Error when deleting training plan",
+      showConfirmButton: false,
+      timer: 3500,
+      toast: true,
+      background: '#222222',
+      color: '#ffffff',
+      customClass: {
+        popup: 'animated slideInRight'
+      }
+    });
+
   }
 };
 
@@ -117,7 +131,20 @@ export const getTrainingPlans = async () => {
     return data;
   } catch (error) {
     console.error("Error obtaining training plans:", error);
-    alert("Error obtaining training plans");
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: "Error when obtaining training plans",
+      showConfirmButton: false,
+      timer: 3500,
+      toast: true,
+      background: '#222222',
+      color: '#ffffff',
+      customClass: {
+        popup: 'animated slideInRight'
+      }
+    });
+
   }
 };
 
