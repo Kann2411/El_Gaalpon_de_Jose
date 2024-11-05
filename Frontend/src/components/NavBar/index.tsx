@@ -22,13 +22,12 @@ const NavBarComponent = () => {
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const handleOpenChat = () => setIsChatOpen(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const handleCloseChat = () => setIsChatOpen(false);
 
   const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } =
-    useSearch();
+  useSearch();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
@@ -323,14 +322,14 @@ const NavBarComponent = () => {
 
       {user?.role === "user" && (
         <button
-          onClick={handleOpenChat}
+          onClick={handleCloseChat}
           className="p-2 text-white hover:text-red-600 transition-colors duration-200 ml-4"
         >
-          <MessageCircle />
+          {user?.role === "user" && <ChatModal onClose={handleCloseChat} />}
+          {isChatOpen && <ChatModal onClose={handleCloseChat} />}
+          
         </button>
       )}
-
-      {isChatOpen && <ChatModal onClose={handleCloseChat} />}
 
       {/* Icono de búsqueda solo en /home */}
       {pathname === "/home" && (
