@@ -23,8 +23,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [isLogged, setIsLogged] = useState<boolean>(false);
     const router = useRouter();
     const { data: session, status } = useSession();
-    console.log("🚀 ~ UserProvider ~ status:", status);
-    console.log("🚀 ~ UserProvider ~ session:", session);
 
     const signIn = async (credentials: SignInCredential): Promise<boolean> => {
       try {
