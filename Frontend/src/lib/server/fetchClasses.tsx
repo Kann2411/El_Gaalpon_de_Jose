@@ -43,9 +43,9 @@ export const getClassData = async () => {
       console.error("Error al crear la clase:", error);
     }
   };
+
   
-  
-  export const uploadClassImage = async (classId: string, file: File): Promise<any> => {
+/*   export const uploadClassImage = async (classId: string, file: File): Promise<any> => {
     try {
 
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -75,7 +75,7 @@ export const getClassData = async () => {
       return null;
     }
   };
-  
+   */
 
 export const reserveClass = async (claseId: string, userId: string) => {
   try {
