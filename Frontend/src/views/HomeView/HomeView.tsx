@@ -138,18 +138,70 @@ const HomeView: React.FC = () => {
       }
 
       const data = await response.json();
-      alert("Class reserved successfully!");
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Class reserved Successfully",
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
+
       console.log("Class reserved successfully:", data);
     } catch (error: unknown) {
       if (error instanceof Error) {
         const detailedMessage = `Error reserving the class: ${error.message}\nStack trace: ${error.stack}`;
-        alert(detailedMessage);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `${detailedMessage}`,
+          showConfirmButton: false,
+          timer: 3500,
+          toast: true,
+          background: '#222222',
+          color: '#ffffff',
+          customClass: {
+            popup: 'animated slideInRight'
+          }
+        });
+  
         console.error("Error reserving the class:", detailedMessage);
       } else if (typeof error === "string") {
-        alert(`Error reserving the class: ${error}`);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Error reserving the class",
+          showConfirmButton: false,
+          timer: 3500,
+          toast: true,
+          background: '#222222',
+          color: '#ffffff',
+          customClass: {
+            popup: 'animated slideInRight'
+          }
+        });
+  
         console.error("Error reserving the class:", error);
       } else {
-        alert("An unknown error occurred.");
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "An unknown error ocurred",
+          showConfirmButton: false,
+          timer: 3500,
+          toast: true,
+          background: '#222222',
+          color: '#ffffff',
+          customClass: {
+            popup: 'animated slideInRight'
+          }
+        });
+  
         console.error("Unknown error:", error);
       }
     }
