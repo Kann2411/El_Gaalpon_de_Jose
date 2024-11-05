@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function RegistratedClasses() {
   return (
-   <div className='mt-20'>
+   <div >
     <RegistratedClassesView/>
    </div>
   )

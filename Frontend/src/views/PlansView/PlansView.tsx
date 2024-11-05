@@ -163,6 +163,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       console.error("Faltan datos para crear la preferencia.");
       return;
     }
+
    const userToken = localStorage.getItem('token')
 
     const suscripcionData: ISuscriptionData = {
