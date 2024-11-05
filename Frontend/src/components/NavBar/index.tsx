@@ -56,7 +56,7 @@ const NavBarComponent = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [handleClickOutside]);
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -172,7 +172,7 @@ const NavBarComponent = () => {
         router.push("/home");
       }
     }
-  }, [isLogged, router]);
+  }, [isLogged, router, user?.role]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
