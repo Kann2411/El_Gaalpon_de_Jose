@@ -10,7 +10,6 @@ export default function Coaches() {
     const router = useRouter();
     const { user } = useContext(UserContext);
     const [users, setUsers] = useState<IUser[]>([]);
-    const [loading, setLoading] = useState(true);
 
     const fetchCoaches = async () => {
         try {
@@ -19,9 +18,7 @@ export default function Coaches() {
             setUsers(filteredCoaches);
         } catch (error) {
             console.error('Error fetching coaches:', error);
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
     const handleChangeRole = async (id: string, newRole: 'user' | 'admin' | 'coach') => {
@@ -68,7 +65,6 @@ export default function Coaches() {
         }
     }, [user, router]);
 
-    if (loading) return <p className="text-white">Loading coaches...</p>;
 
     return (
         <div className="bg-black text-white min-h-screen p-8">

@@ -31,7 +31,6 @@ interface PlanCardProps {
 const PlansView: React.FC = () => {
   const { user } = useContext(UserContext);
   const [plans, setPlans] = useState<PlanCardProps[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -94,18 +93,13 @@ const PlansView: React.FC = () => {
           idealFor: plan.idealFor,
         }));
         setPlans(formattedPlans);
-        setLoading(false);
       })
       .catch((err) => {
         console.error("Error fetching membership data:", err);
         setError("Failed to load plans.");
-        setLoading(false);
       });
   }, []);
 
-  if (loading) {
-    return <div className="text-white">Loading plans...</div>;
-  }
 
   if (error) {
     return <div className="text-red-500">{error}</div>;

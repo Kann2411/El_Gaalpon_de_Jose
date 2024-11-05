@@ -1,11 +1,5 @@
 "use client";
-
-import {
-  cancelClassRegistration,
-  getUserClassRegistration,
-} from "@/lib/server/fetchClasses";
 import { useEffect, useState } from "react";
-import Loading from "../Loading/Loading";
 import { fitZoneApi } from "@/api/rutaApi";
 import Swal from "sweetalert2";
 
@@ -28,7 +22,6 @@ interface ReservedClassesProps {
 }
 export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -50,9 +43,7 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
         }
       } catch (error) {
         console.error("Error fetching classes:", error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     if (userId) {
@@ -61,7 +52,6 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
   }, [userId]);
 
   const handleCancel = async (classId: string) => {
-    setLoading(true);
         const response = await fetch(`${fitZoneApi}/classRegistration/${classId}/delete/${userId}`, {
           method: 'DELETE',
         });
@@ -70,7 +60,6 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
         prevClasses.filter((classItem) => classItem.id !== classId)
       );
     }
-    setLoading(false);
     Swal.fire({
         title: 'Great!',
         text: 'The appointment has been deleted successfully!',
@@ -84,7 +73,6 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
     });
   };
 
-  if (loading) return <Loading />;
 
   return (
     <div className="bg-black p-6 rounded-lg shadow-lg">
