@@ -34,7 +34,10 @@ export default function RootLayout({
         <SearchProvider>
           <Providers>
           <NavBarComponent />
+          <div className="pt-24">
+
           {children}
+          </div>
           <Footer /> 
         </Providers>
         </SearchProvider>
