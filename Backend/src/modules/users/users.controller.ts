@@ -21,7 +21,6 @@ import { SetPasswordDto } from 'src/dtos/setPassword.dto';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-@ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {

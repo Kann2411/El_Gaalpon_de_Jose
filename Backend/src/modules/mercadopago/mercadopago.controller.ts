@@ -12,8 +12,11 @@ import { MercadoPagoService } from './mercadopago.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Role } from '../../enums/role.enum';
 import { Roles } from '../../decorators/role.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('mercadopago')
+@ApiBearerAuth()
+@ApiTags('mercadopago')
 export class MercadoPagoController {
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
