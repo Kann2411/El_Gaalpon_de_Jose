@@ -47,7 +47,7 @@ export class MercadoPagoController {
   ) {
     console.log('Pago exitosoID de pago:', paymentId, 'ID de usuario:', userId);
     return res.redirect(
-      `http://localhost:3001/plans?paymentSuccess=true&id=${paymentId}&userId=${userId}`,
+      `https://el-gaalpon-de-jose.vercel.app/plans?paymentSuccess=true&id=${paymentId}&userId=${userId}`,
     );
   }
 
@@ -64,7 +64,7 @@ export class MercadoPagoController {
       userId,
     );
     return res.redirect(
-      `http://localhost:3001/plans?paymentSuccess=false&&id=${paymentId}&userId=${userId}`,
+      `https://el-gaalpon-de-jose.vercel.app/plans?paymentSuccess=false&&id=${paymentId}&userId=${userId}`,
     );
   }
 
@@ -81,7 +81,7 @@ export class MercadoPagoController {
       userId,
     );
     return res.redirect(
-      `http://localhost:3001/plans?paymentSuccess=pending&&id=${paymentId}&userId=${userId}`,
+      `https://el-gaalpon-de-jose.vercel.app/?paymentSuccess=pending&&id=${paymentId}&userId=${userId}`,
     );
   }
   @Post('payment')

@@ -231,13 +231,13 @@ export class MercadoPagoRepository {
           },
         ],
         back_urls: {
-          success: `http://localhost:3000/mercadopago/success?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de éxito
-          failure: `http://localhost:3000/mercadopago/failure?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de fallo
-          pending: `http://localhost:3000/mercadopago/pending?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de pendiente
+          success: `https://el-gaalpon-de-jose.onrender.com/mercadopago/success?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de éxito
+          failure: `https://el-gaalpon-de-jose.onrender.com/mercadopago/failure?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de fallo
+          pending: `https://el-gaalpon-de-jose.onrender.com/mercadopago/pending?id=${pagoB.id}&userId=${bodySuscription.userId}`, // URL de pendiente
         },
         auto_return: 'approved',
 
-        notification_url: `https://games-trout-eyed-gay.trycloudflare.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
+        notification_url: `https://el-gaalpon-de-jose.onrender.com/mercadopago/payment?userId=${bodySuscription.userId}&pagoId=${pago.id}`,
       };
       try {
         const preference = await new Preference(client).create({ body });

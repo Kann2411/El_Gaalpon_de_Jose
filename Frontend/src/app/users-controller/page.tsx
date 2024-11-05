@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function UsersController() {
   return (
-    <div className='mt-20'>
+    <div>
       <UserManagementView/>
     </div>
   )
