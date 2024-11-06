@@ -61,7 +61,10 @@ export class UsersRepository {
       });
 
       if (!user) {
-        throw new HttpException(`Usuario con id ${id} no existe`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `Usuario con id ${id} no existe`,
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       return user.imgUrl;
@@ -90,7 +93,10 @@ export class UsersRepository {
       });
 
       if (!user) {
-        throw new HttpException(`Usuario con id ${id} no existe`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `Usuario con id ${id} no existe`,
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       return user;
@@ -104,7 +110,10 @@ export class UsersRepository {
   async patchUser(id, role) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `User with ${id} not exist`,
+        HttpStatus.NOT_FOUND,
+      );
     }
     if (role === 'admin') {
       user.role = Role.Admin;
@@ -129,7 +138,10 @@ export class UsersRepository {
         where: { id: id },
       });
       if (!user) {
-        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `User with ${id} not exist`,
+          HttpStatus.NOT_FOUND,
+        );
       }
       user.imgUrl = secureUrl;
       await this.userRepository.save(user);
@@ -137,7 +149,10 @@ export class UsersRepository {
       if (error instanceof NotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
-      throw new HttpException('Error updating product image', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Error updating product image',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -164,7 +179,10 @@ export class UsersRepository {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `User with ${id} not exist`,
+          HttpStatus.NOT_FOUND,
+        );
       }
       this.userRepository.merge(user, updateProfileDto);
       await this.userRepository.save(user);
@@ -187,7 +205,10 @@ export class UsersRepository {
 
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `User with ${id} not exist`,
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       const passwordMatches = await bcrypt.compare(
@@ -195,11 +216,17 @@ export class UsersRepository {
         user.password,
       );
       if (!passwordMatches) {
-        throw new HttpException('The current password is incorrect', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'The current password is incorrect',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       if (newPassword !== confirmPassword) {
-        throw new HttpException('New password and confirmation do not match', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'New password and confirmation do not match',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -214,7 +241,10 @@ export class UsersRepository {
       ) {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
-      throw new HttpException('Error changing password', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Error changing password',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -227,11 +257,17 @@ export class UsersRepository {
 
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `User with ${id} not exist`,
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       if (newPassword !== confirmPassword) {
-        throw new HttpException('New password and confirmation do not match', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'New password and confirmation do not match',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -246,7 +282,10 @@ export class UsersRepository {
       ) {
         throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
-      throw new HttpException('Error resetting password', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Error resetting password',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -254,14 +293,20 @@ export class UsersRepository {
     try {
       const result = await this.userRepository.delete(id);
       if (result.affected === 0) {
-        throw new HttpException(`User with id ${id} not exist`, HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          `User with id ${id} not exist`,
+          HttpStatus.NOT_FOUND,
+        );
       }
       return id;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
-      throw new HttpException('Error deleting user', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Error deleting user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -282,7 +327,10 @@ export class UsersRepository {
 
       const { newPassword, confirmPassword } = setPasswordDto;
       if (newPassword !== confirmPassword) {
-        throw new HttpException('Passwords do not match', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'Passwords do not match',
+          HttpStatus.BAD_REQUEST,
+        );
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -292,7 +340,10 @@ export class UsersRepository {
       return 'Contraseña restablecida con éxito';
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
-        throw new HttpException('The link has expired. Request a new one.', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          'The link has expired. Request a new one.',
+          HttpStatus.BAD_REQUEST,
+        );
       }
       throw new HttpException('The link is invalid', HttpStatus.BAD_REQUEST);
     }
