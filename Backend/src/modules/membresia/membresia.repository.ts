@@ -72,8 +72,8 @@ export class MembresiaRepository {
 
   async getMembresiaById(id: UUID) {
     const membresia = await this.membresiaRepository.findOne({ where: { id } });
-    if(!membresia) {
-      throw new HttpException("Membership not found", HttpStatus.NOT_FOUND);
+    if (!membresia) {
+      throw new HttpException('Membership not found', HttpStatus.NOT_FOUND);
     }
   }
 
@@ -104,7 +104,8 @@ export class MembresiaRepository {
   //   return await this.membresiaRepository.findOne({ where: { id } });
   // }
 
-  // async deleteMembresia(id: UUID) {
-  //   await this.membresiaRepository.delete({ id });
-  // }
+  async deleteMembresia(id: string) {
+    await this.membresiaRepository.delete({ id });
+    return { message: 'Membresia eliminada con exito' };
+  }
 }

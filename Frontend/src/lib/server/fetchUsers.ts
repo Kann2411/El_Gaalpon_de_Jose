@@ -105,7 +105,7 @@ export async function postSignUp(user: Omit<IUser, "id">) {
 
 export const updateUserProfile = async (userId: string, userData: Partial<IUser>, token: string) => {
   try {
-    const response = await fetch(`http://localhost:3000/users/profile/${userId}`, {
+    const response = await fetch(`${fitZoneApi}/users/profile/${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

@@ -23,7 +23,7 @@ export const getClassData = async () => {
 
   export const createClass = async (classData: IClassData): Promise<any> => {
     try {
-      const response = await fetch("http://localhost:3000/class", {
+      const response = await fetch(`${fitZoneApi}/class`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
