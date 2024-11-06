@@ -133,14 +133,27 @@ export class AuthService {
 
     console.log(`Generated reset token: ${token}`);
 
-    const resetLink = `http://localhost:3001/auth/reset-password?token=${token}`;
+    const resetLink = `https://el-gaalpon-de-jose.vercel.app/auth/reset-password?token=${token}`;
     const htmlContent = `
-      <h1>Restablecimiento de contraseña</h1>
-      <p>Hola, ${user.name}!</p>
-      <p>Hiciste una solicitud para restablecer tu contraseña. Haz clic en el enlace a continuación para restablecerla:</p>
-      <a href="${resetLink}">Restablecer contraseña</a>
-      <p>Si no solicitaste este cambio, ignora este correo.</p>
-    `;
+    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+      <h1 style="color: #4A90E2; text-align: center;">Restablecimiento de contraseña</h1>
+      <p style="font-size: 16px; line-height: 1.6;">Hola, <strong>${user.name}</strong>!</p>
+      <p style="font-size: 16px; line-height: 1.6;">
+        Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para proceder:
+      </p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${resetLink}" style="font-size: 16px; color: white; background-color: #4A90E2; padding: 10px 20px; text-decoration: none; border-radius: 4px;">
+          Restablecer contraseña
+        </a>
+      </div>
+      <p style="font-size: 14px; color: #555; line-height: 1.6;">
+        Si no solicitaste este cambio, puedes ignorar este mensaje.
+      </p>
+      <p style="font-size: 14px; color: #999; text-align: center; margin-top: 30px;">
+        &copy; ${new Date().getFullYear()} FitZone. Todos los derechos reservados.
+      </p>
+    </div>
+  `;
 
     await this.mailerService.sendMail({
       to: user.email,
