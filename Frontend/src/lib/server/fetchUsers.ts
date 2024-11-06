@@ -7,6 +7,7 @@ import {
   IUserResponse,
 } from "@/interfaces/interfaces";
 import { useContext } from "react";
+import Swal from "sweetalert2";
 
 // Asegúrate de que el tipo devuelto sea IUserResponse en lugar de IUser
 export async function postSignIn(
@@ -26,7 +27,20 @@ export async function postSignIn(
       });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       console.error("Error del servidor:", errorData);
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
@@ -39,6 +53,7 @@ export async function postSignIn(
         "Error durante la solicitud de inicio de sesión:",
         error.message
       );
+ 
     } else {
       console.error("Error inesperado:", error);
     }
@@ -61,7 +76,20 @@ export async function postSignUp(user: Omit<IUser, "id">) {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       console.error("Error del servidor:", errorData); // Para obtener más detalles
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
@@ -77,7 +105,7 @@ export async function postSignUp(user: Omit<IUser, "id">) {
 
 export const updateUserProfile = async (userId: string, userData: Partial<IUser>, token: string) => {
   try {
-    const response = await fetch(`http://localhost:3000/users/profile/${userId}`, {
+    const response = await fetch(`${fitZoneApi}/users/profile/${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -87,7 +115,20 @@ export const updateUserProfile = async (userId: string, userData: Partial<IUser>
     });
 
     if (!response.ok) {
-      throw new Error('Failed to update user profile');
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
     }
 
     return await response.json();
@@ -112,7 +153,20 @@ export const getUsers = async (): Promise<IUser[]> => {
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
+    const errorData = await response.json();     
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: `${errorData.message}`,
+      showConfirmButton: false,
+      timer: 3500,
+      toast: true,
+      background: '#222222',
+      color: '#ffffff',
+      customClass: {
+        popup: 'animated slideInRight'
+      }
+    });
     throw new Error(
       `HTTP error! Status: ${response.status}, Message: ${errorData.message}`
     );
@@ -144,7 +198,20 @@ export const changeUserRole = async (
   );
 
   if (!response.ok) {
-    const errorData = await response.json();
+    const errorData = await response.json();     
+    Swal.fire({
+      position: "top-end",
+      icon: "error",
+      title: `${errorData.message}`,
+      showConfirmButton: false,
+      timer: 3500,
+      toast: true,
+      background: '#222222',
+      color: '#ffffff',
+      customClass: {
+        popup: 'animated slideInRight'
+      }
+    });
     throw new Error(errorData.message || "Error desconocido al cambiar el rol");
   }
 
@@ -187,6 +254,23 @@ export const fetchUserData = async (
       },
     });
 
+    if(!response.ok) {
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
+    }
+
     if (response.ok) {
       const data: IUserInfo = await response.json();
       return data;
@@ -219,6 +303,20 @@ export async function banUser(userId: string, isBanned: boolean): Promise<void> 
     });
 
     if (!response.ok) {
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       throw new Error(`Error al cambiar estado de baneo: ${response.statusText}`);
     }
 
@@ -249,7 +347,20 @@ export const uploadProfilePhoto = async (userId: string, file: File): Promise<{ 
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       throw new Error(errorData.message || "Error al subir la foto de perfil");
     }
 

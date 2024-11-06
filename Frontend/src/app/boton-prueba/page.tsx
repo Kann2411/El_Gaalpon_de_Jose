@@ -4,7 +4,6 @@ import React, { useEffect, useContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/user';
 import {jwtDecode} from "jwt-decode";
-import Loading from '@/components/Loading/Loading';
 
 interface DecodedToken {
   role: string;
@@ -21,7 +20,6 @@ interface BotonPruebaProps {
 export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
   const router = useRouter();
   const { setIsLogged, setUser } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = searchParams?.token;
@@ -42,7 +40,6 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
       // Actualiza el contexto de usuario
       setUser(userInfo);
       setIsLogged(true);
-      setLoading(false);
 
       // Redirige según el rol del usuario
       switch (decodedToken.role) {
@@ -58,14 +55,10 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
         default:
           router.push('/');
       }
-    } else {
-      setLoading(false); 
+    } else { 
     }
   }, [searchParams, router, setIsLogged, setUser]);
 
-  if (loading) {
-    return <Loading />;
-  }
 
   return <div>Redirecting...</div>; 
 }

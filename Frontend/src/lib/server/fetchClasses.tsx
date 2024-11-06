@@ -1,5 +1,6 @@
 import { fitZoneApi } from "@/api/rutaApi";
 import { GymClass, IClassData } from "@/interfaces/interfaces";
+import { ClassItem } from "@/components/ClassList/ClassList";
 import { Result } from "postcss";
 
 export const getClassData = async () => {
@@ -22,7 +23,7 @@ export const getClassData = async () => {
 
   export const createClass = async (classData: IClassData): Promise<any> => {
     try {
-      const response = await fetch("http://localhost:3000/class", {
+      const response = await fetch(`${fitZoneApi}/class`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,3 +168,81 @@ export async function getUserClassRegistration(userId: string) {
     return null;
   }
 }
+
+export const getClasses = async (): Promise<ClassItem[] | null> => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${fitZoneApi}/class`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    const classes: ClassItem[] = await response.json();
+    console.log("Clases obtenidas:", classes);
+    return classes;
+  } catch (error) {
+    console.error("Error al obtener las clases:", error);
+    alert("Error al obtener las clases");
+    return null;
+  }
+};
+
+export const deleteClass = async (classId: string): Promise<boolean> => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${fitZoneApi}/class/${classId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Error: ${response.status} ${response.statusText}, Details: ${errorText}`
+      );
+    }
+
+    console.log("Clase eliminada exitosamente");
+    return true;
+  } catch (error) {
+    console.error("Error al eliminar la clase:", error);
+    alert("Error al eliminar la clase");
+    return false;
+  }
+};
+
+export const editClass = async (classId: string, updatedClassData: Partial<ClassItem>): Promise<ClassItem | null> => {
+  try {
+    console.log(updatedClassData);
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${fitZoneApi}/class/${classId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedClassData),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error: ${response.status} ${response.statusText}, Details: ${errorText}`);
+    }
+
+    const updatedClass: ClassItem = await response.json();
+    console.log("Clase actualizada exitosamente:", updatedClass);
+    return updatedClass;
+  } catch (error) {
+    console.error("Error al actualizar la clase:", error);
+    alert("Error al actualizar la clase");
+    return null;
+  }
+};

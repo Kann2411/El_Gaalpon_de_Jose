@@ -5,6 +5,7 @@ import NavBarComponent from "@/components/NavBar";
 import Footer from "@/components/Footer/Footer";
 import { Providers } from "./Providers";
 import { SearchProvider } from "@/context/SearchContext";
+import FullScreenLoader from "@/components/FullScreenLoading/FullScreenLoaging";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,6 +22,11 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "FitZone",
   description: "Your fitness journey starts here",
+  icons: {
+    icon: "/favicon.ico?v=4",
+    apple: "/apple-touch-icon.png?v=4",
+    shortcut: "/apple-touch-icon.png?v=4",
+  },
 };
 
 export default function RootLayout({
@@ -30,16 +36,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <head>
+        <title>FitZone</title>
+        <meta name="description" content="Your fitness journey starts here" />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+      >
         <SearchProvider>
           <Providers>
-          <NavBarComponent />
-          <div className="pt-24">
-
-          {children}
-          </div>
-          <Footer /> 
-        </Providers>
+            <NavBarComponent />
+            <FullScreenLoader />
+            <div className="flex-grow pt-24">{children}</div>
+            <Footer />
+          </Providers>
         </SearchProvider>
       </body>
     </html>

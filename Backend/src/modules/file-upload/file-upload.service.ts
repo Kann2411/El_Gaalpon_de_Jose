@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { FileRepository } from './file-upload.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrainingPlan } from '../training/trainingPlan.entity';
@@ -20,7 +20,7 @@ export class FileService {
   async uploadImgProfile(userid: string, file: Express.Multer.File) {
     const user = await this.userRepository.findOneBy({ id: userid });
     if (!user) {
-      throw new NotFoundException(`User ${userid} not found`);
+      throw new HttpException(`User id ${userid} not found`, HttpStatus.NOT_FOUND);
     }
 
     const uploadImage = await this.fileRepository.uploadImage(file);
@@ -40,7 +40,7 @@ export class FileService {
     });
 
     if (!classInfo) {
-      throw new NotFoundException(`class id ${classId} not found`);
+      throw new HttpException(`class id ${classId} not found`, HttpStatus.NOT_FOUND);
     }
     const uploadImage = await this.fileRepository.uploadImage(file);
 
@@ -60,7 +60,7 @@ export class FileService {
       id: trainingId,
     });
     if (!training) {
-      throw new NotFoundException(`Training ${trainingId} not found`);
+      throw new HttpException(`Training ${trainingId} not found`, HttpStatus.NOT_FOUND);
     }
 
     const uploadImage = await this.fileRepository.uploadImage(file);

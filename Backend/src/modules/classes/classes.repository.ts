@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -29,7 +31,7 @@ export class ClassRepository {
     try {
       const classes = await this.classesRepository.find();
       if (!classes) {
-        throw new Error('No se encontraron clases.');
+        throw new HttpException("Cann't find classes", HttpStatus.NOT_FOUND);
       }
       return classes;
     } catch (error) {
@@ -41,7 +43,7 @@ export class ClassRepository {
     try {
       const classData = await this.classesRepository.findOneBy({ id });
       if (!classData) {
-        throw new Error('No se encontró la clase.');
+        throw new HttpException('Class not found', HttpStatus.NOT_FOUND);
       }
       return classData;
     } catch (error) {
@@ -66,7 +68,7 @@ export class ClassRepository {
 
     const coachUser = await this.userRepository.findOneBy({ id: coach });
     if (!coachUser) {
-      throw new BadRequestException(`coach con id ${coachUser} not found`);
+      throw new HttpException(`coach con id ${coachUser} not found`, HttpStatus.NOT_FOUND);
     }
 
     const nuevaClase = new Class();
@@ -92,7 +94,7 @@ export class ClassRepository {
   async updateClass(id: string, classData: Partial<Class>) {
     const classToUpdate = await this.classesRepository.findOneBy({ id });
     if (!classToUpdate) {
-      throw new NotFoundException(`Class with id ${id} not found`);
+      throw new HttpException(`Class with id ${id} not found`, HttpStatus.NOT_FOUND);
     }
     await this.classesRepository.update(id, classData);
     const foundClassUpdate = await this.classesRepository.findOneBy({ id });
@@ -102,7 +104,7 @@ export class ClassRepository {
   async deleteClass(id: string) {
     const classFound = await this.classesRepository.findOneBy({ id });
     if (!classFound) {
-      throw new Error('No se encontró la clase.');
+      throw new HttpException('Class not found', HttpStatus.NOT_FOUND);
     }
     await this.classRegistrationRepository.delete({ classEntity: { id } });
     await this.classesRepository.delete(classFound);

@@ -6,6 +6,8 @@ export async function getMembresia() {
       const response = await fetch(`${fitZoneApi}/membresia`);
       
       if (!response.ok) {
+        const errorData = await response.json();     
+        alert(errorData.message);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   

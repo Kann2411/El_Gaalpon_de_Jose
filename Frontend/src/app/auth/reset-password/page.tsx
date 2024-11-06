@@ -5,14 +5,12 @@ import * as Yup from "yup";
 import { UserContext } from "@/context/user";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import Loading from '@/components/Loading/Loading';
 import { fitZoneApi } from "@/api/rutaApi";
 
 const ResetPasswordView = () => {
   const { user } = useContext(UserContext);
   const router = useRouter();
   const [token, setToken] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -37,7 +35,6 @@ const ResetPasswordView = () => {
         .oneOf([Yup.ref("newPassword")], "Las contraseñas deben coincidir"),
     }),
     onSubmit: async (values) => {
-      setLoading(true);
       try {
 
         const response = await fetch(`${fitZoneApi}/auth/reset-password?token=${token}`, {
@@ -93,15 +90,9 @@ const ResetPasswordView = () => {
           },
           buttonsStyling: false,
         });
-      } finally {
-        setLoading(false);
       }
     },
   });
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">

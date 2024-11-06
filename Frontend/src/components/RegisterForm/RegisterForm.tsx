@@ -45,21 +45,6 @@ export default function RegisterForm() {
       });
       resetForm();
       router.push("/");
-    } else {
-      // Alerta de error
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Something went wrong!",
-        showConfirmButton: false,
-        timer: 3500,
-        toast: true,
-        background: '#222222',
-        color: '#ffffff',
-        customClass: {
-          popup: 'animated slideInRight'
-        }
-      });
     }
   };
 
