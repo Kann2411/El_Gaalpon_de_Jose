@@ -1,10 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useFormik, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import { classValidationSchema } from "@/utils/classValidationSchema";
 import { IClassData, IUser } from "@/interfaces/interfaces";
 import { getCoaches, uploadClassImage } from "@/lib/server/fetchCoaches";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
+import { Upload, Clock, Calendar, User } from "lucide-react";
+
+
 
 const CreateClassForm: React.FC = () => {
   const [coaches, setCoaches] = useState<IUser[]>([]);
@@ -16,11 +20,13 @@ const CreateClassForm: React.FC = () => {
         const coaches = await getCoaches();
         setCoaches(coaches);
       } catch (error) {
-        console.error("Error al obtener los entrenadores:", error);
+        console.error("Error fetching coaches:", error);
       }
     };
     fetchCoaches();
   }, []);
+
+  
 
   const formik = useFormik<IClassData>({
     initialValues: {
@@ -33,7 +39,7 @@ const CreateClassForm: React.FC = () => {
       day: "",
       starttime: "",
       endtime: "",
-      coach: "",
+      coach: "", // se seleccionará el ID del coach
     },
     validationSchema: classValidationSchema,
     onSubmit: async (values) => {
@@ -46,114 +52,103 @@ const CreateClassForm: React.FC = () => {
           body: JSON.stringify(values),
         });
         const classData = await response.json();
-        
-        if (classData && selectedImage) {
-          const response = await uploadClassImage(
-            classData.class.id,
-            selectedImage
-          );
-          console.log("Respuesta de subida de imagen:", response);
 
-          // Toast notification para éxito
-          Swal.fire({
+        if (classData && selectedImage) {
+          await uploadClassImage(classData.class.id, selectedImage);
+
+          await Swal.fire({
+            toast: true,
             position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
             icon: "success",
             title: "Class created successfully!",
-            showConfirmButton: false,
-            timer: 3500,
-            toast: true,
-            background: "#222222",
+            background: "#1F2937",
             color: "#ffffff",
-            customClass: {
-              popup: "animated slideInRight",
-            },
+            customClass: { popup: "rounded-lg shadow-md text-sm font-sans" },
           });
 
           formik.resetForm();
+          setSelectedImage(null);
         }
       } catch (error) {
-        console.error("Error when creating the class", error);
+        console.error("Error creating class:", error);
 
-        // Toast notification para error
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: "Error when creating the class",
-          showConfirmButton: false,
-          timer: 3500,
+        await Swal.fire({
           toast: true,
-          background: "#222222",
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          icon: "error",
+          title: "Error creating class",
+          background: "#1F2937",
           color: "#ffffff",
-          customClass: {
-            popup: "animated slideInRight",
-          },
+          customClass: { popup: "rounded-lg shadow-md text-sm font-sans" },
         });
       }
     },
   });
 
   return (
-    <div className="bg-black text-white p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold text-red-600 mb-6 text-center">
-        <span className="text-white">Create</span> Class
+    <motion.div
+      className="bg-gray-900 text-white p-8 rounded-lg shadow-2xl max-w-7xl mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <h1 className="text-4xl font-bold text-red-500 mb-12 text-center">
+        Create New Class
       </h1>
-      <form onSubmit={formik.handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          {/* Nombre */}
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-red-600 font-semibold mb-1"
-            >
+
+      <form onSubmit={formik.handleSubmit} className="space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Basic Information */}
+          <div className="space-y-2">
+            <label htmlFor="name" className="block text-red-400 font-semibold">
               Name
             </label>
             <input
               id="name"
               type="text"
               {...formik.getFieldProps("name")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white  focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
+              placeholder="Class name"
             />
-            {formik.touched.name && formik.errors.name ? (
-              <div className="text-red-500 text-sm mt-1">
-                {formik.errors.name}
-              </div>
-            ) : null}
+            {formik.touched.name && formik.errors.name && (
+              <div className="text-red-500 text-sm">{formik.errors.name}</div>
+            )}
           </div>
 
-          {/* Intensidad */}
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="intensity"
-              className="block text-red-600 font-semibold mb-1"
+              className="block text-red-400 font-semibold"
             >
               Intensity
             </label>
             <select
               id="intensity"
               {...formik.getFieldProps("intensity")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
             >
               <option value="">Select intensity</option>
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
             </select>
-            {formik.touched.intensity && formik.errors.intensity ? (
-              <div className="text-red-500 text-sm mt-1">
+            {formik.touched.intensity && formik.errors.intensity && (
+              <div className="text-red-500 text-sm">
                 {formik.errors.intensity}
               </div>
-            ) : null}
+            )}
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Capacidad */}
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="capacity"
-              className="block text-red-600 font-semibold mb-1"
+              className="block text-red-400 font-semibold"
             >
               Capacity
             </label>
@@ -161,198 +156,215 @@ const CreateClassForm: React.FC = () => {
               id="capacity"
               type="number"
               {...formik.getFieldProps("capacity")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white  focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
+              placeholder="Number of participants"
             />
-            {formik.touched.capacity && formik.errors.capacity ? (
-              <div className="text-red-500 text-sm mt-1">
+            {formik.touched.capacity && formik.errors.capacity && (
+              <div className="text-red-500 text-sm">
                 {formik.errors.capacity}
               </div>
-            ) : null}
+            )}
           </div>
 
-          {/* Coach */}
-          <div>
-            <label
-              htmlFor="coach"
-              className="block text-red-600 font-semibold mb-1"
-            >
+          <div className="space-y-2">
+            <label htmlFor="coach" className="block text-red-400 font-semibold">
               Coach
             </label>
-            <select
-              id="coach"
-              {...formik.getFieldProps("coach")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-            >
-              <option value="">Select a coach</option>
-              {coaches.map((coach) => (
-                <option key={coach.id} value={coach.id}>
-                  {coach.name}
-                </option>
-              ))}
-            </select>
-            {formik.touched.coach && formik.errors.coach ? (
-              <div className="text-red-500 text-sm mt-1">
-                {formik.errors.coach}
-              </div>
-            ) : null}
+            <div className="relative">
+              <select
+                id="coach"
+                {...formik.getFieldProps("coach")}
+                className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 appearance-none pr-10"
+              >
+                <option value="">Select coach</option>
+                {coaches.map((coach) => (
+                  <option key={coach.id} value={coach.id}>
+                    {coach.name}
+                  </option>
+                ))}
+              </select>
+              <User
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+            </div>
+            {formik.touched.coach && formik.errors.coach && (
+              <div className="text-red-500 text-sm">{formik.errors.coach}</div>
+            )}
           </div>
         </div>
 
-        {/* Subir Imagen */}
-        <div>
-          <label
-            htmlFor="image"
-            className="block text-red-600 font-semibold mb-1"
-          >
-            Image
-          </label>
-          <input
-            id="image"
-            type="file"
-            onChange={(e) => {
-              const file = e.target.files?.[0] || null;
-              setSelectedImage(file);
-            }}
-            className="w-full bg-black border border-grey-600 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-          />
-        </div>
-
-        {/* Descripción */}
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-red-600 font-semibold mb-1"
-          >
-            Description
-          </label>
-          <textarea
-            id="description"
-            {...formik.getFieldProps("description")}
-            onBlur={formik.handleBlur}
-            className="w-full bg-black border border-grey-600 p-2 rounded text-white placeholder-red-400 focus:outline-none focus:ring-2 focus:ring-red-600"
-          ></textarea>
-          {formik.touched.description && formik.errors.description ? (
-            <div className="text-red-500 text-sm mt-1">
-              {formik.errors.description}
-            </div>
-          ) : null}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          {/* Duración */}
-          <div>
+        {/* Schedule Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="space-y-2">
             <label
               htmlFor="duration"
-              className="block text-red-600 font-semibold mb-1"
+              className="block text-red-400 font-semibold"
             >
               Duration
             </label>
-            <select
-              id="duration"
-              {...formik.getFieldProps("duration")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-            >
-              <option value="">Select duration</option>
-              <option value="1 hour">1 hour</option>
-              <option value="35 minutes">35 minutes</option>
-              <option value="45 minutes">45 minutes</option>
-            </select>
-            {formik.touched.duration && formik.errors.duration ? (
-              <div className="text-red-500 text-sm mt-1">
+            <div className="relative">
+              <select
+                id="duration"
+                {...formik.getFieldProps("duration")}
+                className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 appearance-none pr-10"
+              >
+                <option value="">Select duration</option>
+                <option value="1 hour">1 hour</option>
+                <option value="35 minutes">35 minutes</option>
+                <option value="45 minutes">45 minutes</option>
+              </select>
+              <Clock
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+            </div>
+            {formik.touched.duration && formik.errors.duration && (
+              <div className="text-red-500 text-sm">
                 {formik.errors.duration}
               </div>
-            ) : null}
+            )}
           </div>
 
-          {/* Día de la semana */}
-          <div>
-            <label
-              htmlFor="day"
-              className="block text-red-600 font-semibold mb-1"
-            >
+          <div className="space-y-2">
+            <label htmlFor="day" className="block text-red-400 font-semibold">
               Day
             </label>
-            <select
-              id="day"
-              {...formik.getFieldProps("day")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-            >
-              <option value="">Select a day</option>
-              <option value="monday">Monday</option>
-              <option value="tuesday">Tuesday</option>
-              <option value="wednesday">Wednesday</option>
-              <option value="thursday">Thursday</option>
-              <option value="friday">Friday</option>
-              <option value="saturday">Saturday</option>
-              <option value="sunday">Sunday</option>
-            </select>
-            {formik.touched.day && formik.errors.day ? (
-              <div className="text-red-500 text-sm mt-1">
-                {formik.errors.day}
-              </div>
-            ) : null}
+            <div className="relative">
+              <select
+                id="day"
+                {...formik.getFieldProps("day")}
+                className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300 appearance-none pr-10"
+              >
+                <option value="">Select day</option>
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+              </select>
+              <Calendar
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+            </div>
+            {formik.touched.day && formik.errors.day && (
+              <div className="text-red-500 text-sm">{formik.errors.day}</div>
+            )}
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Hora de inicio */}
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="starttime"
-              className="block text-red-600 font-semibold mb-1"
+              className="block text-red-400 font-semibold"
             >
-              Start time
+              Start Time
             </label>
             <input
               id="starttime"
               type="time"
               {...formik.getFieldProps("starttime")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
             />
-            {formik.touched.starttime && formik.errors.starttime ? (
-              <div className="text-red-500 text-sm mt-1">
+            {formik.touched.starttime && formik.errors.starttime && (
+              <div className="text-red-500 text-sm">
                 {formik.errors.starttime}
               </div>
-            ) : null}
+            )}
           </div>
 
-          {/* Hora de finalización */}
-          <div>
+          <div className="space-y-2">
             <label
               htmlFor="endtime"
-              className="block text-red-600 font-semibold mb-1"
+              className="block text-red-400 font-semibold"
             >
-              End time
+              End Time
             </label>
             <input
               id="endtime"
               type="time"
               {...formik.getFieldProps("endtime")}
-              onBlur={formik.handleBlur}
-              className="w-full bg-black border border-grey-600 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
+              className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
             />
-            {formik.touched.endtime && formik.errors.endtime ? (
-              <div className="text-red-500 text-sm mt-1">
+            {formik.touched.endtime && formik.errors.endtime && (
+              <div className="text-red-500 text-sm">
                 {formik.errors.endtime}
               </div>
-            ) : null}
+            )}
           </div>
         </div>
 
-        {/* Botón */}
+        {/* Description and Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <label
+              htmlFor="description"
+              className="block text-red-400 font-semibold"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              {...formik.getFieldProps("description")}
+              className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
+              rows={4}
+              placeholder="Describe the class"
+            />
+            {formik.touched.description && formik.errors.description && (
+              <div className="text-red-500 text-sm">
+                {formik.errors.description}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="image" className="block text-red-400 font-semibold">
+              Image
+            </label>
+            <div className="flex items-center justify-center w-full">
+              <label
+                htmlFor="image"
+                className="flex flex-col items-center justify-center w-full h-[160px] border-2 border-gray-700 border-dashed rounded-lg cursor-pointer bg-gray-800 hover:bg-gray-700 transition duration-300"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Upload className="w-8 h-8 mb-3 text-gray-400" />
+                  <p className="mb-2 text-sm text-gray-400">
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  </p>
+                </div>
+                <input
+                  id="image"
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] || null;
+                    setSelectedImage(file);
+                  }}
+                />
+              </label>
+            </div>
+            {selectedImage && (
+              <p className="text-sm text-gray-400 mt-2">
+                Selected file: {selectedImage.name}
+              </p>
+            )}
+          </div>
+        </div>
+
         <button
           type="submit"
-          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full"
+          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105"
         >
           Create Class
         </button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getClasses, deleteClass, editClass } from "@/lib/server/fetchClasses";
+import { getClasses, editClass, deleteClass } from "@/lib/server/fetchClasses";
 import { getCoaches } from "@/lib/server/fetchCoaches";
 import { IUser } from "@/interfaces/interfaces";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
+import { Edit2, Trash2 } from "lucide-react";
 
 export interface ClassItem {
   id: string;
@@ -25,12 +27,10 @@ const ClassList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [editingClass, setEditingClass] = useState<ClassItem | null>(null);
-  const [updatedClassData, setUpdatedClassData] = useState<Partial<ClassItem>>(
-    {}
-  );
+  const [updatedClassData, setUpdatedClassData] = useState<Partial<ClassItem>>({});
 
   useEffect(() => {
-    const fetchClasses = async () => {
+    const fetchData = async () => {
       try {
         const classList = await getClasses();
         const coachList = await getCoaches();
@@ -47,67 +47,14 @@ const ClassList: React.FC = () => {
           setCoaches(coachList);
         }
       } catch (error) {
-        console.error("Error fetching classes:", error);
-        setError("Error fetching classes");
+        console.error("Error fetching data:", error);
+        setError("Error fetching data");
       } finally {
         setLoading(false);
       }
     };
-    fetchClasses();
+    fetchData();
   }, []);
-
-  const handleDelete = async (id: string) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you really want to delete this class?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-      customClass: {
-        popup: "bg-[#222222] text-white",
-        title: "text-[#B0E9FF]",
-        confirmButton:
-          "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
-        cancelButton:
-          "bg-gray-500 text-white hover:bg-gray-600 py-2 px-4 border-none",
-      },
-      buttonsStyling: false,
-    });
-
-    if (result.isConfirmed) {
-      try {
-        await deleteClass(id);
-        setClasses(classes.filter((classItem) => classItem.id !== id));
-        Swal.fire({
-          title: "Deleted!",
-          text: "The class has been deleted.",
-          icon: "success",
-          customClass: {
-            popup: "bg-[#222222] text-white",
-            title: "text-[#B0E9FF]",
-            confirmButton:
-              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
-          },
-          buttonsStyling: false,
-        });
-      } catch (error) {
-        console.error("Error deleting class:", error);
-        Swal.fire({
-          title: "Error!",
-          text: "There was an error deleting the class.",
-          icon: "error",
-          customClass: {
-            popup: "bg-[#222222] text-white",
-            title: "text-[#B0E9FF]",
-            confirmButton:
-              "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
-          },
-          buttonsStyling: false,
-        });
-      }
-    }
-  };
 
   const handleEdit = (classItem: ClassItem) => {
     setEditingClass(classItem);
@@ -136,258 +83,340 @@ const ClassList: React.FC = () => {
             )
           );
           setEditingClass(null);
-          Swal.fire("Success", "Class updated successfully", "success");
+          await Swal.fire({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            icon: 'success',
+            title: 'Class updated successfully',
+            background: '#1F2937',
+            color: '#ffffff',
+            customClass: {
+              popup: 'rounded-lg shadow-md text-sm font-sans',
+            },
+          });
         }
       } catch (error) {
         console.error("Error updating class:", error);
-        Swal.fire("Error", "There was an error updating the class.", "error");
+        await Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          icon: 'error',
+          title: 'Error updating class',
+          background: '#1F2937',
+          color: '#ffffff',
+          customClass: {
+            popup: 'rounded-lg shadow-md text-sm font-sans',
+          },
+        });
       }
     }
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        background: '#1F2937',
+        color: '#ffffff',
+        customClass: {
+          popup: 'rounded-lg shadow-md text-sm font-sans',
+        },
+      });
+
+      if (result.isConfirmed) {
+        await deleteClass(id);
+        setClasses(classes.filter(classItem => classItem.id !== id));
+        await Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          icon: 'success',
+          title: 'Class deleted successfully',
+          background: '#1F2937',
+          color: '#ffffff',
+          customClass: {
+            popup: 'rounded-lg shadow-md text-sm font-sans',
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting class:", error);
+      await Swal.fire({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        icon: 'error',
+        title: 'Error deleting class',
+        background: '#1F2937',
+        color: '#ffffff',
+        customClass: {
+          popup: 'rounded-lg shadow-md text-sm font-sans',
+        },
+      });
+    }
+  };
+
   if (loading) {
-    return <div>Loading classes...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-600"></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return <div className="text-red-500 text-center text-xl mt-8">{error}</div>;
   }
 
   return (
-    <div className="bg-black text-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-red-600 mb-6 text-center">
-        <span className="text-white">Class</span> List
+    <div className="bg-gray-900 text-white p-8 rounded-lg shadow-2xl max-w-7xl mx-auto mt-16">
+      <h1 className="text-4xl font-bold text-red-600 mb-8 text-center">
+        Class List
       </h1>
-      <div className="space-y-4">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {classes.map((classItem) => (
-          <div key={classItem.id} className="p-4 border-b border-gray-700">
-            <h2 className="text-xl font-semibold text-red-600">
-              {classItem.name}
-            </h2>
-            <p>{classItem.description}</p>
-            <p>
-              <strong>Intensity:</strong> {classItem.intensity}
-            </p>
-            <p>
-              <strong>Capacity:</strong> {classItem.capacity}
-            </p>
-            <p>
-              <strong>Status:</strong> {classItem.status}
-            </p>
-            <p>
-              <strong>Duration:</strong> {classItem.duration}
-            </p>
-            <p>
-              <strong>Day:</strong> {classItem.day}
-            </p>
-            <p>
-              <strong>Start Time:</strong> {classItem.starttime}
-            </p>
-            <p>
-              <strong>End Time:</strong> {classItem.endtime}
-            </p>
-            <p>
-              <strong>Coach:</strong>{" "}
-              {
-                coaches.find((coach) => coach.id === classItem.coach)?.name ||
-                  "N/A"
-              }
-            </p>
-
-            <div className="flex space-x-4 mt-2">
-              <button
-                onClick={() => handleEdit(classItem)}
-                className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded"
-              >
-                Edit Class
-              </button>
-              <button
-                onClick={() => handleDelete(classItem.id)}
-                className="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded"
-              >
-                Delete Class
-              </button>
+          <motion.div
+            key={classItem.id}
+            className="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex justify-between items-start mb-4">
+              <h2 className="text-2xl font-semibold text-red-500">{classItem.name}</h2>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleEdit(classItem)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors duration-300"
+                >
+                  <Edit2 size={16} />
+                </button>
+                <button
+                  onClick={() => handleDelete(classItem.id)}
+                  className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors duration-300"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
             </div>
-          </div>
+            <p className="text-gray-300 mb-4">{classItem.description}</p>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="space-y-1">
+                <p className="font-semibold text-red-400">Intensity</p>
+                <p className="text-gray-300">{classItem.intensity}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-semibold text-red-400">Capacity</p>
+                <p className="text-gray-300">{classItem.capacity}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-semibold text-red-400">Status</p>
+                <p className="text-gray-300">{classItem.status}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-semibold text-red-400">Duration</p>
+                <p className="text-gray-300">{classItem.duration}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-semibold text-red-400">Day</p>
+                <p className="text-gray-300">{classItem.day}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-semibold text-red-400">Time</p>
+                <p className="text-gray-300">{classItem.starttime} - {classItem.endtime}</p>
+              </div>
+              <div className="col-span-2 space-y-1">
+                <p className="font-semibold text-red-400">Coach</p>
+                <p className="text-gray-300">
+                  {coaches.find((coach) => coach.id === classItem.coach)?.name || "N/A"}
+                </p>
+              </div>
+            </div>
+          </motion.div>
         ))}
       </div>
 
       {editingClass && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-black text-white p-6 rounded-lg">
-            <h2 className="text-xl mb-4">Edit Class</h2>
-            <input
-              type="text"
-              placeholder="Name"
-              value={updatedClassData.name || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  name: e.target.value,
-                })
-              }
-              className="bg-black border border-gray-300 p-2 mb-2 w-full"
-            />
-            <input
-              type="number"
-              placeholder="Capacity"
-              value={updatedClassData.capacity || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  capacity: Number(e.target.value),
-                })
-              }
-              className="bg-black border border-gray-300 p-2 mb-2 w-full"
-            />
-            <select
-              value={updatedClassData.intensity || ""}
-              onChange={(e) => {
-                const value = e.target.value as "low" | "medium" | "high" | "";
-                if (
-                  value === "low" ||
-                  value === "medium" ||
-                  value === "high" ||
-                  value === ""
-                ) {
-                  setUpdatedClassData({
-                    ...updatedClassData,
-                    intensity: value || undefined,
-                  });
-                }
-              }}
-              className="bg-black border border-gray-300 p-2 mb-2 w-full"
-            >
-              <option value="">Select Intensity</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-            <select
-              value={updatedClassData.status || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  status: e.target.value as "Active" | "Inactive",
-                })
-              }
-              className="bg-black border border-gray-300 p-2 mb-2 w-full"
-            >
-              <option value="">Select Status</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Description"
-              value={updatedClassData.description || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  description: e.target.value,
-                })
-              }
-              className="bg-black border border-gray-300 p-2 mb-2 w-full"
-            />
-            <select
-              value={updatedClassData.duration || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  duration: e.target.value,
-                })
-              }
-              className="w-full bg-black border border-gray-300 p-2 mb-2 text-white rounded focus:outline-none focus:ring-2 focus:ring-red-600"
-            >
-              <option value="">Select Duration</option>
-              <option value="1 hour">1 hour</option>
-              <option value="35 minutes">35 minutes</option>
-              <option value="45 minutes">45 minutes</option>
-            </select>
-
-            <select
-              value={updatedClassData.day || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  day: e.target.value,
-                })
-              }
-              className="bg-black text-white border border-gray-300 p-2 mb-2 w-full"
-            >
-              <option value="">Select Day</option>
-              <option value="Monday">Monday</option>
-              <option value="Tuesday">Tuesday</option>
-              <option value="Wednesday">Wednesday</option>
-              <option value="Thursday">Thursday</option>
-              <option value="Friday">Friday</option>
-              <option value="Saturday">Saturday</option>
-              <option value="Sunday">Sunday</option>
-            </select>
-
-            <input
-              type="time"
-              placeholder="Start Time"
-              value={updatedClassData.starttime || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  starttime: e.target.value,
-                })
-              }
-              className="bg-black border border-gray-300 p-2 mb-2 w-full"
-            />
-            <input
-              type="time"
-              placeholder="End Time"
-              value={updatedClassData.endtime || ""}
-              onChange={(e) =>
-                setUpdatedClassData({
-                  ...updatedClassData,
-                  endtime: e.target.value,
-                })
-              }
-              className="bg-black border border-gray-300 p-2 mb-2 w-full"
-            />
-            <div>
-              <label
-                htmlFor="coach"
-                className="block text-red-600 font-semibold mb-1"
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <motion.div
+            className="bg-gray-800 text-white p-8 rounded-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl text-red-500 font-semibold">Edit Class</h2>
+              <button
+                onClick={() => setEditingClass(null)}
+                className="text-gray-400 hover:text-white transition-colors"
               >
-                Coach
-              </label>
-              <select
-                id="coach"
-                value={updatedClassData.coach || ""}
-                onChange={(e) =>
-                  setUpdatedClassData({
-                    ...updatedClassData,
-                    coach: e.target.value,
-                  })
-                }
-                className="w-full bg-black border border-gray-300 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-red-600"
-              >
-                <option value="">Select a coach</option>
-                {coaches.map((coach) => (
-                  <option key={coach.id} value={coach.id}>
-                    {coach.name}
-                  </option>
-                ))}
-              </select>
+                ✕
+              </button>
             </div>
-            <button
-              onClick={handleSaveChanges}
-              className="bg-green-500 text-white py-1 px-4 rounded mt-4"
-            >
-              Save Changes
-            </button>
-            <button
-              onClick={() => setEditingClass(null)}
-              className="bg-gray-500 text-white py-1 px-4 rounded mt-4 ml-2"
-            >
-              Cancel
-            </button>
-          </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Name</label>
+                <input
+                  type="text"
+                  value={updatedClassData.name || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, name: e.target.value })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Intensity</label>
+                <select
+                  value={updatedClassData.intensity || ""}
+                  onChange={(e) => {
+                    const value = e.target.value as "low" | "medium" | "high" | "";
+                    if (value === "low" || value === "medium" || value === "high" || value === "") {
+                      setUpdatedClassData({ ...updatedClassData, intensity: value || undefined });
+                    }
+                  }}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="">Select Intensity</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Capacity</label>
+                <input
+                  type="number"
+                  value={updatedClassData.capacity || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, capacity: Number(e.target.value) })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Status</label>
+                <select
+                  value={updatedClassData.status || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, status: e.target.value as "Active" | "Inactive" })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="">Select Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Duration</label>
+                <select
+                  value={updatedClassData.duration || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, duration: e.target.value })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="">Select Duration</option>
+                  <option value="1 hour">1 hour</option>
+                  <option value="35 minutes">35 minutes</option>
+                  <option value="45 minutes">45 minutes</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Day</label>
+                <select
+                  value={updatedClassData.day || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, day: e.target.value })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="">Select Day</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                  <option value="Sunday">Sunday</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Start Time</label>
+                <input
+                  type="time"
+                  value={updatedClassData.starttime || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, starttime: e.target.value })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">End Time</label>
+                <input
+                  type="time"
+                  value={updatedClassData.endtime || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, endtime: e.target.value })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-red-400 font-semibold">Coach</label>
+                <select
+                  value={updatedClassData.coach || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, coach: e.target.value })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  <option value="">Select Coach</option>
+                  {coaches.map((coach) => (
+                    <option key={coach.id} value={coach.id}>
+                      {coach.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="lg:col-span-3">
+                <label className="block text-red-400 font-semibold mb-2">Description</label>
+                <textarea
+                  value={updatedClassData.description || ""}
+                  onChange={(e) => setUpdatedClassData({ ...updatedClassData, description: e.target.value })}
+                  className="w-full bg-gray-700 border border-gray-600 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                  rows={3}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-8 space-x-4">
+              <button
+                onClick={() => setEditingClass(null)}
+                className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveChanges}
+                className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-300"
+              >
+                Save Changes
+              </button>
+            </div>
+          </motion.div>
         </div>
       )}
     </div>
