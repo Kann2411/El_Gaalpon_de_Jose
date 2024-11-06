@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -30,7 +32,7 @@ export class classRegistrationRepository {
       .getOne();
 
     if (!classEntity) {
-      throw new NotFoundException('Clase no encontrada');
+      throw new HttpException('Class not found', HttpStatus.NOT_FOUND);
     }
     return classEntity;
   }
@@ -44,7 +46,7 @@ export class classRegistrationRepository {
       .getOne();
 
     if (!userWithClasses) {
-      throw new NotFoundException('Usuario no encontrado');
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     return userWithClasses.registrations.map(
@@ -55,12 +57,12 @@ export class classRegistrationRepository {
   async registerUserToClass(classId, userId) {
     const classEntity = await this.classesRepository.findOneBy({ id: classId });
     if (!classEntity) {
-      throw new NotFoundException('La clase no existe');
+      throw new HttpException('Class not found', HttpStatus.NOT_FOUND);
     }
 
     const registrations = classEntity.registrations || [];
     if (registrations.length >= classEntity.capacity) {
-      throw new BadRequestException('La clase está llena');
+      throw new HttpException('Class is full', HttpStatus.BAD_REQUEST);
     }
 
     const user = await this.userDBRepository.findOneBy({ id: userId });
@@ -79,7 +81,7 @@ export class classRegistrationRepository {
       where: { user: { id: userId }, classEntity: { id: classId } },
     });
     if (!registration) {
-      throw new NotFoundException('No estas registrado en esta clase');
+      throw new HttpException('You are not registered in this class', HttpStatus.BAD_REQUEST);
     }
     await this.classRegistrationRepository.remove(registration);
     return { message: 'class canceled successfully' };

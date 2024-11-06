@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Membresia } from './membresia.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -64,14 +64,17 @@ export class MembresiaRepository {
     } catch (error) {
       await queryRunner.rollbackTransaction();
       console.error('Error during seeding:', error);
-      throw error;
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     } finally {
       await queryRunner.release();
     }
   }
 
   async getMembresiaById(id: UUID) {
-    return await this.membresiaRepository.findOne({ where: { id } });
+    const membresia = await this.membresiaRepository.findOne({ where: { id } });
+    if(!membresia) {
+      throw new HttpException("Membership not found", HttpStatus.NOT_FOUND);
+    }
   }
 
   async createMembresia(membresiaDto) {
