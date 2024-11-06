@@ -34,7 +34,7 @@ export class AuthController {
     const tokenData = await this.authService.validateOAuthLogin(req.user);
     return res.redirect(
       `https://el-gaalpon-de-jose.vercel.app/boton-prueba?token=${tokenData.token}`,
-    );
+    ); 
   }
 
   @Post('signup')
