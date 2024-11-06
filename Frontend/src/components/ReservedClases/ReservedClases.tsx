@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { fitZoneApi } from "@/api/rutaApi";
 import Swal from "sweetalert2";
+import NoDataMessage from "../NoDataMessage/NoDataMessage";
+import Button from "../Button/Button";
 
 interface ClassItem {
   id: string;
@@ -76,7 +78,10 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
 
   return (
     <div className="bg-black p-6 rounded-lg shadow-lg">
-      <h2 className="text-white text-2xl font-bold mb-4">Reserved Classes</h2>
+      {classes.length > 0 ? (
+
+        <h2 className="text-white text-2xl font-bold mb-4">Reserved Classes</h2>
+      ): null}
       {classes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {classes.map((classItem) => (
@@ -119,9 +124,11 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
           ))}
         </div>
       ) : (
-        <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
-          <p className="text-white">There's no reserved classes</p>
+        <div className="flex flex-col items-center">
+          <NoDataMessage message="You have no reserved classes yet." />
+          <Button content="Go to classes" redirectTo="/home"></Button>
         </div>
+     
       )}
     </div>
   );
