@@ -211,7 +211,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
   };
 
   return (
-    <div className="bg-zinc-900 text-white p-6 rounded-lg shadow-lg flex flex-col">
+    <div className="bg-zinc-900 text-white p-6 rounded-lg shadow-lg flex flex-col mb-10">
       <h3 className="text-2xl font-bold mb-4 text-center">{plan}</h3>
       <p className="mb-4 text-center">{description}</p>
       <ul className="mb-6">

@@ -35,6 +35,15 @@ export default function LoginForm() {
     const res = await signIn(values);
 
     if (res) {
+      
+      if(user?.role === 'admin') {
+        router.push("/users-controller");
+      } else if (user?.role === 'coach') {
+        router.push("/training-management");
+      } else if (user?.role === 'user') {
+        router.push("/home");
+      } 
+     
       // Toast notification para éxito
       Swal.fire({
         position: "top-end",
@@ -49,32 +58,10 @@ export default function LoginForm() {
           popup: 'animated slideInRight'
         }
       });
+      resetForm();
 
-      if(user?.role === 'admin') {
-        router.push("/users-controller");
-      } else if (user?.role === 'coach') {
-        router.push("/training-management");
-      } else if (user?.role === 'user') {
-        router.push("/home");
-      } 
-     
-    } else {
-      // Toast notification para error
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Email or password incorrect!",
-        showConfirmButton: false,
-        timer: 3500,
-        toast: true,
-        background: '#222222',
-        color: '#ffffff',
-        customClass: {
-          popup: 'animated slideInRight'
-        }
-      });
-    }
-    resetForm();
+    } 
+  
   };
   
 

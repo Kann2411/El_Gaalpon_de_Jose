@@ -19,7 +19,20 @@ export async function createPlan(description: string) {
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
+          const errorData = await response.json();     
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: `${errorData.message}`,
+            showConfirmButton: false,
+            timer: 3500,
+            toast: true,
+            background: '#222222',
+            color: '#ffffff',
+            customClass: {
+              popup: 'animated slideInRight'
+            }
+          });
             console.error("Server error:", errorData); 
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
@@ -56,7 +69,20 @@ export async function uploadImage(id: string, file: File) {
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
+          const errorData = await response.json();     
+          Swal.fire({
+            position: "top-end",
+            icon: "error",
+            title: `${errorData.message}`,
+            showConfirmButton: false,
+            timer: 3500,
+            toast: true,
+            background: '#222222',
+            color: '#ffffff',
+            customClass: {
+              popup: 'animated slideInRight'
+            }
+          });
             console.error("Server error:", errorData); 
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
@@ -85,6 +111,20 @@ export const deleteTrainingPlan = async (id: string) => {
         });
 
     if (!response.ok) {
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       const errorText = await response.text();
       throw new Error(
         `Error: ${response.status} ${response.statusText}, Details: ${errorText}`
@@ -123,6 +163,20 @@ export const getTrainingPlans = async () => {
         });
 
     if (!response.ok) {
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
 
@@ -157,6 +211,20 @@ export const getReservedClasses = async (classId: string) => {
       }
     );
     if (!response.ok) {
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
@@ -177,6 +245,20 @@ export const getCoaches = async () => {
       }
     });
     if (!response.ok) {
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
@@ -203,7 +285,20 @@ export const uploadClassImage = async (classId: string, file: File): Promise<any
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json();     
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${errorData.message}`,
+        showConfirmButton: false,
+        timer: 3500,
+        toast: true,
+        background: '#222222',
+        color: '#ffffff',
+        customClass: {
+          popup: 'animated slideInRight'
+        }
+      });
       console.error("Server error:", errorData); 
       throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
