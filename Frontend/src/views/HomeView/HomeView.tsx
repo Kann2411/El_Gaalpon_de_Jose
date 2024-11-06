@@ -21,7 +21,7 @@ import ClassFilters from "@/components/class-filters/class-filters"; // Asegúra
 import { useRouter } from "next/navigation";
 
 interface ClassInfo {
-  id: number;
+  id: string;
   name: string;
   intensity: string;
   capacity: number;
@@ -80,6 +80,32 @@ const HomeView: React.FC = () => {
     duration: [] as string[],
     day: [] as string[],
   });
+  const closeModal = () => {
+    setSelectedClass(null);
+  };
+
+  const isReserved = async (userId: string, selectedClassId : string) => {
+    try {
+      const token = localStorage.getItem("token")
+      const response = await fetch(`${fitZoneApi}/classRegistration/user/${userId}`, {
+        method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      })
+      
+      const arrOfClasses = await response.json();
+      const classIsReserved = arrOfClasses.some((classObj: any) => classObj.id === selectedClassId);
+      
+    if (classIsReserved) {
+      return true
+    } else {
+      return false
+    }
+  } catch(error: any){
+    console.error(error)
+  }
+}
 
   const onClick = async () => {
     if (!selectedClass || !user) {
@@ -117,6 +143,26 @@ const HomeView: React.FC = () => {
       return
     }
 
+if(user.id) {
+  const isClassReserved = await isReserved(user.id, selectedClass.id);
+  if (isClassReserved) {
+    Swal.fire({
+      title: "Oops!",
+      text: "This class has already been reserved.",
+      icon: "error",
+      customClass: {
+        popup: "bg-[#222222] text-white",
+        title: "text-[#B0E9FF]",
+        confirmButton:
+          "bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none",
+      },
+      buttonsStyling: false,
+    });
+    return; // Detener la ejecución si la clase ya está reservada
+  }
+}
+   
+
     try {
       const claseId = selectedClass.id;
       const userId = user.id;
@@ -151,7 +197,7 @@ const HomeView: React.FC = () => {
           popup: 'animated slideInRight'
         }
       });
-
+      closeModal()
       console.log("Class reserved successfully:", data);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -225,9 +271,7 @@ const HomeView: React.FC = () => {
     setSelectedClass(classInfo);
   };
 
-  const closeModal = () => {
-    setSelectedClass(null);
-  };
+  
 
   const nextImage = () => {
     if (!isAnimating) {

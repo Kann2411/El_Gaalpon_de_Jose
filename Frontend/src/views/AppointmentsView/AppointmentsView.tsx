@@ -17,7 +17,7 @@ const AppointmentsView: React.FC = () => {
   }, [userId, router]);
 
   if (!userId) {
-    return null; // No renderiza nada mientras redirige
+    return null;
   }
 
   return (
