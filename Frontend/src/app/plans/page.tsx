@@ -1,9 +1,14 @@
 import React from "react";
 import PlansView from "@/views/PlansView/PlansView";
+import PrivateRoute from "@/components/PrivateRoute/PrivateRoute";
 
 const Plans = () => {
   return (
-    <PlansView />
+<>
+<PrivateRoute userRole='user'>
+<PlansView />
+</PrivateRoute>
+</>
   );
 };
 

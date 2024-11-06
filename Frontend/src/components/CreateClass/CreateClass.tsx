@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 const CreateClassForm: React.FC = () => {
   const [coaches, setCoaches] = useState<IUser[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  
 
   useEffect(() => {
     const fetchCoaches = async () => {
