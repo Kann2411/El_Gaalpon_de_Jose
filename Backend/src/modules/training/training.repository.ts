@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Training } from './training.entity';
 import { Repository } from 'typeorm';
@@ -26,7 +31,10 @@ export class TrainingRepository {
       return training;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new HttpException('Error creating training', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Error creating training',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -37,7 +45,10 @@ export class TrainingRepository {
       });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new HttpException('Error getting trainings', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Error getting trainings',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }
