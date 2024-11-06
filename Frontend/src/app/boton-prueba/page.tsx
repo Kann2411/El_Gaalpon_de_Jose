@@ -46,16 +46,16 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
         const redirectUser = () => {
           switch (decodedToken.role) {
             case 'admin':
-              router.replace('/users-controller');
+              router.push('/users-controller');
               break;
             case 'coach':
-              router.replace('/training-management');
+              router.push('/training-management');
               break;
             case 'user':
-              router.replace('/home');
+              router.push('/home');
               break;
             default:
-              router.replace('/');
+              router.push('/');
           }
         };
 
