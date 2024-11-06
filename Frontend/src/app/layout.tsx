@@ -45,16 +45,8 @@ export default function RootLayout({
       >
         <SearchProvider>
           <Providers>
-
-          <NavBarComponent />
-          <FullScreenLoader/>
-          <div className="flex-grow pt-24">{children}
-          {children}
-          </div>
-          <Footer /> 
-        </Providers>
-           
             <NavBarComponent />
+            <FullScreenLoader />
             <div className="flex-grow pt-24">{children}</div>
             <Footer />
           </Providers>
