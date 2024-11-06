@@ -1,38 +1,66 @@
+import React from 'react';
 import Image from "next/image";
+import Link from 'next/link';
+import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react';
 import logo from "@/public/icons/icono-principal.png";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-black">
-      <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <Image src={logo} alt="logo" width={60} height={60} />
-            <div className="ml-4 text-2xl font-bold text-white">FitZone</div>
+    <footer className="bg-zinc-900 text-white w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
+              <Image src={logo} alt="logo" width={60} height={60} />
+              <span className="text-2xl font-bold">FitZone</span>
+            </div>
+            <p className="text-sm text-gray-400">
+              Empowering your fitness journey with cutting-edge facilities and expert guidance.
+            </p>
           </div>
-          <div className="flex space-x-8">
-            <a href="/home" className="text-sm font-semibold text-gray-900 uppercase dark:text-white">
-              Home
-            </a>
-            <a href="/plans" className="text-sm font-semibold text-gray-900 uppercase dark:text-white">
-              Plans
-            </a>
-            <a href="#" className="text-sm font-semibold text-gray-900 uppercase dark:text-white">
-              Contact Us
-            </a>
+          
+          <div className="flex justify-center ">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+              <ul className="space-y-2">
+                {['Home', 'Plans', 'About Us'].map((item) => (
+                  <li key={item}>
+                    <Link href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-gray-400 hover:text-white transition-colors duration-200">
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+          
+          <div className="ml-auto">
+            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+            <ul className="space-y-2 text-gray-400">
+              <li>123 Fitness Street, Gym City, 12345</li>
+              <li>Phone: (123) 456-7890</li>
+              <li>Email: fitzone463@gmail.com</li>
+            </ul>
+          </div>
+          
         </div>
-        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-            © 2024 <a href="/" className="hover:underline">FitZone™</a>. All Rights Reserved.
-          </span>
-          <div className="flex mt-4 sm:justify-center sm:mt-0">
-            {/* Icons for social media */}
-            <a href="#" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-              {/* Insert SVG for Facebook */}
-            </a>
-            {/* Repeat similar structure for other social media icons */}
+        
+        <hr className="border-gray-800" />
+        
+        <div className="flex flex-col md:flex-row justify-between items-center py-6">
+          <p className="text-sm text-gray-400">
+            © {new Date().getFullYear()} FitZone™. All Rights Reserved.
+          </p>
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            {[Facebook, Instagram, Twitter, Youtube].map((Icon, index) => (
+              <a
+                key={index}
+                href="#"
+                className="text-gray-400 hover:text-white transition-colors duration-200"
+              >
+                <Icon size={24} />
+              </a>
+            ))}
           </div>
         </div>
       </div>

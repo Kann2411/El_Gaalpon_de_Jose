@@ -19,7 +19,7 @@ export class chatBotService {
         2: "The establishment's opening hours are Monday to Friday from 8:00 a.m. to 9:00 p.m. and Saturdays from 9:00 a.m. to 2:00 p.m.",
         3: 'For membership inquiries, please review the options available on our website. For cancellation or modification issues, contact administration.',
       },
-      end: "I'm glad I could help you, thank you. For more information, you can contact gym@gym.com. Greetings!",
+      end: "I'm glad I could help you, thank you. For more information, you can contact fitzone463@gmail.com Greetings!",
     };
   }
 

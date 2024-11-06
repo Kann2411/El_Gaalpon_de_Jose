@@ -41,20 +41,23 @@ export default function RootLayout({
         <meta name="description" content="Your fitness journey starts here" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <SearchProvider>
           <Providers>
 
           <NavBarComponent />
           <FullScreenLoader/>
-          <div className="pt-24">
-
+          <div className="flex-grow pt-24">{children}
           {children}
           </div>
           <Footer /> 
         </Providers>
            
+            <NavBarComponent />
+            <div className="flex-grow pt-24">{children}</div>
+            <Footer />
+          </Providers>
         </SearchProvider>
       </body>
     </html>

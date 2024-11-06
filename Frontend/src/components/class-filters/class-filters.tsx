@@ -23,7 +23,6 @@ interface FilterProps {
 }
 
 export default function ClassFilters({ onFilterChange }: FilterProps) {
-  const [isOpen, setIsOpen] = React.useState(false)
   const [selectedFilters, setSelectedFilters] = React.useState({
     intensity: [] as string[],
     duration: [] as string[],
@@ -93,7 +92,12 @@ export default function ClassFilters({ onFilterChange }: FilterProps) {
               )}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 bg-zinc-900 text-white border-red-600">
+          <DropdownMenuContent 
+            className="w-56 bg-zinc-900 text-white border-red-600 max-h-[50vh] overflow-y-auto"
+            onCloseAutoFocus={(event) => event.preventDefault()}
+            sideOffset={5}
+            align="start"
+          >
             <DropdownMenuLabel>Intensity</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-zinc-700" />
             {intensityOptions.map((option) => (
