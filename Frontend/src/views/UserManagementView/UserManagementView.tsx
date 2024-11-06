@@ -4,7 +4,6 @@ import { UserContext } from "@/context/user";
 import { useRouter } from "next/navigation";
 import { getUsers, changeUserRole, banUser } from "@/lib/server/fetchUsers";
 import { IUser } from "@/interfaces/interfaces";
-import Loading from "@/components/Loading/Loading";
 import Swal from "sweetalert2";
 import Image from "next/image";
 
@@ -12,7 +11,6 @@ export default function UserManagementView() {
   const router = useRouter();
   const { user } = useContext(UserContext);
   const [users, setUsers] = useState<IUser[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedRole, setSelectedRole] = useState<"user" | "coach" | "admin">("user");
 
   const fetchUsers = async () => {
@@ -22,9 +20,7 @@ export default function UserManagementView() {
       setUsers(filteredUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const handleChangeRole = async (id: string, newRole: "user" | "admin" | "coach") => {
@@ -116,7 +112,6 @@ export default function UserManagementView() {
     }
   }, [user, router, selectedRole]);
 
-  if (loading) return <Loading />;
 
   return (
     <div className="bg-black text-white p-6 min-h-screen ">

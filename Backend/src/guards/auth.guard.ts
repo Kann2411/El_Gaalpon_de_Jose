@@ -3,6 +3,8 @@ import {
   CanActivate,
   ExecutionContext,
   UnauthorizedException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -12,7 +14,8 @@ export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1];
-    if (!token) throw new UnauthorizedException('Token invalido');
+    if (!token)
+      throw new HttpException('Invalid Token', HttpStatus.UNAUTHORIZED);
 
     try {
       const secret = process.env.JWT_SECRET;
@@ -24,7 +27,7 @@ export class AuthGuard implements CanActivate {
       return true;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new UnauthorizedException('Token invalido');
+      throw new HttpException('Invalid Token', HttpStatus.UNAUTHORIZED);
     }
   }
 }

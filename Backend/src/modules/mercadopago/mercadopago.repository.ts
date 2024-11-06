@@ -1,7 +1,10 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
+  Options,
   Redirect,
 } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
@@ -49,9 +52,7 @@ export class MercadoPagoRepository {
     });
 
     if (!lastPayment) {
-      throw new NotFoundException(
-        'No se encontró ningún pago para este usuario',
-      );
+      throw new HttpException('No payment found for this user', HttpStatus.NOT_FOUND);
     }
     return lastPayment;
   }
@@ -70,7 +71,7 @@ export class MercadoPagoRepository {
       try {
         const user = await this.usersRepository.getUserById(userId);
         if (!user) {
-          throw new BadRequestException('User not found');
+          throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
         const response = await fetch(
           `https://api.mercadopago.com/v1/payments/${id}`,
@@ -91,7 +92,7 @@ export class MercadoPagoRepository {
           });
 
           if (!pago) {
-            throw new BadRequestException('El pago no ha sido encontrado');
+            throw new HttpException('The payment has not been found', HttpStatus.NOT_FOUND);
           }
 
           pago = {
@@ -197,7 +198,7 @@ export class MercadoPagoRepository {
         }
       } catch (error) {
         console.log('errorssdsds: ', error);
-        return error;
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
     });
   }
@@ -245,7 +246,10 @@ export class MercadoPagoRepository {
           bodySuscription.userId,
         );
 
-        if (!user) throw new BadRequestException('User not found');
+        if (!user) throw new HttpException(
+          'User not found',
+          HttpStatus.NOT_FOUND,
+        );
 
         pago = {
           ...pago,
@@ -264,8 +268,14 @@ export class MercadoPagoRepository {
 
         return { redirectUrl: preference.init_point };
       } catch (error) {
-        console.log('error: ', error);
-        return error;
+        if (error instanceof HttpException) {
+          throw error;
+        }
+      
+        throw new HttpException(
+          error.message,
+          HttpStatus.BAD_REQUEST,
+        );
       }
     });
   }

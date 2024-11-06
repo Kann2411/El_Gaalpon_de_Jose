@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import Swal from 'sweetalert2'
 import { UserContext } from '@/context/user';
+import NoDataMessage from '../NoDataMessage/NoDataMessage';
 
 interface TrainingPlan {
   id: string;
@@ -15,19 +16,15 @@ const TrainingPlans: React.FC = () => {
   const { user } = useContext(UserContext);
   const [trainingPlans, setTrainingPlans] = useState<TrainingPlan[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTrainingPlans = async () => {
-      setLoading(true);
       try {
         const plans = await getTrainingPlans();
         setTrainingPlans(plans);
       } catch (err) {
         setError('Error fetching training plans');
-      } finally {
-        setLoading(false);
       }
     };
     fetchTrainingPlans();
@@ -78,9 +75,6 @@ const TrainingPlans: React.FC = () => {
     setSelectedPlan(null);
   };
 
-  if (loading) {
-    return <div>Loading training plans...</div>;
-  }
 
   if (error) {
     return <div className="text-red-500">{error}</div>;
@@ -94,10 +88,10 @@ const TrainingPlans: React.FC = () => {
         </h1>
       </div>
 
-      <div className="text-center container mx-auto p-8 bg-zinc-950 shadow-lg">
         {trainingPlans.length === 0 ? (
-          <p>No training plans available</p>
+          <NoDataMessage message='There are no training plans available yet'/>
         ) : (
+          <div className="text-center container mx-auto p-8 bg-zinc-950 shadow-lg">
           <ul>
             {trainingPlans.map(plan => (
               <li key={plan.id} className="bg-zinc-900 p-4 rounded-lg shadow-md mb-4 flex justify-between items-center">
@@ -121,8 +115,8 @@ const TrainingPlans: React.FC = () => {
               </li>
             ))}
           </ul>
-        )}
       </div>
+        )}
 
       <Modal
         isOpen={!!selectedPlan}

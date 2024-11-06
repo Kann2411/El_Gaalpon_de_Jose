@@ -10,7 +10,6 @@ export default function Coaches() {
     const router = useRouter();
     const { user } = useContext(UserContext);
     const [users, setUsers] = useState<IUser[]>([]);
-    const [loading, setLoading] = useState(true);
 
     const fetchCoaches = async () => {
         try {
@@ -19,9 +18,7 @@ export default function Coaches() {
             setUsers(filteredCoaches);
         } catch (error) {
             console.error('Error fetching coaches:', error);
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
     const handleChangeRole = async (id: string, newRole: 'user' | 'admin' | 'coach') => {
@@ -55,7 +52,20 @@ export default function Coaches() {
                   });
             } else {
                 console.error('Error changing coach role:', error);
-                alert('Error desconocido al cambiar el rol');
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Error when changing role",
+                    showConfirmButton: false,
+                    timer: 3500,
+                    toast: true,
+                    background: '#222222',
+                    color: '#ffffff',
+                    customClass: {
+                      popup: 'animated slideInRight'
+                    }
+                  });
+            
             }
         }
     };
@@ -68,7 +78,6 @@ export default function Coaches() {
         }
     }, [user, router]);
 
-    if (loading) return <p className="text-white">Loading coaches...</p>;
 
     return (
         <div className="bg-black text-white min-h-screen p-8">

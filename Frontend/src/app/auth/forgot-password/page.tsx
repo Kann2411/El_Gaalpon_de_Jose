@@ -3,12 +3,10 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
-import LoadingSpinner from "@/components/Loading/Loading";
 import { fitZoneApi } from "@/api/rutaApi";
 
 const ForgotPasswordView = () => {
   const [emailSent, setEmailSent] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: { email: "" },
@@ -16,7 +14,6 @@ const ForgotPasswordView = () => {
       email: Yup.string().email("Invalid email").required("Required"),
     }),
     onSubmit: async (values) => {
-      setLoading(true);
       try {
 
         const response = await fetch(`${fitZoneApi}/auth/forgot-password`, {
@@ -53,7 +50,6 @@ const ForgotPasswordView = () => {
           buttonsStyling: false,
         });
       } finally {
-        setLoading(false);
       }
     },
   });
@@ -105,9 +101,9 @@ const ForgotPasswordView = () => {
             <button
               type="submit"
               className="w-full bg-red-600 text-[#FFFFFF] py-3 rounded-md hover:bg-red-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!formik.isValid || formik.isSubmitting || loading}
+              disabled={!formik.isValid || formik.isSubmitting }
             >
-              {loading ? <LoadingSpinner /> : "Send Reset Link"}
+             Send Reset Link
             </button>
           </form>
         )}

@@ -1,13 +1,9 @@
 "use client";
-
-import {
-  cancelClassRegistration,
-  getUserClassRegistration,
-} from "@/lib/server/fetchClasses";
 import { useEffect, useState } from "react";
-import Loading from "../Loading/Loading";
 import { fitZoneApi } from "@/api/rutaApi";
 import Swal from "sweetalert2";
+import NoDataMessage from "../NoDataMessage/NoDataMessage";
+import Button from "../Button/Button";
 
 interface ClassItem {
   id: string;
@@ -28,7 +24,6 @@ interface ReservedClassesProps {
 }
 export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
   const [classes, setClasses] = useState<ClassItem[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -50,9 +45,7 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
         }
       } catch (error) {
         console.error("Error fetching classes:", error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     if (userId) {
@@ -61,7 +54,6 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
   }, [userId]);
 
   const handleCancel = async (classId: string) => {
-    setLoading(true);
         const response = await fetch(`${fitZoneApi}/classRegistration/${classId}/delete/${userId}`, {
           method: 'DELETE',
         });
@@ -70,7 +62,6 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
         prevClasses.filter((classItem) => classItem.id !== classId)
       );
     }
-    setLoading(false);
     Swal.fire({
         title: 'Great!',
         text: 'The appointment has been deleted successfully!',
@@ -84,11 +75,13 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
     });
   };
 
-  if (loading) return <Loading />;
 
   return (
     <div className="bg-black p-6 rounded-lg shadow-lg">
-      <h2 className="text-white text-2xl font-bold mb-4">Reserved Classes</h2>
+      {classes.length > 0 ? (
+
+        <h2 className="text-white text-2xl font-bold mb-4">Reserved Classes</h2>
+      ): null}
       {classes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {classes.map((classItem) => (
@@ -131,9 +124,11 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
           ))}
         </div>
       ) : (
-        <div className="container mx-auto p-8 bg-zinc-950 shadow-lg">
-          <p className="text-white">There's no reserved classes</p>
+        <div className="flex flex-col items-center">
+          <NoDataMessage message="You have no reserved classes yet." />
+          <Button content="Go to classes" redirectTo="/home"></Button>
         </div>
+     
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UUID } from 'crypto';
 import { DataSource, Repository } from 'typeorm';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ export class HorarioRepository {
     try {
       const horarios = await this.horarioRepository.find();
       if (!horarios) {
-        throw new Error('No hay horarios registrados');
+        throw new HttpException('There are no registered schedules', HttpStatus.NOT_FOUND);
       }
       return horarios;
     } catch (error) {
@@ -30,11 +30,11 @@ export class HorarioRepository {
         where: { id },
       });
       if (!horario) {
-        throw new Error('El horario no existe');
+        throw new HttpException('Schedule not found', HttpStatus.NOT_FOUND);
       }
       return horario;
     } catch (error) {
-      throw error;
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -45,7 +45,7 @@ export class HorarioRepository {
         await manager.save(newHorario);
         return newHorario;
       } catch (error) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
     });
   }
@@ -57,13 +57,13 @@ export class HorarioRepository {
           where: { id },
         });
         if (!horarioToUpdate) {
-          throw new Error('El horario no existe');
+          throw new HttpException('Schedule not found', HttpStatus.NOT_FOUND);
         }
         Object.assign(horarioToUpdate, horarioData);
         await manager.save(horarioToUpdate);
         return horarioToUpdate;
       } catch (error) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
     });
   }
@@ -75,12 +75,12 @@ export class HorarioRepository {
           where: { id },
         });
         if (!horarioToDelete) {
-          throw new Error('El horario no existe');
+          throw new HttpException('Schedulo not found', HttpStatus.NOT_FOUND);
         }
         await manager.delete(Horario, { id });
         return true;
       } catch (error) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
     });
   }
