@@ -1,13 +1,9 @@
-import CarouselComponent from "@/components/Carousel/Carousel";
-import TestimonialCard from "@/components/TestimonialCard/TestimonialCard";
 import React from "react";
+import LandingView from "@/views/LandingView/LandingView";
 
 const LandingPage = () => {
   return (
-    <div>
-      <CarouselComponent />
-      <TestimonialCard />
-    </div>
+    <LandingView />
   );
 };
 
