@@ -74,6 +74,7 @@ const NavBarComponent = () => {
   const handleLogout = () => {
     logOut();
     setIsMenuOpen(false);
+    sessionStorage.removeItem('hasRedirected');
     router.push("/");
   };
 
@@ -163,16 +164,23 @@ const NavBarComponent = () => {
   };
 
   useEffect(() => {
-    if (isLogged) {
+    const hasRedirected = sessionStorage.getItem('hasRedirected');
+    
+    if (isLogged && !hasRedirected) {
+      let redirectPath = '/home';
+      
       if (user?.role === "admin") {
-        router.push("/users-controller");
+        redirectPath = "/users-controller";
       } else if (user?.role === "coach") {
-        router.push("/training-management");
-      } else if (user?.role === "user") {
-        router.push("/home");
+        redirectPath = "/training-management";
+      }
+      
+      if (pathname !== redirectPath) {
+        router.push(redirectPath);
+        sessionStorage.setItem('hasRedirected', 'true');
       }
     }
-  }, [isLogged, router, user?.role]);
+  }, [isLogged, user?.role, router, pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

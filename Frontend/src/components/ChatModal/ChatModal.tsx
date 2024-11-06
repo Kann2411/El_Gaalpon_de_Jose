@@ -162,7 +162,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-6 w-[400px] bg-zinc-900 rounded-xl shadow-2xl overflow-hidden z-50 border border-zinc-800"
+            className="fixed bottom-24 right-6 w-[90vw] max-w-[400px] h-[80vh] max-h-[600px] bg-zinc-900 rounded-xl shadow-2xl overflow-hidden z-50 border border-zinc-800 flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center gap-3 bg-red-600 p-4 text-white">
@@ -189,7 +189,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
             </div>
 
             {/* Messages */}
-            <div className="h-[450px] overflow-y-auto p-4 space-y-4">
+            <div className="flex-grow overflow-y-auto p-4 space-y-4">
               {messages.map((message, index) => (
                 <motion.div
                   key={index}
@@ -202,7 +202,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
                 >
                   <div className="flex gap-3 max-w-[80%]">
                     {message.sender === "bot" && (
-                      <Avatar className="h-8 w-8 bg-white">
+                      <Avatar className="h-8 w-8 bg-white flex-shrink-0">
                         <AvatarImage />
                         <AvatarFallback>
                           <Bot className="w-4 h-4 text-red-600" />

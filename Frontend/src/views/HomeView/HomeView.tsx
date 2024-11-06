@@ -17,7 +17,7 @@ import { useSearch } from "@/context/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { fitZoneApi } from "@/api/rutaApi";
 import CoachCard from "@/components/CoachCard/CoachCard";
-import ClassFilters from "@/components/class-filters/class-filters"; // Asegúrate de que esta ruta sea correcta
+import ClassFilters from "@/components/class-filters/class-filters";
 import { useRouter } from "next/navigation";
 
 interface ClassInfo {
@@ -68,7 +68,7 @@ const carouselImages: CarouselImage[] = [
 ];
 
 const HomeView: React.FC = () => {
-  const router = useRouter()
+  const router = useRouter();
   const { user } = useContext(UserContext);
   const [classesData, setClassesData] = useState<ClassInfo[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassInfo | null>(null);
@@ -97,10 +97,10 @@ const HomeView: React.FC = () => {
         buttonsStyling: false,
       });
       router.push("/login");
-      return
+      return;
     }
-    
-    if(user.membership === null) {
+
+    if (user.membership === null) {
       Swal.fire({
         title: "Hey!",
         text: "To schedule a class you need a membership",
@@ -114,7 +114,7 @@ const HomeView: React.FC = () => {
         buttonsStyling: false,
       });
       router.push("/plans");
-      return
+      return;
     }
 
     try {
@@ -178,22 +178,16 @@ const HomeView: React.FC = () => {
   };
 
   const nextImage = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentImageIndex(
-        (prevIndex) => (prevIndex + 1) % carouselImages.length
-      );
-    }
+    setCurrentImageIndex(
+      (prevIndex) => (prevIndex + 1) % carouselImages.length
+    );
   };
 
   const prevImage = () => {
-    if (!isAnimating) {
-      setIsAnimating(true);
-      setCurrentImageIndex(
-        (prevIndex) =>
-          (prevIndex - 1 + carouselImages.length) % carouselImages.length
-      );
-    }
+    setCurrentImageIndex(
+      (prevIndex) =>
+        (prevIndex - 1 + carouselImages.length) % carouselImages.length
+    );
   };
 
   useEffect(() => {
@@ -244,7 +238,6 @@ const HomeView: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
       {/* Título de la sección de clases */}
-      
 
       {/* Contenedor para filtros y subtítulo */}
       <div className="w-full max-w-9xl px-5 mb-8">
@@ -298,7 +291,10 @@ const HomeView: React.FC = () => {
                     <span className="text-sm">{classInfo.intensity}</span>
                   </div>
                   <div className="flex justify-center pt-5">
-                    <Button content='Select' onClick={() => openModal(classInfo)} />
+                    <Button
+                      content="Select"
+                      onClick={() => openModal(classInfo)}
+                    />
                   </div>
                 </div>
               </motion.div>
@@ -361,10 +357,10 @@ const HomeView: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-center mt-4">
-             {/*  {user?.role === "user" && (
+              {/*  {user?.role === "user" && (
                 <Button content="Schedule" onClick={onClick} />
               )} */}
-               <Button content="Schedule" onClick={onClick} />
+              <Button content="Schedule" onClick={onClick} />
             </div>
           </motion.div>
         </motion.div>
@@ -403,14 +399,12 @@ const HomeView: React.FC = () => {
           <button
             onClick={prevImage}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-            disabled={isAnimating}
           >
             <ChevronLeft size={24} />
           </button>
           <button
             onClick={nextImage}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-            disabled={isAnimating}
           >
             <ChevronRight size={24} />
           </button>
