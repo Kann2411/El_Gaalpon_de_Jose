@@ -1,7 +1,10 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
+  Options,
   Redirect,
 } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
@@ -245,7 +248,10 @@ export class MercadoPagoRepository {
           bodySuscription.userId,
         );
 
-        if (!user) throw new BadRequestException('User not found');
+        if (!user) throw new HttpException(
+          'User not found',
+          HttpStatus.NOT_FOUND,
+        );
 
         pago = {
           ...pago,
@@ -264,8 +270,14 @@ export class MercadoPagoRepository {
 
         return { redirectUrl: preference.init_point };
       } catch (error) {
-        console.log('error: ', error);
-        return error;
+        if (error instanceof HttpException) {
+          throw error;
+        }
+      
+        throw new HttpException(
+          error.message,
+          HttpStatus.BAD_REQUEST,
+        );
       }
     });
   }

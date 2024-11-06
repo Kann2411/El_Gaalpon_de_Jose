@@ -1,6 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -31,7 +33,7 @@ export class AuthService {
       profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
 
     if (!email) {
-      throw new Error('No se pudo obtener un correo electrónico del perfil.');
+      throw new HttpException("Cann't obtain Email profile", HttpStatus.BAD_REQUEST);
     }
 
     const name =
@@ -58,7 +60,7 @@ export class AuthService {
     }
 
     if (user.isBanned) {
-      throw new BadRequestException('Tu cuenta ha sido baneada.');
+      throw new HttpException('Your account has been baned', HttpStatus.BAD_REQUEST);
     }
 
     const payload = { id: user.id, email: user.email, role: user.role };
@@ -73,7 +75,7 @@ export class AuthService {
 
     const existingUser = await this.usersRepository.findByEmail(email);
     if (existingUser) {
-      throw new BadRequestException('El correo electrónico ya está en uso.');
+      throw new HttpException('Email is already in use', HttpStatus.BAD_REQUEST);
     }
 
     const newUserDto = {
@@ -92,20 +94,20 @@ export class AuthService {
   async signIn(email: string, password: string) {
     console.log('Se ejecuto el metodo Signin');
     if (!email || !password) {
-      throw new BadRequestException('Email  y contraseña son requeridos.');
+      throw new HttpException('Email and password required', HttpStatus.BAD_REQUEST);
     }
 
     const user = await this.usersRepository.findByEmail(email);
 
-    if (!user) throw new BadRequestException('credenciales invalidas');
+    if (!user) throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
 
     if (user.isBanned) {
-      throw new BadRequestException('Tu cuenta ha sido baneada.');
+      throw new HttpException('Your account has been baned', HttpStatus.UNAUTHORIZED);
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
-    if (!validPassword) throw new BadRequestException('credenciales invalidas');
+    if (!validPassword) throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
 
     const payload = {
       id: user.id,
@@ -124,7 +126,7 @@ export class AuthService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new NotFoundException('Usuario no encontrado');
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     const token = this.jwtService.sign({ id: user.id }, { expiresIn: '1h' });
