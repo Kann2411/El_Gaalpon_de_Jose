@@ -5,6 +5,7 @@ import { classValidationSchema } from "@/utils/classValidationSchema";
 import { IClassData, IUser } from "@/interfaces/interfaces";
 import { getCoaches, uploadClassImage } from "@/lib/server/fetchCoaches";
 import Swal from "sweetalert2";
+import { fitZoneApi } from "@/api/rutaApi";
 
 const CreateClassForm: React.FC = () => {
   const [coaches, setCoaches] = useState<IUser[]>([]);
@@ -38,7 +39,7 @@ const CreateClassForm: React.FC = () => {
     validationSchema: classValidationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await fetch("http://localhost:3000/class", {
+        const response = await fetch(`${fitZoneApi}/class`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
