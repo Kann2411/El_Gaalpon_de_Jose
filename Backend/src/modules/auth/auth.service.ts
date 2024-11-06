@@ -33,7 +33,10 @@ export class AuthService {
       profile?.emails?.[0]?.value || profile?.email || profile?._json?.email;
 
     if (!email) {
-      throw new HttpException("Cann't obtain Email profile", HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        "Cann't obtain Email profile",
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const name =
@@ -60,7 +63,10 @@ export class AuthService {
     }
 
     if (user.isBanned) {
-      throw new HttpException('Your account has been baned', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Your account has been baned',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const payload = { id: user.id, email: user.email, role: user.role };
@@ -75,7 +81,10 @@ export class AuthService {
 
     const existingUser = await this.usersRepository.findByEmail(email);
     if (existingUser) {
-      throw new HttpException('Email is already in use', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Email is already in use',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const newUserDto = {
@@ -94,20 +103,28 @@ export class AuthService {
   async signIn(email: string, password: string) {
     console.log('Se ejecuto el metodo Signin');
     if (!email || !password) {
-      throw new HttpException('Email and password required', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Email and password required',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const user = await this.usersRepository.findByEmail(email);
 
-    if (!user) throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
+    if (!user)
+      throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
 
     if (user.isBanned) {
-      throw new HttpException('Your account has been baned', HttpStatus.UNAUTHORIZED);
+      throw new HttpException(
+        'Your account has been baned',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
 
-    if (!validPassword) throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
+    if (!validPassword)
+      throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
 
     const payload = {
       id: user.id,

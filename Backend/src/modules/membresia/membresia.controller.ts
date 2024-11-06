@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   // Delete,
   Get,
   Param,
@@ -67,10 +68,10 @@ export class MembresiaController {
   //   this.membresiaService.updateMembresia(id, membresia);
   // }
 
-  // @Roles(Role.Admin)
-  // @UseGuards(RolesGuard)
-  // @Delete()
-  // deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
-  //   this.membresiaService.deleteMembresia(id);
-  // }
+  @Roles(Role.Admin)
+  @UseGuards(RolesGuard)
+  @Delete(':id')
+  deleteMembresia(@Param('id', ParseUUIDPipe) id: string) {
+    return this.membresiaService.deleteMembresia(id);
+  }
 }
