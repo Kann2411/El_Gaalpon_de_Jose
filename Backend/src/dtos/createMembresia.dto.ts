@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
-import { EstadoMembresia } from 'src/enums/estadoMembresia.enum';
+import { IsArray, IsNumber, IsString } from 'class-validator';
 
 export class MembresiaDto {
   @ApiProperty({ description: 'Tipo de membresía' })

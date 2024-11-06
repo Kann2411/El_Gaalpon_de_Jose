@@ -30,7 +30,7 @@ export class membresiaService {
   //   this.membresiaRepository.updateMembresia(id, membresia);
   // }
 
-  // deleteMembresia(id: UUID) {
-  //   this.membresiaRepository.deleteMembresia(id);
-  // }
+  deleteMembresia(id: string) {
+    this.membresiaRepository.deleteMembresia(id);
+  }
 }

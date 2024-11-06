@@ -68,7 +68,10 @@ export class ClassRepository {
 
     const coachUser = await this.userRepository.findOneBy({ id: coach });
     if (!coachUser) {
-      throw new HttpException(`coach con id ${coachUser} not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `coach con id ${coachUser} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     const nuevaClase = new Class();
@@ -94,7 +97,10 @@ export class ClassRepository {
   async updateClass(id: string, classData: Partial<Class>) {
     const classToUpdate = await this.classesRepository.findOneBy({ id });
     if (!classToUpdate) {
-      throw new HttpException(`Class with id ${id} not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `Class with id ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     }
     await this.classesRepository.update(id, classData);
     const foundClassUpdate = await this.classesRepository.findOneBy({ id });
