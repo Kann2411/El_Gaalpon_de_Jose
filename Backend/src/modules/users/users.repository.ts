@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -41,7 +43,7 @@ export class UsersRepository {
       return users;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new InternalServerErrorException('Error al obtener los usuarios');
+      throw new HttpException('Error getting users', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -59,17 +61,15 @@ export class UsersRepository {
       });
 
       if (!user) {
-        throw new NotFoundException(`Usuario con id ${id} no existe`);
+        throw new HttpException(`Usuario con id ${id} no existe`, HttpStatus.NOT_FOUND);
       }
 
       return user.imgUrl;
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
-      throw new InternalServerErrorException(
-        'Error al obtener el usuario por ID',
-      );
+      throw new HttpException('Error getting user by id', HttpStatus.NOT_FOUND);
     }
   }
 
@@ -90,23 +90,21 @@ export class UsersRepository {
       });
 
       if (!user) {
-        throw new NotFoundException(`Usuario con id ${id} no existe`);
+        throw new HttpException(`Usuario con id ${id} no existe`, HttpStatus.NOT_FOUND);
       }
 
       return user;
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
-      throw new InternalServerErrorException(
-        'Error al obtener el usuario por ID',
-      );
+      throw new HttpException('Error getting user by id', HttpStatus.NOT_FOUND);
     }
   }
   async patchUser(id, role) {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) {
-      throw new NotFoundException(`Usuario con nombre ${id} no existe`);
+      throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
     }
     if (role === 'admin') {
       user.role = Role.Admin;
@@ -131,17 +129,15 @@ export class UsersRepository {
         where: { id: id },
       });
       if (!user) {
-        throw new NotFoundException(`Usuario con id ${id} no existe.`);
+        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
       }
       user.imgUrl = secureUrl;
       await this.userRepository.save(user);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
-      throw new InternalServerErrorException(
-        'Error al actualizar la imagen del producto.',
-      );
+      throw new HttpException('Error updating product image', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -157,7 +153,7 @@ export class UsersRepository {
       return newUser;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new InternalServerErrorException('Error al crear el usuario');
+      throw new HttpException('Error creating user', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -168,16 +164,16 @@ export class UsersRepository {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        throw new NotFoundException(`Usuario con id ${id} no existe`);
+        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
       }
       this.userRepository.merge(user, updateProfileDto);
       await this.userRepository.save(user);
       return user;
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
-      throw new InternalServerErrorException('Error al actualizar el perfil');
+      throw new HttpException('Error updating profile', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -191,7 +187,7 @@ export class UsersRepository {
 
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        throw new NotFoundException(`Usuario con id ${id} no existe`);
+        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
       }
 
       const passwordMatches = await bcrypt.compare(
@@ -199,13 +195,11 @@ export class UsersRepository {
         user.password,
       );
       if (!passwordMatches) {
-        throw new BadRequestException('La contraseña actual es incorrecta.');
+        throw new HttpException('The current password is incorrect', HttpStatus.BAD_REQUEST);
       }
 
       if (newPassword !== confirmPassword) {
-        throw new BadRequestException(
-          'La nueva contraseña y la confirmación no coinciden.',
-        );
+        throw new HttpException('New password and confirmation do not match', HttpStatus.BAD_REQUEST);
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -218,9 +212,9 @@ export class UsersRepository {
         error instanceof NotFoundException ||
         error instanceof BadRequestException
       ) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
-      throw new InternalServerErrorException('Error al cambiar la contraseña');
+      throw new HttpException('Error changing password', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -233,13 +227,11 @@ export class UsersRepository {
 
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        throw new NotFoundException(`Usuario con id ${id} no existe`);
+        throw new HttpException(`User with ${id} not exist`, HttpStatus.NOT_FOUND);
       }
 
       if (newPassword !== confirmPassword) {
-        throw new BadRequestException(
-          'La nueva contraseña y la confirmación no coinciden.',
-        );
+        throw new HttpException('New password and confirmation do not match', HttpStatus.BAD_REQUEST);
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -252,11 +244,9 @@ export class UsersRepository {
         error instanceof NotFoundException ||
         error instanceof BadRequestException
       ) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
-      throw new InternalServerErrorException(
-        'Error al establecer la contraseña',
-      );
+      throw new HttpException('Error resetting password', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -264,14 +254,14 @@ export class UsersRepository {
     try {
       const result = await this.userRepository.delete(id);
       if (result.affected === 0) {
-        throw new NotFoundException(`Usuario con id ${id} no existe`);
+        throw new HttpException(`User with id ${id} not exist`, HttpStatus.NOT_FOUND);
       }
       return id;
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw error;
+        throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       }
-      throw new InternalServerErrorException('Error al eliminar el usuario');
+      throw new HttpException('Error deleting user', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -287,12 +277,12 @@ export class UsersRepository {
       });
 
       if (!user) {
-        throw new NotFoundException('Usuario no encontrado');
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       }
 
       const { newPassword, confirmPassword } = setPasswordDto;
       if (newPassword !== confirmPassword) {
-        throw new BadRequestException('Las contraseñas no coinciden.');
+        throw new HttpException('Passwords do not match', HttpStatus.BAD_REQUEST);
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -302,18 +292,16 @@ export class UsersRepository {
       return 'Contraseña restablecida con éxito';
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
-        throw new BadRequestException(
-          'El enlace ha expirado. Solicita uno nuevo.',
-        );
+        throw new HttpException('The link has expired. Request a new one.', HttpStatus.BAD_REQUEST);
       }
-      throw new BadRequestException('El enlace no es válido.');
+      throw new HttpException('The link is invalid', HttpStatus.BAD_REQUEST);
     }
   }
 
   async toggleBanUser(id: string, isBanned: boolean): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException('Usuario no encontrado');
+      throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
     }
     user.isBanned = isBanned;
     return this.userRepository.save(user);
