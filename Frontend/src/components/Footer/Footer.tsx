@@ -8,22 +8,27 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-zinc-900 text-white w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
+        <div className="flex justify-between py-12">
+          
+          {/* Logo section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <Image src={logo} alt="logo" width={60} height={60} />
               <span className="text-2xl font-bold">FitZone</span>
             </div>
             <p className="text-sm text-gray-400">
-              Empowering your fitness journey with cutting-edge facilities and expert guidance.
+              Empowering your fitness journey with <br /> cutting-edge facilities and expert guidance.
             </p>
           </div>
           
-          <div className="flex justify-center ">
-            <div>
+          {/* Links section */}
+          <div className="flex space-x-8">
+            
+            {/* Quick Links */}
+            <div className='mr-6'>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                {['Home', 'Plans', 'About Us'].map((item) => (
+                {['Classes', 'Plans', 'About Us'].map((item) => (
                   <li key={item}>
                     <Link href={`/${item.toLowerCase().replace(' ', '-')}`} className="text-gray-400 hover:text-white transition-colors duration-200">
                       {item}
@@ -32,17 +37,18 @@ const Footer: React.FC = () => {
                 ))}
               </ul>
             </div>
+            
+            {/* Contact Us */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li>123 Fitness Street, Gym City, 12345</li>
+                <li>Phone: (123) 456-7890</li>
+                <li>Email: fitzone463@gmail.com</li>
+              </ul>
+            </div>
+            
           </div>
-          
-          <div className="ml-auto">
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-2 text-gray-400">
-              <li>123 Fitness Street, Gym City, 12345</li>
-              <li>Phone: (123) 456-7890</li>
-              <li>Email: fitzone463@gmail.com</li>
-            </ul>
-          </div>
-          
         </div>
         
         <hr className="border-gray-800" />

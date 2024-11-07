@@ -77,7 +77,12 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
 
 
   return (
-    <div className="bg-black p-6 rounded-lg shadow-lg">
+    <div className="bg-black rounded-lg shadow-lg">
+      <div className="text-center mb-6">
+        <h1 className="text-white text-3xl font-extrabold">
+          My <span className="text-red-600">Appointments</span>
+        </h1>
+      </div>
       {classes.length > 0 ? (
 
         <h2 className="text-white text-2xl font-bold mb-4">Reserved Classes</h2>
