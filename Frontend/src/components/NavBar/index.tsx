@@ -27,9 +27,22 @@ const NavBarComponent = () => {
   const handleCloseChat = () => setIsChatOpen(false);
 
   const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } =
-  useSearch();
+    useSearch();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user?.id) {
+      const storedImageUrl = localStorage.getItem(`imgUrl_${user.id}`);
+      if (storedImageUrl) {
+        setProfileImageUrl(storedImageUrl);
+      } else {
+        setProfileImageUrl(user.imgUrl || null);
+      }
+    }
+  }, [user]);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -74,7 +87,7 @@ const NavBarComponent = () => {
   const handleLogout = () => {
     logOut();
     setIsMenuOpen(false);
-    sessionStorage.removeItem('hasRedirected');
+    sessionStorage.removeItem("hasRedirected");
     router.push("/");
   };
 
@@ -164,20 +177,20 @@ const NavBarComponent = () => {
   };
 
   useEffect(() => {
-    const hasRedirected = sessionStorage.getItem('hasRedirected');
-    
+    const hasRedirected = sessionStorage.getItem("hasRedirected");
+
     if (isLogged && !hasRedirected) {
-      let redirectPath = '/home';
-      
+      let redirectPath = "/home";
+
       if (user?.role === "admin") {
         redirectPath = "/users-controller";
       } else if (user?.role === "coach") {
         redirectPath = "/training-management";
       }
-      
+
       if (pathname !== redirectPath) {
         router.push(redirectPath);
-        sessionStorage.setItem('hasRedirected', 'true');
+        sessionStorage.setItem("hasRedirected", "true");
       }
     }
   }, [isLogged, user?.role, router, pathname]);
@@ -335,7 +348,6 @@ const NavBarComponent = () => {
         >
           {user?.role === "user" && <ChatModal onClose={handleCloseChat} />}
           {isChatOpen && <ChatModal onClose={handleCloseChat} />}
-          
         </button>
       )}
 
@@ -377,7 +389,7 @@ const NavBarComponent = () => {
       {isLogged ? (
         <div className="relative" ref={menuRef}>
           <div
-            className="w-14 h-14 rounded-full cursor-pointer transition-transform duration-200 hover:scale-105 me-5"
+            className="w-16 h-16 rounded-full overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-105 me-5"
             onClick={toggleMenu}
           >
             <img
@@ -386,7 +398,7 @@ const NavBarComponent = () => {
                 "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"
               }
               alt="avatar"
-              className="w-full h-full rounded-full"
+              className="w-full h-full rounded-full object-cover"
             />
           </div>
 
@@ -402,7 +414,7 @@ const NavBarComponent = () => {
               <>
                 <div className="px-4 py-2 text-black">
                   {/* Información del usuario */}
-                  <div className="mb-4 border-solid ">
+                  <div className="mb-4 border-solid">
                     <p className="font-medium text-center">{user?.name}</p>
                     <p className="font-light ml-1 text-center">{user?.email}</p>
                   </div>
@@ -432,14 +444,6 @@ const NavBarComponent = () => {
                   </button>
                 </div>
 
-                {/* Botón para cambiar la foto de perfil
-                <button
-                  onClick={() => document.getElementById("fileInput")?.click()}
-                  className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
-                >
-                  Change profile photo
-                </button> */}
-
                 {/* Input oculto para subir archivos */}
                 <input
                   type="file"
@@ -448,8 +452,6 @@ const NavBarComponent = () => {
                   accept="image/*"
                   onChange={handleFileChange}
                 />
-
-                {/* Modal de confirmación */}
               </>
             )}
           </div>
