@@ -12,6 +12,7 @@ import { fitZoneApi } from "@/api/rutaApi";
 const CreateClassForm: React.FC = () => {
   const [coaches, setCoaches] = useState<IUser[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  
 
   useEffect(() => {
     const fetchCoaches = async () => {
