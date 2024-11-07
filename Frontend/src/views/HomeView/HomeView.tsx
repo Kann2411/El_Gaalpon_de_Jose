@@ -338,13 +338,9 @@ if(user.id) {
       {/* Contenedor para filtros y subtítulo */}
       <div className="w-full max-w-9xl px-5 mb-8">
         <div className="flex flex-col items-center relative">
-          <div className="absolute left-2 ml-2">
-            <div className="absolute left-2 ml-6">
-              <div className="absolute left-2 ml-6">
+              <div className="absolute left-2 ml-2">
                 <ClassFilters onFilterChange={setFilters} />
               </div>
-            </div>
-          </div>
           <h2 className="text-3xl font-bold">
             Experience <span className="text-red-600">FitZone</span>
           </h2>
