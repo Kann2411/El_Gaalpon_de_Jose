@@ -50,10 +50,11 @@ export default function LoginView() {
       </div>
       <div className="w-1/2 h-full bg-[#222222] flex items-center justify-center">
         <div className="w-full max-w-lg mb-10">
-          <div className="text-center my-5">
-            <h2 className="text-3xl font-bold text-white">Sign In</h2>
-          </div>
-
+        <div className="text-center mb-6">
+          <h1 className="text-white text-3xl font-extrabold">
+            Sign <span className="text-red-600">In</span>
+          </h1>
+        </div>
           <LoginForm />
 
           <div className="flex items-center justify-center">

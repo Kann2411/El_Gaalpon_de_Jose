@@ -84,11 +84,8 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
         </h1>
       </div>
       {classes.length > 0 ? (
-
-        <h2 className="text-white text-2xl font-bold mb-4">Reserved Classes</h2>
-      ): null}
-      {classes.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        // <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {classes.map((classItem) => (
             <div
               key={classItem.id}
@@ -100,7 +97,7 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
                 className="w-full h-28 object-cover rounded-t-lg"
               />
               <div className="p-2">
-                <h3 className="text-lg font-semibold text-red-400">
+                <h3 className="text-lg font-semibold text-red-600">
                   {classItem.name}
                 </h3>
                 <div className="text-white mt-1">
@@ -117,12 +114,12 @@ export const ReservedClasses: React.FC<ReservedClassesProps> = ({ userId }) => {
                 </div>
                 <button
                   onClick={() => handleCancel(classItem.id)}
-                  className="mt-4 w-full bg-red-500 text-white py-1 px-4 rounded-lg hover:bg-red-600"
+                  className="mt-4 w-full bg-red-600 text-white py-1 px-4 rounded-lg hover:bg-red-600"
                 >
                   Cancel Appointment
                 </button>
               </div>
-              <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+              <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                 {classItem.status}
               </div>
             </div>
