@@ -77,7 +77,7 @@ export default function LoginView() {
               Sign up
             </Link>
           </p>
-          <p className="text-center">
+          <p className="text-center mt-4">
             <Link className="text-red-500" href="/auth/forgot-password">
               I forgot my password
             </Link>
