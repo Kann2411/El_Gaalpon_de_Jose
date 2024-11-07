@@ -44,9 +44,11 @@ export async function getMembresias(): Promise<Membership[] | null> {
 
 export async function createMembresia(newMembership: Omit<Membership, 'id'>): Promise<Membership | void> {
   try {
+    const token = localStorage.getItem("token");
     const response = await fetch(`${fitZoneApi}/membresia`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newMembership),
