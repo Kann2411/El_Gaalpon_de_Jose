@@ -37,9 +37,11 @@ export default function RegisterView() {
       {/* Lado izquierdo - Formulario de registro */}
       <div className="w-1/2 h-full bg-[#222222] flex items-center justify-center">
         <div className="w-full max-w-lg px-8 mb-10">
-          <div className="text-center my-5">
-            <h2 className="text-3xl font-bold text-white">Sign Up</h2>
-          </div>
+        <div className="text-center mb-6">
+          <h1 className="text-white text-3xl font-extrabold">
+            Sign <span className="text-red-600">Up</span>
+          </h1>
+        </div>
 
           <RegisterForm />
 
