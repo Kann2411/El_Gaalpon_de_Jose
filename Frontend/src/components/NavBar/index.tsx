@@ -207,7 +207,7 @@ const NavBarComponent = () => {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0  right-0 flex items-center justify-between p-4 bg-black text-white shadow-md z-50">
+    <header className="fixed top-0 left-0 right-0 flex items-center justify-between p-4 bg-black text-white shadow-md z-50">
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={60} height={60} />
         <div className="ml-4 text-2xl font-bold">FitZone</div>
@@ -252,29 +252,37 @@ const NavBarComponent = () => {
       ) : user?.role === "admin" ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Users Controller", "Classes"].map((item, index) => {
+            {["Users Controller", "Classes", "Membership"].map((item, index) => {
               const lowerCaseItem = item.toLowerCase().replace(" ", "-");
-              const route =
-                lowerCaseItem === "users-controller"
-                  ? "/users-controller"
-                  : "/classes";
-              const isActive = pathname === route;
+              let route;
 
+              if (lowerCaseItem === "users-controller") {
+                route = "/users-controller";
+              } else if (lowerCaseItem === "classes") {
+                route = "/classes";
+              } else if (lowerCaseItem === "membership") {
+                route = "/plans-management"; // Redirige a plans-management
+              } else {
+                route = "/"; // Ruta predeterminada si no se encuentra una coincidencia
+              }
+              
+              // Asegurarse de que `route` siempre tenga un valor definido antes de usarlo en el `href`.
+              <Link href={route || "/"}>go to page</Link>
+              
               return (
                 <li key={index} className="relative group">
                   <Link
                     href={route}
-                    className={`text-white text-sm sm:text-base font-medium px-3 py-2 ${
-                      isActive ? "text-red-600" : ""
-                    }`}
+                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
                   >
                     {item}
                   </Link>
                   <span
                     className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                      isActive ? "scale-x-100" : "scale-x-0"
+                      pathname === route ? "scale-x-100" : "scale-x-0"
                     }`}
                   />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
                 </li>
               );
             })}
