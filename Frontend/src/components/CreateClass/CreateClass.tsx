@@ -12,7 +12,6 @@ import { fitZoneApi } from "@/api/rutaApi";
 const CreateClassForm: React.FC = () => {
   const [coaches, setCoaches] = useState<IUser[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  
 
   useEffect(() => {
     const fetchCoaches = async () => {
@@ -50,7 +49,7 @@ const CreateClassForm: React.FC = () => {
           body: JSON.stringify(values),
         });
         const classData = await response.json();
-        
+
         if (classData && selectedImage) {
           const response = await uploadClassImage(
             classData.class.id,
@@ -60,16 +59,16 @@ const CreateClassForm: React.FC = () => {
 
           await Swal.fire({
             toast: true,
-            position: 'top-end',
+            position: "top-end",
             showConfirmButton: false,
             timer: 3000,
             timerProgressBar: true,
-            icon: 'success',
-            title: 'Class created successfully!',
-            background: '#1F2937',
-            color: '#ffffff',
+            icon: "success",
+            title: "Class created successfully!",
+            background: "#1F2937",
+            color: "#ffffff",
             customClass: {
-              popup: 'rounded-lg shadow-md text-sm font-sans',
+              popup: "rounded-lg shadow-md text-sm font-sans",
             },
           });
 
@@ -81,16 +80,16 @@ const CreateClassForm: React.FC = () => {
 
         await Swal.fire({
           toast: true,
-          position: 'top-end',
+          position: "top-end",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          icon: 'error',
-          title: 'Error creating class',
-          background: '#1F2937',
-          color: '#ffffff',
+          icon: "error",
+          title: "Error creating class",
+          background: "#1F2937",
+          color: "#ffffff",
           customClass: {
-            popup: 'rounded-lg shadow-md text-sm font-sans',
+            popup: "rounded-lg shadow-md text-sm font-sans",
           },
         });
       }
@@ -130,7 +129,10 @@ const CreateClassForm: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="intensity" className="block text-red-400 font-semibold">
+            <label
+              htmlFor="intensity"
+              className="block text-red-400 font-semibold"
+            >
               Intensity
             </label>
             <select
@@ -144,12 +146,17 @@ const CreateClassForm: React.FC = () => {
               <option value="high">High</option>
             </select>
             {formik.touched.intensity && formik.errors.intensity && (
-              <div className="text-red-500 text-sm">{formik.errors.intensity}</div>
+              <div className="text-red-500 text-sm">
+                {formik.errors.intensity}
+              </div>
             )}
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="capacity" className="block text-red-400 font-semibold">
+            <label
+              htmlFor="capacity"
+              className="block text-red-400 font-semibold"
+            >
               Capacity
             </label>
             <input
@@ -160,7 +167,9 @@ const CreateClassForm: React.FC = () => {
               placeholder="Number of participants"
             />
             {formik.touched.capacity && formik.errors.capacity && (
-              <div className="text-red-500 text-sm">{formik.errors.capacity}</div>
+              <div className="text-red-500 text-sm">
+                {formik.errors.capacity}
+              </div>
             )}
           </div>
 
@@ -181,7 +190,10 @@ const CreateClassForm: React.FC = () => {
                   </option>
                 ))}
               </select>
-              <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <User
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
             </div>
             {formik.touched.coach && formik.errors.coach && (
               <div className="text-red-500 text-sm">{formik.errors.coach}</div>
@@ -192,7 +204,10 @@ const CreateClassForm: React.FC = () => {
         {/* Schedule Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="space-y-2">
-            <label htmlFor="duration" className="block text-red-400 font-semibold">
+            <label
+              htmlFor="duration"
+              className="block text-red-400 font-semibold"
+            >
               Duration
             </label>
             <div className="relative">
@@ -206,10 +221,15 @@ const CreateClassForm: React.FC = () => {
                 <option value="35 minutes">35 minutes</option>
                 <option value="45 minutes">45 minutes</option>
               </select>
-              <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Clock
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
             </div>
             {formik.touched.duration && formik.errors.duration && (
-              <div className="text-red-500 text-sm">{formik.errors.duration}</div>
+              <div className="text-red-500 text-sm">
+                {formik.errors.duration}
+              </div>
             )}
           </div>
 
@@ -232,7 +252,10 @@ const CreateClassForm: React.FC = () => {
                 <option value="saturday">Saturday</option>
                 <option value="sunday">Sunday</option>
               </select>
-              <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Calendar
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
             </div>
             {formik.touched.day && formik.errors.day && (
               <div className="text-red-500 text-sm">{formik.errors.day}</div>
@@ -240,7 +263,10 @@ const CreateClassForm: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="starttime" className="block text-red-400 font-semibold">
+            <label
+              htmlFor="starttime"
+              className="block text-red-400 font-semibold"
+            >
               Start Time
             </label>
             <input
@@ -250,12 +276,17 @@ const CreateClassForm: React.FC = () => {
               className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
             />
             {formik.touched.starttime && formik.errors.starttime && (
-              <div className="text-red-500 text-sm">{formik.errors.starttime}</div>
+              <div className="text-red-500 text-sm">
+                {formik.errors.starttime}
+              </div>
             )}
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="endtime" className="block text-red-400 font-semibold">
+            <label
+              htmlFor="endtime"
+              className="block text-red-400 font-semibold"
+            >
               End Time
             </label>
             <input
@@ -265,7 +296,9 @@ const CreateClassForm: React.FC = () => {
               className="w-full bg-gray-800 border border-gray-700 p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500 transition duration-300"
             />
             {formik.touched.endtime && formik.errors.endtime && (
-              <div className="text-red-500 text-sm">{formik.errors.endtime}</div>
+              <div className="text-red-500 text-sm">
+                {formik.errors.endtime}
+              </div>
             )}
           </div>
         </div>
@@ -273,7 +306,10 @@ const CreateClassForm: React.FC = () => {
         {/* Description and Image */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="description" className="block text-red-400 font-semibold">
+            <label
+              htmlFor="description"
+              className="block text-red-400 font-semibold"
+            >
               Description
             </label>
             <textarea
@@ -284,7 +320,9 @@ const CreateClassForm: React.FC = () => {
               placeholder="Describe the class"
             />
             {formik.touched.description && formik.errors.description && (
-              <div className="text-red-500 text-sm">{formik.errors.description}</div>
+              <div className="text-red-500 text-sm">
+                {formik.errors.description}
+              </div>
             )}
           </div>
 
@@ -300,9 +338,12 @@ const CreateClassForm: React.FC = () => {
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <Upload className="w-8 h-8 mb-3 text-gray-400" />
                   <p className="mb-2 text-sm text-gray-400">
-                    <span className="font-semibold">Click to upload</span> or drag and drop
+                    <span className="font-semibold">Click to upload</span> or
+                    drag and drop
                   </p>
-                  <p className="text-xs text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                  <p className="text-xs text-gray-400">
+                    SVG, PNG, JPG or GIF (MAX. 800x400px)
+                  </p>
                 </div>
                 <input
                   id="image"
@@ -323,12 +364,14 @@ const CreateClassForm: React.FC = () => {
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105"
-        >
-          Create Class
-        </button>
+        <div className="flex justify-center mt-6">
+          <button
+            type="submit"
+            className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
+          >
+            Create Class
+          </button>
+        </div>
       </form>
     </motion.div>
   );

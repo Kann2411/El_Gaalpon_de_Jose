@@ -185,7 +185,7 @@ const ClassList: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-900 text-white p-8 rounded-lg shadow-2xl max-w-7xl mx-auto mt-16">
+    <div className="bg-gray-900 text-white p-8 rounded-lg shadow-2xl max-w-7xl mx-auto my-16">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-extrabold">
           Class <span className="text-red-600">List</span>
@@ -203,12 +203,12 @@ const ClassList: React.FC = () => {
             <div className="flex justify-between items-start mb-4">
               <h2 className="text-2xl font-semibold text-red-500">{classItem.name}</h2>
               <div className="flex space-x-2">
-                <button
+                {/* <button
                   onClick={() => handleEdit(classItem)}
                   className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors duration-300"
                 >
                   <Edit2 size={16} />
-                </button>
+                </button> */}
                 <button
                   onClick={() => handleDelete(classItem.id)}
                   className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors duration-300"

@@ -7,8 +7,8 @@ const containerStyle = {
 };
 
 const center = {
-  lng: 40.728520783781,
-  lat: -73.79463386540343,
+  lat: 40.728520783781,
+  lng: -73.79463386540343,
 };
 
 const Map: React.FC = () => {
@@ -16,7 +16,7 @@ const Map: React.FC = () => {
     <div>
       <h2 className="text-white text-center text-3xl font-bold">Visit Us</h2>
       <div className="p-10">
-        <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+        <LoadScript googleMapsApiKey="AIzaSyBlfH-MmX_PbmOpvNYk2YDtY5VcB68n3GQ">
           <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
             <Marker position={center} />
           </GoogleMap>
