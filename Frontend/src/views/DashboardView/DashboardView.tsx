@@ -7,11 +7,6 @@ import Link from "next/link";
 import EditProfileModal from "@/components/editProfile/EditProfileModal";
 import Swal from "sweetalert2";
 import IUser from "@/interfaces/interfaces";
-import {
-  fetchUserData,
-  updateUserProfile,
-  updateProfilePhoto,
-} from "@/lib/server/fetchUsers";
 import ModalProfilePhoto from "@/components/ModalProfilePhoto/ModalProfilePhoto";
 import {
   fetchUserData,
