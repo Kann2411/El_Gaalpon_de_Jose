@@ -81,7 +81,7 @@ const TrainingPlans: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center p-6">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center">
       <div className="text-center mb-6">
         <h1 className="text-3xl font-extrabold">
           My <span className="text-red-600">Training Plans</span>

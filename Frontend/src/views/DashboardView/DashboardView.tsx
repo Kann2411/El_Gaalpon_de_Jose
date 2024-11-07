@@ -214,9 +214,11 @@ export default function DashboardView() {
     <div className="min-h-screen bg-black text-white">
       <div className=" px-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-extrabold">
             My <span className="text-red-600">Dashboard</span>
           </h1>
+        </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Profile Section */}
@@ -251,6 +253,17 @@ export default function DashboardView() {
                   <span className="text-gray-400">DNI</span>
                   <span>{user?.dni || "Not provided"}</span>
                 </div>
+              </div>
+
+              {/* Centered Log Out Button */}
+              <div className="flex justify-center mt-16">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <LogOut size={18} />
+                  <span>Log Out</span>
+                </button>
               </div>
             </div>
 
@@ -330,13 +343,13 @@ export default function DashboardView() {
           </div>
 
           {/* Logout Button */}
-          <button
+          {/* <button
             onClick={handleLogout}
             className="mt-8 flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
           >
             <LogOut size={18} />
             <span>Log Out</span>
-          </button>
+          </button> */}
         </div>
       </div>
 
