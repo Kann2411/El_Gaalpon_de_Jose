@@ -22,6 +22,7 @@ export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
   const token = searchParams?.token; 
 
   useEffect(() => {
+    console.log('searchParams:', searchParams);
     if (token) {
       try {
         localStorage.setItem('token', token);
