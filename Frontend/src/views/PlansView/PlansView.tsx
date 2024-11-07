@@ -52,9 +52,9 @@ const PlansView: React.FC = () => {
             icon = "error";
             break;
           case "pending":
-            title = "Pending payment";
-            text = "Your payment is pending confirmation.";
-            icon = "info";
+            title = "Successful payment!";
+            text = "Your transaction has been completed.";
+            icon = "success";
             break;
           default:
             title = "";

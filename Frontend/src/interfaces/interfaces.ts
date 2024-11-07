@@ -147,3 +147,13 @@ export interface IUserListProps {
 }
 
 export default IUser;
+
+export interface Membership {
+  id: string;
+  plan: string;
+  price: number;
+  currency: string;
+  description: string;
+  benefits: string[];
+  idealFor: string;
+}

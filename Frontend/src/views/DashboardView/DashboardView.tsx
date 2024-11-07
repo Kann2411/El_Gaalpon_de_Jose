@@ -13,6 +13,14 @@ import {
   updateProfilePhoto,
 } from "@/lib/server/fetchUsers";
 import ModalProfilePhoto from "@/components/ModalProfilePhoto/ModalProfilePhoto";
+import {
+  fetchUserData,
+  getUsers,
+  uploadProfilePhoto,
+  updateUserProfile,
+  updateProfilePhoto,
+} from "@/lib/server/fetchUsers";
+import ChangePasswordModal from "@/components/ChangePasswordModal/ChangePasswordModal";
 
 export default function DashboardView() {
   interface IUserInfo {
@@ -33,6 +41,7 @@ export default function DashboardView() {
   const [isEditing, setIsEditing] = useState(false);
   const { user, logOut, setUser } = useContext(UserContext);
   const [userInfo, setUserInfo] = useState({} as IUserInfo);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   const handleLogout = () => {
     logOut();
@@ -266,8 +275,8 @@ export default function DashboardView() {
                     </span>
                     <Pencil size={18} />
                   </button>
-                  <Link
-                    href="/auth/forgot-password"
+                  <button
+                    onClick={() => setIsPasswordModalOpen(true)}
                     className="w-full flex items-center justify-between p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition-colors relative group"
                   >
                     <span className="relative">
@@ -275,9 +284,14 @@ export default function DashboardView() {
                       <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
                     </span>
                     <Key size={18} />
-                  </Link>
+                  </button>
                 </div>
               </div>
+              <ChangePasswordModal
+                isOpen={isPasswordModalOpen}
+                onClose={() => setIsPasswordModalOpen(false)}
+                userId={user?.id || ''}
+              />
 
               {/* Membership Section */}
               {user?.role === "user" ? (
