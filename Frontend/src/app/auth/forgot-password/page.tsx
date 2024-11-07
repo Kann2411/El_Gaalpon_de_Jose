@@ -66,9 +66,11 @@ const ForgotPasswordView = () => {
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
       <div className="w-full max-w-md bg-black bg-opacity-50 p-8 rounded shadow-lg relative z-10">
-        <h2 className="text-2xl font-bold mb-6 text-center text-white">
-          Forgot Password
-        </h2>
+        <div className="text-center mb-6">
+          <h1 className="text-white text-3xl font-extrabold">
+            Forgot <span className="text-red-600">Password</span>
+          </h1>
+        </div>
         {emailSent ? (
           <p className="text-center text-white">
             An email has been sent with instructions to reset your password.
