@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
+import { fitZoneApi } from "@/api/rutaApi";
 
 interface ChangePasswordModalProps {
   isOpen: boolean;
@@ -23,9 +24,8 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
       });
       return;
     }
-
     try {
-      const response = await fetch(`/users/change-password/${userId}`, {
+      const response = await fetch(`${fitZoneApi}/users/change-password/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -34,6 +34,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
         body: JSON.stringify({
           currentPassword,
           newPassword,
+          confirmPassword,
         }),
       });
 
