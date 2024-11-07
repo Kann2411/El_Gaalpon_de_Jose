@@ -3,7 +3,7 @@
 import { FcGoogle } from "react-icons/fc";
 import LoginForm from "@/components/LoginForm/LoginForm";
 import { signIn } from "next-auth/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import logo from "@/public/images/image-login.png";
 import { UserContext } from "@/context/user";
 import Image from "next/image";
@@ -12,8 +12,20 @@ import { useRouter } from "next/navigation";
 import { fitZoneApi } from "@/api/rutaApi";
 
 export default function LoginView() {
-  const { signIn: contextSignIn } = useContext(UserContext);
+  const { signIn: contextSignIn, user } = useContext(UserContext);
   const router = useRouter();
+
+  useEffect(() => {
+    if(user) {
+      if(user.role === 'user'){
+        router.push('/home')
+      } else if (user.role === 'coach') {
+        router.push('/training-management')
+      } else if (user.role === 'admin') {
+        router.push('/users-controller')
+      }
+    }
+  }, [user])
 
   const handleGoogleSignIn = async () => {
     try {
