@@ -41,8 +41,6 @@ export class MembresiaController {
   //   return this.membresiaService.getMembresiaById(id);
   // }
 
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard, RolesGuard)
   @Post()
   createMembresia(@Body() membresiaDto: MembresiaDto) {
     return this.membresiaService.createMembresia(membresiaDto);
@@ -68,8 +66,6 @@ export class MembresiaController {
   //   this.membresiaService.updateMembresia(id, membresia);
   // }
 
-  @Roles(Role.Admin)
-  @UseGuards(AuthGuard, RolesGuard)
   @Delete(':id')
   deleteMembresia(@Param('id', ParseUUIDPipe) id: string) {
     return this.membresiaService.deleteMembresia(id);
