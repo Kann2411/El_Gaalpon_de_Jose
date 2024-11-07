@@ -104,9 +104,11 @@ const CreateClassForm: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <h1 className="text-4xl font-bold text-red-500 mb-12 text-center">
-        Create New Class
-      </h1>
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-extrabold">
+          Create New <span className="text-red-600">Class</span>
+        </h1>
+      </div>
 
       <form onSubmit={formik.handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

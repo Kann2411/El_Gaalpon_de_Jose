@@ -48,7 +48,7 @@ const coaches: Coach[] = [
 
 const CoachCards: React.FC = () => {
   return (
-    <div className="py-16">
+    <div className="py-10">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-white mb-6"> Meet Our <span className="text-red-600"> Expert Coaches </span> </h2>
         <p className="text-center text-gray-400 mb-6">

@@ -2,7 +2,7 @@
 import { UserContext } from "@/context/user";
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, LogOut, Key, CreditCard } from "lucide-react";
+import { LogOut, Key, CreditCard, Pencil } from "lucide-react";
 import Link from "next/link";
 import EditProfileModal from "@/components/editProfile/EditProfileModal";
 import Swal from "sweetalert2";
@@ -121,18 +121,27 @@ export default function DashboardView() {
     setFile(null);
   };
 
-  const handleSaveProfile = async (userData: Partial<IUser>) => {
+  const handleSaveProfile = async (userData: Partial<IUser>, file?: File) => {
     try {
       if (!user || !user.id) {
         throw new Error("User ID is missing");
       }
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
         throw new Error("Authentication token is missing");
       }
 
-      const updatedUser = await updateUserProfile(user.id, userData, token);
+      let updatedUser = await updateUserProfile(user.id, userData, token);
+
+      if (file) {
+        const photoResult = await updateProfilePhoto(user.id, file);
+        if (photoResult) {
+          updatedUser = { ...updatedUser, imgUrl: photoResult.imgUrl };
+          // Guardar la nueva URL de la imagen en localStorage
+          localStorage.setItem(`imgUrl_${user.id}`, photoResult.imgUrl);
+        }
+      }
 
       if (updatedUser) {
         setUser((prevUser) => ({
@@ -175,13 +184,41 @@ export default function DashboardView() {
     }
   };
 
+  useEffect(() => {
+    const getUsersInfo = async () => {
+      try {
+        const userId = user?.id;
+        const token = localStorage.getItem('token');
+  
+        if (userId && token) {
+          const usersData = await fetchUserData(userId, token);
+          if (usersData) {
+            setUserInfo(usersData);
+            // Actualizar la imagen de perfil en localStorage
+            if (usersData.imgUrl) {
+              localStorage.setItem(`imgUrl_${userId}`, usersData.imgUrl);
+            }
+          }
+        } else {
+          console.error("User ID or token is undefined");
+        }
+      } catch (error) {
+        console.error("Error fetching users data:", error);
+      }
+    };
+  
+    getUsersInfo();
+  }, [user]);
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className=" px-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold mb-8">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-extrabold">
             My <span className="text-red-600">Dashboard</span>
           </h1>
+        </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Profile Section */}
@@ -189,18 +226,12 @@ export default function DashboardView() {
               <div className="flex flex-col items-center">
                 <div className="relative group">
                   <img
-                    src={user?.imgUrl}
+                    src={
+                      user?.imgUrl || "/placeholder.svg?height=128&width=128"
+                    }
                     alt="Profile"
                     className="w-32 h-32 rounded-full object-cover border-4 border-red-600"
                   />
-                  <button
-                    onClick={() =>
-                      document.getElementById("fileInput")?.click()
-                    }
-                    className="absolute bottom-0 right-0 bg-red-600 p-2 rounded-full hover:bg-red-700 transition-colors"
-                  >
-                    <Pencil size={16} />
-                  </button>
                 </div>
                 <input
                   type="file"
@@ -222,6 +253,17 @@ export default function DashboardView() {
                   <span className="text-gray-400">DNI</span>
                   <span>{user?.dni || "Not provided"}</span>
                 </div>
+              </div>
+
+              {/* Centered Log Out Button */}
+              <div className="flex justify-center mt-16">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <LogOut size={18} />
+                  <span>Log Out</span>
+                </button>
               </div>
             </div>
 
@@ -301,13 +343,13 @@ export default function DashboardView() {
           </div>
 
           {/* Logout Button */}
-          <button
+          {/* <button
             onClick={handleLogout}
             className="mt-8 flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors"
           >
             <LogOut size={18} />
             <span>Log Out</span>
-          </button>
+          </button> */}
         </div>
       </div>
 

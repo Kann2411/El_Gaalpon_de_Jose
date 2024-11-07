@@ -21,7 +21,7 @@ const AppointmentsView: React.FC = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="min-h-screen">
       <ReservedClasses userId={userId} />
     </div>
   );

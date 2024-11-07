@@ -463,7 +463,7 @@ if(user.id) {
       )}
 
       {/* Image Carousel */}
-      <div className="w-full max-w-4xl mb-12">
+      <div className="w-full max-w-4xl">
         <h1 className="text-3xl text-center py-6 font-extrabold">
           Quality <span className="text-red-600">equipment</span>
         </h1>
@@ -492,18 +492,6 @@ if(user.id) {
               </div>
             ))}
           </div>
-          <button
-            onClick={prevImage}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <button
-            onClick={nextImage}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-          >
-            <ChevronRight size={24} />
-          </button>
         </div>
       </div>
 

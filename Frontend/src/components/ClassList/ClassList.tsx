@@ -186,9 +186,11 @@ const ClassList: React.FC = () => {
 
   return (
     <div className="bg-gray-900 text-white p-8 rounded-lg shadow-2xl max-w-7xl mx-auto mt-16">
-      <h1 className="text-4xl font-bold text-red-600 mb-8 text-center">
-        Class List
-      </h1>
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-extrabold">
+          Class <span className="text-red-600">List</span>
+        </h1>
+      </div>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {classes.map((classItem) => (
           <motion.div

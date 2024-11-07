@@ -13,11 +13,16 @@ const center = {
 
 const Map: React.FC = () => {
   return (
-    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
-        <Marker position={center} />
-      </GoogleMap>
-    </LoadScript>
+    <div>
+      <h2 className="text-white text-center text-3xl font-bold">Visit Us</h2>
+      <div className="p-10">
+        <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
+          <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+            <Marker position={center} />
+          </GoogleMap>
+        </LoadScript>
+      </div>
+    </div>
   );
 };
 
