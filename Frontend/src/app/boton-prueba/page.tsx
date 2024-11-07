@@ -2,7 +2,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/user';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 interface DecodedToken {
   role: string;
@@ -19,59 +19,51 @@ interface BotonPruebaProps {
 export default function BotonPrueba({ searchParams }: BotonPruebaProps) {
   const router = useRouter();
   const { setIsLogged, setUser } = useContext(UserContext);
+  const token = searchParams?.token; 
 
   useEffect(() => {
-    const token = searchParams?.token;
-
     if (token) {
       try {
         localStorage.setItem('token', token);
         const decodedToken: DecodedToken = jwtDecode(token);
-        
+
         const userInfo = {
           id: decodedToken.id,
           email: decodedToken.email,
           role: decodedToken.role,
-          token, 
+          token,
         };
 
-        
         localStorage.setItem('user', JSON.stringify(userInfo));
-
-        
         setUser(userInfo);
         setIsLogged(true);
 
-        
         const redirectUser = () => {
           switch (decodedToken.role) {
             case 'admin':
-              router.replace('/users-controller');
+              router.push('/users-controller');
               break;
             case 'coach':
-              router.replace('/training-management');
+              router.push('/training-management');
               break;
             case 'user':
-              router.replace('/home');
+              router.push('/home');
               break;
             default:
-              router.replace('/');
+              router.push('/');
           }
         };
 
-        
         redirectUser();
-
       } catch (error) {
-        console.error("Error al procesar el token:", error);
-        
+        console.error('Error al procesar el token:', error);
         router.push('/');
       }
     } else {
-      console.warn("Token no encontrado en los parámetros de búsqueda");
+      console.warn('Token no encontrado en los parámetros de búsqueda');
       router.push('/');
     }
-  }, [searchParams, router, setIsLogged, setUser]);
+  }, [token, router, setIsLogged, setUser]);
 
   return <div>Redirecting...</div>;
 }

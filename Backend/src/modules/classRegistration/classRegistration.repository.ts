@@ -81,7 +81,10 @@ export class classRegistrationRepository {
       where: { user: { id: userId }, classEntity: { id: classId } },
     });
     if (!registration) {
-      throw new HttpException('You are not registered in this class', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'You are not registered in this class',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     await this.classRegistrationRepository.remove(registration);
     return { message: 'class canceled successfully' };

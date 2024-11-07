@@ -52,7 +52,10 @@ export class MercadoPagoRepository {
     });
 
     if (!lastPayment) {
-      throw new HttpException('No payment found for this user', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'No payment found for this user',
+        HttpStatus.NOT_FOUND,
+      );
     }
     return lastPayment;
   }
@@ -92,7 +95,10 @@ export class MercadoPagoRepository {
           });
 
           if (!pago) {
-            throw new HttpException('The payment has not been found', HttpStatus.NOT_FOUND);
+            throw new HttpException(
+              'The payment has not been found',
+              HttpStatus.NOT_FOUND,
+            );
           }
 
           pago = {
@@ -246,10 +252,8 @@ export class MercadoPagoRepository {
           bodySuscription.userId,
         );
 
-        if (!user) throw new HttpException(
-          'User not found',
-          HttpStatus.NOT_FOUND,
-        );
+        if (!user)
+          throw new HttpException('User not found', HttpStatus.NOT_FOUND);
 
         pago = {
           ...pago,
@@ -271,11 +275,8 @@ export class MercadoPagoRepository {
         if (error instanceof HttpException) {
           throw error;
         }
-      
-        throw new HttpException(
-          error.message,
-          HttpStatus.BAD_REQUEST,
-        );
+
+        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
       }
     });
   }

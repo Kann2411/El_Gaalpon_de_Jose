@@ -16,7 +16,10 @@ export class HorarioRepository {
     try {
       const horarios = await this.horarioRepository.find();
       if (!horarios) {
-        throw new HttpException('There are no registered schedules', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'There are no registered schedules',
+          HttpStatus.NOT_FOUND,
+        );
       }
       return horarios;
     } catch (error) {

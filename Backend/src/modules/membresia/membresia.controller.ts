@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   // Delete,
   Get,
   Param,
@@ -29,7 +30,7 @@ export class MembresiaController {
   }
 
   @Roles(Role.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get('seeder')
   seederData() {
     return this.membresiaService.seederData();
@@ -41,15 +42,15 @@ export class MembresiaController {
   // }
 
   @Roles(Role.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Post()
   createMembresia(@Body() membresiaDto: MembresiaDto) {
     return this.membresiaService.createMembresia(membresiaDto);
   }
 
   @Patch('price/:id')
-  @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   updateMembresiaPrice(
     @Param('id', ParseUUIDPipe) id: string,
     @Body('price') price: number,
@@ -67,10 +68,10 @@ export class MembresiaController {
   //   this.membresiaService.updateMembresia(id, membresia);
   // }
 
-  // @Roles(Role.Admin)
-  // @UseGuards(RolesGuard)
-  // @Delete()
-  // deleteMembresia(@Param('id', ParseUUIDPipe) id: UUID) {
-  //   this.membresiaService.deleteMembresia(id);
-  // }
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Delete(':id')
+  deleteMembresia(@Param('id', ParseUUIDPipe) id: string) {
+    return this.membresiaService.deleteMembresia(id);
+  }
 }
