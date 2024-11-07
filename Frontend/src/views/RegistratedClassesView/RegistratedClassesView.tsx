@@ -32,9 +32,12 @@ export default function RegistratedClassesView() {
 
 
   return (
-    <div className="text-white bg-black min-h-screen p-8 flex flex-col items-center">
-      <h2 className=" text-center text-3xl font-extrabold mb-8 text-white">Classes and <span className='text-red-500'>Registered Users</span></h2>
-      <div className="space-y-6 w-2/4 ">
+    <div className="text-white bg-black min-h-screen px-8 mb-8 flex flex-col items-center">
+        <div className="text-center mb-6">
+          <h1 className="text-white text-3xl font-extrabold">
+            Classes And <span className="text-red-600">Registered Users</span>
+          </h1>
+        </div>      <div className="space-y-6 w-2/4 ">
       {classes.length === 0 ? (
   <p className="text-center">There's no available classes</p>
 ) : (

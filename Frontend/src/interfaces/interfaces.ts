@@ -69,9 +69,11 @@ export interface IUserContext{
 
 
 export interface IButtonProps {
-    content: string;
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; 
-    redirectTo?: string;
+  content: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  redirectTo?: string;
+  disabled?: boolean; //ult cambio
+  className?: string; //ult cambio
 }
 
 export interface DecodedToken {

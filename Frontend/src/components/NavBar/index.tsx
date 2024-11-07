@@ -324,9 +324,14 @@ const NavBarComponent = () => {
       ) : !isLogged ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Classes", "Plans"].map((item, index) => {
-              const lowerCaseItem = item.toLowerCase();
-              const route = lowerCaseItem === "classes" ? "/home" : "/plans";
+            {["Classes", "Plans", "About Us"].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase().replace(" ", "-");
+              const route =
+                lowerCaseItem === "classes"
+                  ? "/home"
+                  : lowerCaseItem === "plans"
+                  ? "/plans"
+                  : "/about-us";
 
               return (
                 <li key={index} className="relative group">
