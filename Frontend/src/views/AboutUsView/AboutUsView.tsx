@@ -23,7 +23,11 @@ const AboutUsView = () => {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="relative z-10 text-center px-4 py-6 bg-black bg-opacity-50 rounded-lg">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">About FitZone</h1>
+        <div className="text-center mb-2">
+          <h1 className="text-white text-3xl font-extrabold">
+            About <span className="text-red-600">Us</span>
+          </h1>
+        </div>
           <p className="text-xl md:text-2xl">Empowering Your Fitness Journey Since 2010</p>
         </div>
       </section>

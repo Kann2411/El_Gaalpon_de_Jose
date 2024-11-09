@@ -3,7 +3,7 @@
 import { FcGoogle } from "react-icons/fc";
 import LoginForm from "@/components/LoginForm/LoginForm";
 import { signIn } from "next-auth/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import logo from "@/public/images/image-login.png";
 import { UserContext } from "@/context/user";
 import Image from "next/image";
@@ -12,8 +12,20 @@ import { useRouter } from "next/navigation";
 import { fitZoneApi } from "@/api/rutaApi";
 
 export default function LoginView() {
-  const { signIn: contextSignIn } = useContext(UserContext);
+  const { signIn: contextSignIn, user } = useContext(UserContext);
   const router = useRouter();
+
+  useEffect(() => {
+    if(user) {
+      if(user.role === 'user'){
+        router.push('/home')
+      } else if (user.role === 'coach') {
+        router.push('/training-management')
+      } else if (user.role === 'admin') {
+        router.push('/users-controller')
+      }
+    }
+  }, [user])
 
   const handleGoogleSignIn = async () => {
     try {
@@ -38,10 +50,11 @@ export default function LoginView() {
       </div>
       <div className="w-1/2 h-full bg-[#222222] flex items-center justify-center">
         <div className="w-full max-w-lg mb-10">
-          <div className="text-center my-5">
-            <h2 className="text-3xl font-bold text-white">Sign In</h2>
-          </div>
-
+        <div className="text-center mb-6">
+          <h1 className="text-white text-3xl font-extrabold">
+            Sign <span className="text-red-600">In</span>
+          </h1>
+        </div>
           <LoginForm />
 
           <div className="flex items-center justify-center">
@@ -64,7 +77,7 @@ export default function LoginView() {
               Sign up
             </Link>
           </p>
-          <p className="text-center">
+          <p className="text-center mt-4">
             <Link className="text-red-500" href="/auth/forgot-password">
               I forgot my password
             </Link>

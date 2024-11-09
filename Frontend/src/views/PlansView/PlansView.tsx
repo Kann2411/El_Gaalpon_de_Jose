@@ -52,9 +52,9 @@ const PlansView: React.FC = () => {
             icon = "error";
             break;
           case "pending":
-            title = "Pending payment";
-            text = "Your payment is pending confirmation.";
-            icon = "info";
+            title = "Successful payment!";
+            text = "Your transaction has been completed.";
+            icon = "success";
             break;
           default:
             title = "";
@@ -107,9 +107,11 @@ const PlansView: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center">
-      <h2 className="text-4xl font-extrabold mb-8">
-        Check out our <span className="text-red-600">plans</span>
-      </h2>
+      <div className="text-center mb-6">
+        <h1 className="text-3xl font-extrabold">
+          Check Out <span className="text-red-600">Our Plans</span>
+        </h1>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-8 max-w-7xl">
         {plans?.map((plan, index) => (

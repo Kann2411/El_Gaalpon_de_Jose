@@ -1,143 +1,119 @@
 'use client';
-import React, { useState, useEffect, useContext } from 'react';
-import Modal from 'react-modal';
+import { useState, useEffect } from 'react';
+import { Membership } from "@/interfaces/interfaces";
+import { getMembresias, deleteMembresia } from '../../lib/server/fetchMembresias';
 import Swal from 'sweetalert2';
-import { UserContext } from '@/context/user';
-import NoDataMessage from '../NoDataMessage/NoDataMessage';
-import { deleteTrainingPlan, getTrainingPlans } from '@/lib/server/fetchCoaches';
+import { motion } from 'framer-motion';
+import { Trash2, Edit2 } from 'lucide-react';
 
-interface TrainingPlan {
-  id: string;
-  description: string;
-  file: string;
-}
+export default function PlansList() {
+  const [memberships, setMemberships] = useState<Membership[] | null>(null);
 
-const PlansList: React.FC = () => {
-  const { user } = useContext(UserContext);
-  const [trainingPlans, setTrainingPlans] = useState<TrainingPlan[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-
-  // Fetch training plans when the component mounts
   useEffect(() => {
-    const fetchTrainingPlans = async () => {
+    const fetchMemberships = async () => {
       try {
-        const plans = await getTrainingPlans();
-        setTrainingPlans(plans);
-      } catch (err) {
-        setError('Error fetching training plans');
+        const data = await getMembresias();
+        setMemberships(data);
+      } catch (error) {
+        console.error("Error fetching memberships:", error);
+        setMemberships(null);
       }
     };
-    fetchTrainingPlans();
+    fetchMemberships();
   }, []);
 
-  // Handle the deletion of a training plan
   const handleDelete = async (id: string) => {
     const result = await Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to delete this training plan?',
+      text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#374151',
       confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      customClass: {
-        popup: 'bg-[#222222] text-white',
-        title: 'text-[#B0E9FF]',
-        confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-        cancelButton: 'bg-gray-500 text-white hover:bg-gray-600 py-2 px-4 border-none',
-      },
-      buttonsStyling: false,
+      background: '#000000',
+      color: '#ffffff',
     });
 
     if (result.isConfirmed) {
-      const success = await deleteTrainingPlan(id);
-      if (success) {
-        setTrainingPlans(trainingPlans.filter(plan => plan.id !== id));
+      try {
+        await deleteMembresia(id);
+        setMemberships((prev) => prev ? prev.filter((membership) => membership.id !== id) : null);
         Swal.fire({
           title: 'Deleted!',
-          text: 'The plan has been successfully deleted.',
+          text: 'The membership has been deleted.',
           icon: 'success',
-          customClass: {
-            popup: 'bg-[#222222] text-white',
-            title: 'text-[#B0E9FF]',
-            confirmButton: 'bg-[#B0E9FF] text-[#222222] hover:bg-[#6aa4bb] py-2 px-4 border-none',
-          },
-          buttonsStyling: false,
+          background: '#000000',
+          color: '#ffffff',
+          confirmButtonColor: '#dc2626',
+        });
+      } catch (error) {
+        console.error("Error deleting membership:", error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'There was an issue deleting the membership.',
+          icon: 'error',
+          background: '#000000',
+          color: '#ffffff',
+          confirmButtonColor: '#dc2626',
         });
       }
     }
   };
 
-  // Open the modal to view the plan
-  const openModal = (imageUrl: string) => {
-    setSelectedPlan(imageUrl);
-  };
-
-  // Close the modal
-  const closeModal = () => {
-    setSelectedPlan(null);
-  };
-
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
+  if (!memberships) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-red-600"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center p-6">
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-extrabold">
-          My <span className="text-red-600">Plans</span>
-        </h1>
-      </div>
-
-      {trainingPlans.length === 0 ? (
-        <NoDataMessage message="There are no training plans available yet" />
-      ) : (
-        <div className="text-center container mx-auto p-8 bg-zinc-950 shadow-lg">
-          <ul>
-            {trainingPlans.map((plan) => (
-              <li key={plan.id} className="bg-zinc-900 p-4 rounded-lg shadow-md mb-4 flex justify-between items-center">
-                <h2 className="text-lg font-semibold">{plan.description}</h2>
-                <div className="flex space-x-4">
-                  <button
-                    onClick={() => openModal(plan.file)}
-                    className="bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-800 transition"
-                  >
-                    View Plan
-                  </button>
-                  {user?.role === 'coach' && (
-                    <button
-                      onClick={() => handleDelete(plan.id)}
-                      className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
-                    >
-                      Delete Plan
-                    </button>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <Modal
-        isOpen={!!selectedPlan}
-        onRequestClose={closeModal}
-        className="flex items-center justify-center"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-      >
-        <div className="bg-white p-4 rounded">
-          {selectedPlan && <img src={selectedPlan} alt="Training Plan" className="max-w-full h-auto" />}
-          <button
-            onClick={closeModal}
-            className="mt-4 bg-gray-500 text-white py-1 px-3 rounded hover:bg-gray-600"
+    <div className="bg-black text-white p-8 rounded-lg shadow-2xl max-w-7xl mx-auto mt-16">
+      <h2 className="text-3xl font-bold text-red-600 mb-8 text-center">Membership plans created</h2>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {memberships.map((membership) => (
+          <motion.div
+            key={membership.id}
+            className="bg-gray-900 p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            Close
-          </button>
-        </div>
-      </Modal>
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-2xl font-semibold text-red-500">{membership.plan}</h3>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleDelete(membership.id)}
+                  className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition-colors duration-300"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            </div>
+            <p className="text-gray-300 mb-4">{membership.description}</p>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="font-semibold text-red-400">Price</p>
+                <p className="text-gray-300">{membership.price} {membership.currency}</p>
+              </div>
+              <div>
+                <p className="font-semibold text-red-400">Ideal For</p>
+                <p className="text-gray-300">{membership.idealFor}</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              <p className="font-semibold text-red-400 mb-2">Benefits:</p>
+              <ul className="list-disc pl-5 text-sm text-gray-300">
+                {membership.benefits.map((benefit, index) => (
+                  <li key={index}>{benefit}</li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default PlansList;
+}

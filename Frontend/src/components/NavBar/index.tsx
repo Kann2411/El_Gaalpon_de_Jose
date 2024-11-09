@@ -27,9 +27,22 @@ const NavBarComponent = () => {
   const handleCloseChat = () => setIsChatOpen(false);
 
   const { searchQuery, setSearchQuery, isSearchOpen, setIsSearchOpen } =
-  useSearch();
+    useSearch();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user?.id) {
+      const storedImageUrl = localStorage.getItem(`imgUrl_${user.id}`);
+      if (storedImageUrl) {
+        setProfileImageUrl(storedImageUrl);
+      } else {
+        setProfileImageUrl(user.imgUrl || null);
+      }
+    }
+  }, [user]);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -74,7 +87,7 @@ const NavBarComponent = () => {
   const handleLogout = () => {
     logOut();
     setIsMenuOpen(false);
-    sessionStorage.removeItem('hasRedirected');
+    sessionStorage.removeItem("hasRedirected");
     router.push("/");
   };
 
@@ -164,20 +177,20 @@ const NavBarComponent = () => {
   };
 
   useEffect(() => {
-    const hasRedirected = sessionStorage.getItem('hasRedirected');
-    
+    const hasRedirected = sessionStorage.getItem("hasRedirected");
+
     if (isLogged && !hasRedirected) {
-      let redirectPath = '/home';
-      
+      let redirectPath = "/home";
+
       if (user?.role === "admin") {
         redirectPath = "/users-controller";
       } else if (user?.role === "coach") {
         redirectPath = "/training-management";
       }
-      
+
       if (pathname !== redirectPath) {
         router.push(redirectPath);
-        sessionStorage.setItem('hasRedirected', 'true');
+        sessionStorage.setItem("hasRedirected", "true");
       }
     }
   }, [isLogged, user?.role, router, pathname]);
@@ -194,7 +207,7 @@ const NavBarComponent = () => {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0  right-0 flex items-center justify-between p-4 bg-black text-white shadow-md z-50">
+    <header className="fixed top-0 left-0 right-0 flex items-center justify-between p-4 bg-black text-white shadow-md z-50">
       <Link href="/" className="flex items-center">
         <Image src={logo} alt="logo" width={60} height={60} />
         <div className="ml-4 text-2xl font-bold">FitZone</div>
@@ -239,29 +252,37 @@ const NavBarComponent = () => {
       ) : user?.role === "admin" ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Users Controller", "Classes"].map((item, index) => {
+            {["Users Controller", "Classes", "Membership"].map((item, index) => {
               const lowerCaseItem = item.toLowerCase().replace(" ", "-");
-              const route =
-                lowerCaseItem === "users-controller"
-                  ? "/users-controller"
-                  : "/classes";
-              const isActive = pathname === route;
+              let route;
 
+              if (lowerCaseItem === "users-controller") {
+                route = "/users-controller";
+              } else if (lowerCaseItem === "classes") {
+                route = "/classes";
+              } else if (lowerCaseItem === "membership") {
+                route = "/plans-management"; // Redirige a plans-management
+              } else {
+                route = "/"; // Ruta predeterminada si no se encuentra una coincidencia
+              }
+              
+              // Asegurarse de que `route` siempre tenga un valor definido antes de usarlo en el `href`.
+              <Link href={route || "/"}>go to page</Link>
+              
               return (
                 <li key={index} className="relative group">
                   <Link
                     href={route}
-                    className={`text-white text-sm sm:text-base font-medium px-3 py-2 ${
-                      isActive ? "text-red-600" : ""
-                    }`}
+                    className="text-white text-sm sm:text-base font-medium px-3 py-2"
                   >
                     {item}
                   </Link>
                   <span
                     className={`absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 ${
-                      isActive ? "scale-x-100" : "scale-x-0"
+                      pathname === route ? "scale-x-100" : "scale-x-0"
                     }`}
                   />
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-600 transition-transform duration-300 scale-x-0 group-hover:scale-x-100" />
                 </li>
               );
             })}
@@ -303,9 +324,14 @@ const NavBarComponent = () => {
       ) : !isLogged ? (
         <nav className="flex-1 flex items-center justify-center">
           <ul className="flex space-x-6 list-none m-0 p-0 items-center justify-center flex-grow">
-            {["Classes", "Plans"].map((item, index) => {
-              const lowerCaseItem = item.toLowerCase();
-              const route = lowerCaseItem === "classes" ? "/home" : "/plans";
+            {["Classes", "Plans", "About Us"].map((item, index) => {
+              const lowerCaseItem = item.toLowerCase().replace(" ", "-");
+              const route =
+                lowerCaseItem === "classes"
+                  ? "/home"
+                  : lowerCaseItem === "plans"
+                  ? "/plans"
+                  : "/about-us";
 
               return (
                 <li key={index} className="relative group">
@@ -335,7 +361,6 @@ const NavBarComponent = () => {
         >
           {user?.role === "user" && <ChatModal onClose={handleCloseChat} />}
           {isChatOpen && <ChatModal onClose={handleCloseChat} />}
-          
         </button>
       )}
 
@@ -377,7 +402,7 @@ const NavBarComponent = () => {
       {isLogged ? (
         <div className="relative" ref={menuRef}>
           <div
-            className="w-14 h-14 rounded-full cursor-pointer transition-transform duration-200 hover:scale-105 me-5"
+            className="w-16 h-16 rounded-full overflow-hidden cursor-pointer transition-transform duration-200 hover:scale-105 me-5"
             onClick={toggleMenu}
           >
             <img
@@ -386,7 +411,7 @@ const NavBarComponent = () => {
                 "https://i.postimg.cc/Ssxqc09d/Dise-o-sin-t-tulo-17-removebg-preview.png"
               }
               alt="avatar"
-              className="w-full h-full rounded-full"
+              className="w-full h-full rounded-full object-cover"
             />
           </div>
 
@@ -402,7 +427,7 @@ const NavBarComponent = () => {
               <>
                 <div className="px-4 py-2 text-black">
                   {/* Información del usuario */}
-                  <div className="mb-4 border-solid ">
+                  <div className="mb-4 border-solid">
                     <p className="font-medium text-center">{user?.name}</p>
                     <p className="font-light ml-1 text-center">{user?.email}</p>
                   </div>
@@ -432,14 +457,6 @@ const NavBarComponent = () => {
                   </button>
                 </div>
 
-                {/* Botón para cambiar la foto de perfil
-                <button
-                  onClick={() => document.getElementById("fileInput")?.click()}
-                  className="w-full px-4 py-2 text-left text-black hover:bg-red-100"
-                >
-                  Change profile photo
-                </button> */}
-
                 {/* Input oculto para subir archivos */}
                 <input
                   type="file"
@@ -448,8 +465,6 @@ const NavBarComponent = () => {
                   accept="image/*"
                   onChange={handleFileChange}
                 />
-
-                {/* Modal de confirmación */}
               </>
             )}
           </div>

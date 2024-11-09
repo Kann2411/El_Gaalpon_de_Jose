@@ -338,15 +338,15 @@ if(user.id) {
       {/* Contenedor para filtros y subtítulo */}
       <div className="w-full max-w-9xl px-5 mb-8">
         <div className="flex flex-col items-center relative">
-          <div className="absolute left-0 mt-8">
-            <ClassFilters onFilterChange={setFilters} />
-          </div>
+              <div className="absolute left-2 ml-2">
+                <ClassFilters onFilterChange={setFilters} />
+              </div>
           <h2 className="text-3xl font-bold">
             Experience <span className="text-red-600">FitZone</span>
           </h2>
-          <h1 className="text-xl font-extrabold mt-4">
-            Discover our <span className="text-red-600">exclusive classes</span>
-          </h1>
+          <p className="text-center text-gray-400 mt-6">
+          Top-notch technology and facilities
+          </p>
         </div>
       </div>
 
@@ -360,7 +360,7 @@ if(user.id) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="bg-zinc-900 max-w-md w-full mx-auto pt-1 pb-6 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105"
+                className="bg-zinc-900 max-w-md w-full mx-auto pt-1 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105"
                 onClick={() => openModal(classInfo)}
               >
                 <img
@@ -386,7 +386,7 @@ if(user.id) {
                     </div>
                     <span className="text-sm">{classInfo.intensity}</span>
                   </div>
-                  <div className="flex justify-center pt-5">
+                  <div className="flex justify-center pt-10">
                     <Button
                       content="Select"
                       onClick={() => openModal(classInfo)}
@@ -452,18 +452,26 @@ if(user.id) {
                 <span>{selectedClass.intensity}</span>
               </div>
             </div>
-            <div className="flex justify-center mt-4">
-              {/*  {user?.role === "user" && (
-                <Button content="Schedule" onClick={onClick} />
-              )} */}
+            
+            {/* <div className="flex justify-center mt-4">
               <Button content="Schedule" onClick={onClick} />
+            </div> */}
+
+            {/*ult cambio*/}
+            <div className="flex justify-center mt-4">
+              <Button
+                content="Schedule"
+                onClick={onClick}
+                disabled={user?.role !== "user"}
+                className={`${user?.role !== "user" ? "opacity-50 cursor-not-allowed" : ""}`}
+              />
             </div>
           </motion.div>
         </motion.div>
       )}
 
       {/* Image Carousel */}
-      <div className="w-full max-w-4xl mb-12">
+      <div className="w-full max-w-4xl">
         <h1 className="text-3xl text-center py-6 font-extrabold">
           Quality <span className="text-red-600">equipment</span>
         </h1>
@@ -492,18 +500,6 @@ if(user.id) {
               </div>
             ))}
           </div>
-          <button
-            onClick={prevImage}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <button
-            onClick={nextImage}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-red-600 p-2 rounded-full text-white transition-transform duration-500 hover:scale-110"
-          >
-            <ChevronRight size={24} />
-          </button>
         </div>
       </div>
 
