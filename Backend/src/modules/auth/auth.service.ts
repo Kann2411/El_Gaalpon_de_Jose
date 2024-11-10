@@ -150,7 +150,7 @@ export class AuthService {
 
     console.log(`Generated reset token: ${token}`);
 
-    const resetLink = `https://el-gaalpon-de-jose.vercel.app/auth/reset-password?token=${token}`;
+    const resetLink = `https://fitzzone.vercel.app/auth/reset-password?token=${token}`;
     const htmlContent = `
     <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
       <h1 style="color: #4A90E2; text-align: center;">Restablecimiento de contraseña</h1>
