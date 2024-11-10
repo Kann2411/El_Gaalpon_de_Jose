@@ -32,9 +32,9 @@ export class AuthController {
   @UseGuards(GoogleOauthGuard)
   async googleLoginCallback(@Req() req, @Res() res) {
     const tokenData = await this.authService.validateOAuthLogin(req.user);
-    console.log('Redirecting to: ', `https://el-gaalpon-de-jose.vercel.app/boton-prueba?token=${tokenData.token}`);
+    console.log('Redirecting to: ', `https://fitzzone.vercel.app/boton-prueba?token=${tokenData.token}`);
     return res.redirect(
-      `https://el-gaalpon-de-jose.vercel.app/boton-prueba?token=${tokenData.token}`,
+      `https://fitzzone.vercel.app/boton-prueba?token=${tokenData.token}`,
     ); 
   }
 
