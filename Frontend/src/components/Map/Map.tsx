@@ -12,11 +12,17 @@ const center = {
 };
 
 const Map: React.FC = () => {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+  if (!apiKey) {
+    return <div>Error: Google Maps API key is missing</div>;
+  }
+
   return (
     <div>
       <h2 className="text-white text-center text-3xl font-bold">Visit Us</h2>
       <div className="p-10">
-        <LoadScript googleMapsApiKey="AIzaSyBlfH-MmX_PbmOpvNYk2YDtY5VcB68n3GQ">
+        <LoadScript googleMapsApiKey={apiKey}>
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
