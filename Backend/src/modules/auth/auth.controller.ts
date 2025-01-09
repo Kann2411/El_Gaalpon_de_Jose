@@ -3,8 +3,6 @@ import {
   Body,
   Controller,
   Get,
-  Param,
-  Patch,
   Post,
   Put,
   Query,
@@ -24,18 +22,17 @@ import { SetPasswordDto } from 'src/dtos/setPassword.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('google')
-  @UseGuards(GoogleOauthGuard)
-  async googleAuth(@Req() req) {}
-
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleLoginCallback(@Req() req, @Res() res) {
     const tokenData = await this.authService.validateOAuthLogin(req.user);
-    console.log('Redirecting to: ', `https://el-gaalpon-de-jose.vercel.app/boton-prueba?token=${tokenData.token}`);
+    console.log(
+      'Redirecting to: ',
+      `https://el-gaalpon-de-jose.vercel.app/boton-prueba?token=${tokenData.token}`,
+    );
     return res.redirect(
       `https://el-gaalpon-de-jose.vercel.app/boton-prueba?token=${tokenData.token}`,
-    ); 
+    );
   }
 
   @Post('signup')
@@ -45,6 +42,7 @@ export class AuthController {
       throw new BadRequestException('Las contraseñas no coinciden.');
     }
     const newUser = await this.authService.signUp(signUpDto);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = newUser;
     return { user: userWithoutPassword };
   }

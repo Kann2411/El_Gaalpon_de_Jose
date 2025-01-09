@@ -6,8 +6,6 @@ import {
   ParseFilePipe,
   ParseUUIDPipe,
   Patch,
-  Post,
-  Put,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';

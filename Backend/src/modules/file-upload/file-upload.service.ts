@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FileRepository } from './file-upload.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrainingPlan } from '../training/trainingPlan.entity';
